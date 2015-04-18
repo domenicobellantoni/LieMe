@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/logo_login"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="82dp"
             android:layout_gravity="center_horizontal|top"
             android:src="@mipmap/logo_mini" />
 
@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/editText"
             android:layout_gravity="center"
+            android:layout_marginTop="35dp"
             android:text="deve esserci il login" />
     </FrameLayout>
 </RelativeLayout>

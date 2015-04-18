@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.lang.ref.WeakReference;
+
 
 public class SplashActivity extends Activity {
 
@@ -18,32 +20,53 @@ public class SplashActivity extends Activity {
 
     private static final int GO_AHEAD_WHAT =1;
 
-    private long mStartTime;
+    private long mStartTime = -1L;
 
     private boolean mIsDone;
 
-    /*private Handler mHandler = new Handler(){
+    private Handler mHandler;
+
+    private static final String IS_DONE_KEY = "com.bellantoni.chetta.lieme.key.IS_DONE_KEY";
+
+    private static final String START_TIME_KEY ="com.bellantoni.chetta.lieme.key.START_TIME_KEY";
+
+    private static class UiHandler extends Handler{
+
+        private WeakReference<SplashActivity> mActivityRef;
+
+        public UiHandler(final SplashActivity srcActivity){
+            this.mActivityRef = new WeakReference<SplashActivity>(srcActivity);
+        }
 
         @Override
         public void handleMessage(Message msg){
-            switch (msg.what){
+            final SplashActivity srcActivity = this.mActivityRef.get();
+            if(srcActivity == null){
+                return;
+
+            }
+            switch(msg.what) {
                 case GO_AHEAD_WHAT:
-                    long elapsedTime= SystemClock.uptimeMillis()-mStartTime;
-                    if(elapsedTime>=MIN_WAIT_INTERVAL && !mIsDone){
-                        mIsDone=true;
-                        goAhead();
+                    long elapsedTime = SystemClock.uptimeMillis();
+                    if (elapsedTime >= MIN_WAIT_INTERVAL) {
+                        srcActivity.mIsDone = true;
+                        srcActivity.goAhead();
                     }
+
                     break;
             }
-
         }
-    };*/
-
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        if(savedInstanceState!=null){
+            this.mStartTime = savedInstanceState.getLong(START_TIME_KEY);
+
+        }
+        mHandler = new UiHandler(this);
     }
 
 
@@ -69,9 +92,12 @@ public class SplashActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /*@Override
+    @Override
     protected void onStart(){
-        mStartTime = SystemClock.uptimeMillis();
+        super.onStart();
+        if(mStartTime==-1L) {
+            mStartTime = SystemClock.uptimeMillis();
+        }
         final Message goAheadMessage = mHandler.obtainMessage(GO_AHEAD_WHAT);
         mHandler.sendMessageAtTime(goAheadMessage, mStartTime+MAX_WAIT_INTERVAL);
     }
@@ -80,5 +106,20 @@ public class SplashActivity extends Activity {
         final Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
-    }*/
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(IS_DONE_KEY, mIsDone);
+        outState.putLong(START_TIME_KEY, mStartTime);
+    }
+
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstance){
+        super.onRestoreInstanceState(savedInstance);
+        this.mIsDone=savedInstance.getBoolean(IS_DONE_KEY);
+
+    }
 }
