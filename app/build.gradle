@@ -4,6 +4,10 @@ android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
 
+    repositories {
+        mavenCentral()
+    }
+
     defaultConfig {
         applicationId "com.bellantoni.chetta.lieme"
         minSdkVersion 15
@@ -22,4 +26,5 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.0.0'
 }
