@@ -1,0 +1,29 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+    android:focusableInTouchMode="true"
+    android:background="#F39200">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_gravity="center"
+        android:src="@mipmap/logo_mini"
+        android:layout_marginBottom="30dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="LieMe 1.0 \n Bellantoni &amp; Chetta"
+        android:gravity="center"
+        android:id="@+id/info_splash"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="15dp"/>
+
+</FrameLayout>
+
