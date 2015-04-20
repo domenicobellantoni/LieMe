@@ -5,10 +5,17 @@
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp" />
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp" />
+        android:id="@+id/logo_mini_login"
+        android:layout_gravity="center_horizontal|top"
+        android:src="@mipmap/logo_mini"
+        android:layout_marginTop="92dp" />
 
 </FrameLayout>
