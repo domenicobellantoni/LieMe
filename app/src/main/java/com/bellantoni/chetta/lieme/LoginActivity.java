@@ -6,12 +6,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
+
 public class LoginActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, new LoginFragment())
+                    .commit();
+        }
     }
 
 
@@ -36,4 +42,6 @@ public class LoginActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
