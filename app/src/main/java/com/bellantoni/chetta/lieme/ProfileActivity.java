@@ -6,30 +6,34 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.facebook.Profile;
 
+public class ProfileActivity extends ActionBarActivity {
 
-public class LoginActivity extends ActionBarActivity implements LoginFragment.ListenerInterface{
+    private TextView nameSurname;
+    private ImageView profileImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_profile);
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new LoginFragment())
-                    .commit();
-        }
+        nameSurname = (TextView) findViewById(R.id.nameSurname);
+        Intent intent = getIntent();
+        nameSurname.setText(intent.getStringExtra("NAME")+" "+intent.getStringExtra("SURNAME"));
+        profileImage = (ImageView) findViewById(R.id.imageprofile);
+        profileImage.setImageResource(R.mipmap.chetta);
+
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
+        getMenuInflater().inflate(R.menu.menu_profile, menu);
         return true;
     }
 
@@ -47,18 +51,4 @@ public class LoginActivity extends ActionBarActivity implements LoginFragment.Li
 
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public void goProfile(Profile profile){
-        final Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra("NAME", profile.getFirstName());
-        intent.putExtra("SURNAME", profile.getLastName());
-        intent.putExtra("ID", profile.getId());
-        startActivity(intent);
-        finish();
-    }
-
-
-
-
 }

@@ -23,12 +23,22 @@ public class LoginFragment extends Fragment {
 
     private CallbackManager mCallbackManager;
 
+    private Profile facebookProfile;
+
+    public interface ListenerInterface{
+        void goProfile(Profile profile);
+    }
+
+    private ListenerInterface mListener;
+
     private FacebookCallback<LoginResult> mCallback = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {
 
             AccessToken accessToken = loginResult.getAccessToken();
             Profile profile = Profile.getCurrentProfile();
+            facebookProfile=profile;
+            mListener.goProfile(facebookProfile);
 
         }
 
@@ -59,6 +69,7 @@ public class LoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
         mCallbackManager=CallbackManager.Factory.create();
+
     }
 
     @Override
@@ -74,7 +85,24 @@ public class LoginFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode,resultCode, data);
         mCallbackManager.onActivityResult(requestCode,resultCode,data);
+        if(facebookProfile!=null){
+            mListener.goProfile(facebookProfile);
+        }
 
+    }
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        if(activity instanceof ListenerInterface){
+            mListener =(ListenerInterface)activity;
+        }
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        this.mListener=null;
     }
 
 
