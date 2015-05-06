@@ -54,8 +54,12 @@ public class LoginActivity extends ActionBarActivity implements LoginFragment.Li
         intent.putExtra("NAME", profile.getFirstName());
         intent.putExtra("SURNAME", profile.getLastName());
         intent.putExtra("ID", profile.getId());
+        intent.putExtra("IMAGE", profile.getProfilePictureUri(40,40).toString());
+
+
         startActivity(intent);
         finish();
+
     }
 
 

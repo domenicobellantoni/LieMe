@@ -1,6 +1,9 @@
 package com.bellantoni.chetta.lieme;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.StrictMode;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -8,12 +11,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 public class ProfileActivity extends ActionBarActivity {
 
     private TextView nameSurname;
     private ImageView profileImage;
+    private Bitmap bitmap = null;
+    private RoundImage roundedImage;
+    private String id;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,11 +32,13 @@ public class ProfileActivity extends ActionBarActivity {
         setContentView(R.layout.activity_profile);
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
-        nameSurname = (TextView) findViewById(R.id.nameSurname);
-        Intent intent = getIntent();
-        nameSurname.setText(intent.getStringExtra("NAME")+" "+intent.getStringExtra("SURNAME"));
-        profileImage = (ImageView) findViewById(R.id.imageprofile);
-        profileImage.setImageResource(R.mipmap.chetta);
+        this.nameSurname = (TextView) findViewById(R.id.nameSurname);
+        this.intent = getIntent();
+        this.nameSurname.setText(this.intent.getStringExtra("NAME")+" "+this.intent.getStringExtra("SURNAME"));
+        this.id = this.intent.getStringExtra("ID");
+
+        setImage(id);
+
 
     }
 
@@ -50,5 +63,33 @@ public class ProfileActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setImage(String id){
+
+        this.profileImage = (ImageView) findViewById(R.id.imageProfile);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        URL imageURL = null;
+        try {
+            imageURL = new URL("https://graph.facebook.com/" + id + "/picture?height=105&width=105");
+        } catch (MalformedURLException e) {
+            //qui dovrei impostare una immagine di default vuota se va male
+            e.printStackTrace();
+        }
+
+        try {
+            bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+        } catch (IOException e) {
+            //qui dovrei impostare una immagine di default vuota se va male
+            e.printStackTrace();
+        }
+
+        this.roundedImage = new RoundImage(bitmap);
+
+        this.profileImage.setImageDrawable(roundedImage);
+
     }
 }
