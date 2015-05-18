@@ -70,6 +70,7 @@ public class LoginFragment extends Fragment {
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
         mCallbackManager=CallbackManager.Factory.create();
 
+
     }
 
     @Override

@@ -92,4 +92,7 @@ public class ProfileActivity extends ActionBarActivity {
         this.profileImage.setImageDrawable(roundedImage);
 
     }
+
+
+
 }
