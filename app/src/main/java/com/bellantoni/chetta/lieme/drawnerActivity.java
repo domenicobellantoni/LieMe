@@ -27,20 +27,17 @@ import com.facebook.login.LoginManager;
 
 
 public class drawnerActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
-
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
-    private CharSequence mTitle;
-
-
-
+    private String surname;
+    private String name;
+    private String id;
+    private Intent intent;
+    private String photo1, photo2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +47,7 @@ public class drawnerActivity extends ActionBarActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -58,6 +55,21 @@ public class drawnerActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
+        this.intent = getIntent();
+        if(intent.getStringExtra("idfromlogin")!=null) {
+            this.surname = intent.getStringExtra("surnamefromlogin");
+            this.name = intent.getStringExtra("namefromlogin");
+            this.id = intent.getStringExtra("idfromlogin");
+        }
+
+        if(intent.getStringExtra("idfromsplash")!=null) {
+            this.surname = intent.getStringExtra("surnamefromsplash");
+            this.name = intent.getStringExtra("namefromsplash");
+            this.id = intent.getStringExtra("idfromsplash");
+        }
+
+        this.photo1 = "https://graph.facebook.com/";
+        this.photo2 = "/picture?height=105&width=105";
     }
 
     @Override
@@ -66,39 +78,25 @@ public class drawnerActivity extends ActionBarActivity
         //qui qualsiasi sia position creo un fragmnet devo modificarlo
 
         switch (position){
+            case 1:
+                goProfile();
+                break;
+            case 0:
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                        .commit();
+                break;
             case 2:
                 logout();
                 break;
-            case 1:
-                goProfile(position);
+
         }
 
-
-
-
-
     }
 
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_section1);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-        }
-    }
 
-    public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
-    }
+
 
 
     @Override
@@ -108,7 +106,7 @@ public class drawnerActivity extends ActionBarActivity
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.drawner, menu);
-            restoreActionBar();
+
             return true;
         }
         return super.onCreateOptionsMenu(menu);
@@ -165,8 +163,7 @@ public class drawnerActivity extends ActionBarActivity
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
-            ((drawnerActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
+
         }
     }
 
@@ -177,10 +174,20 @@ public class drawnerActivity extends ActionBarActivity
         finish();
     }
 
-    private void goProfile(int position){
+    private void goProfile(){
+
+        Bundle bundle = new Bundle();
+        bundle.putString("name", this.name);
+        bundle.putString("surname", this.surname);
+        System.out.println("CAZZO DI COGNOME "+ this.surname);
+        bundle.putString("photo1", this.photo1);
+        bundle.putString("photo2", this.photo2);
+        bundle.putString("id", this.id);
+        ProfileFragment profileFragment = new ProfileFragment();
+        profileFragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .replace(R.id.container, profileFragment)
                 .commit();
     }
 

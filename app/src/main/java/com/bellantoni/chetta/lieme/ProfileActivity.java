@@ -29,7 +29,7 @@ public class ProfileActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        //setContentView(R.layout.activity_profile);
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
         this.nameSurname = (TextView) findViewById(R.id.nameSurname);

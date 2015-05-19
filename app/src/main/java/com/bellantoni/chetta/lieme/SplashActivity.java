@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 
 import java.lang.ref.WeakReference;
 
@@ -71,6 +72,7 @@ public class SplashActivity extends Activity {
 
         }
         mHandler = new UiHandler(this);
+        FacebookSdk.sdkInitialize(getApplicationContext());
     }
 
 
@@ -114,6 +116,14 @@ public class SplashActivity extends Activity {
             finish();
         }else{
             final Intent intent = new Intent(this, drawnerActivity.class);
+            Profile profile = Profile.getCurrentProfile();
+            intent.putExtra("namefromsplash", profile.getFirstName());
+            intent.putExtra("surnamefromsplash", profile.getLastName());
+            intent.putExtra("idfromsplash", profile.getId());
+            intent.putExtra("photo1", "https://graph.facebook.com/" );
+            intent.putExtra("photo2","/picture?height=105&width=105");
+            System.out.println("NOMEEEEEEE "+profile.getFirstName());
+
             startActivity(intent);
             finish();
 

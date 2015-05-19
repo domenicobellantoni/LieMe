@@ -25,7 +25,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:id="@+id/imageProfile"
-
                 android:layout_gravity="center_horizontal|top" />
 
             <TextView
@@ -37,7 +36,6 @@
                 android:textStyle="bold"
                 android:layout_gravity="center"
                 android:textColor="#ffffff" />
-
 
         </FrameLayout>
     </LinearLayout>

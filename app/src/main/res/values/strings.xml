@@ -13,7 +13,7 @@
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
     <string name="title_activity_drawner">drawnerActivity</string>
 
-    <string name="title_section1">Section 1</string>
+    <string name="title_section1">Ask a question</string>
     <string name="title_section2">Profile</string>
     <string name="title_section3">Logout</string>
 
