@@ -2,42 +2,35 @@ package com.bellantoni.chetta.lieme;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 
 
 public class drawnerActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface {
 
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
+
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private String surname;
     private String name;
     private String id;
     private Intent intent;
     private String photo1, photo2;
+    private ProfileFragment profileFragment;
+    private boolean restoredProfile = false;
+    private int selected=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,22 +63,43 @@ public class drawnerActivity extends ActionBarActivity
 
         this.photo1 = "https://graph.facebook.com/";
         this.photo2 = "/picture?height=105&width=105";
+
+        if (savedInstanceState != null && selected==0) {
+            //Restore the fragment's instance
+            System.out.println("RIPRISTINO FRAGMENT");
+            this.profileFragment = (ProfileFragment) getSupportFragmentManager().getFragment(
+                    savedInstanceState, "profileFragment");
+
+            restoredProfile=true;
+
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        System.out.println("SALVO FRAGMENT");
+        if(profileFragment!=null)
+            getSupportFragmentManager().putFragment(outState, "profileFragment", profileFragment);
+
+
+
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
-        //qui qualsiasi sia position creo un fragmnet devo modificarlo
 
         switch (position){
-            case 1:
-                goProfile();
-                break;
             case 0:
+                goProfile();
+                selected=0;
+                break;
+            case 1:
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                         .commit();
+                selected=1;
                 break;
             case 2:
                 logout();
@@ -125,6 +139,29 @@ public class drawnerActivity extends ActionBarActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logout(){
+        /*
+        LoginManager.getInstance().logOut();
+        final Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();*/
+        LogoutDialog logoutDialog = new LogoutDialog();
+        logoutDialog.show(getSupportFragmentManager(), "PROGRESS_DIALOG");
+    }
+
+    @Override
+    public void yesPressed(){
+        LoginManager.getInstance().logOut();
+        final Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void noPressed(){
+        //
     }
 
     /**
@@ -167,28 +204,39 @@ public class drawnerActivity extends ActionBarActivity
         }
     }
 
-    private void logout(){
-        LoginManager.getInstance().logOut();
-        final Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
-    }
+
+
 
     private void goProfile(){
 
-        Bundle bundle = new Bundle();
-        bundle.putString("name", this.name);
-        bundle.putString("surname", this.surname);
-        System.out.println("CAZZO DI COGNOME "+ this.surname);
-        bundle.putString("photo1", this.photo1);
-        bundle.putString("photo2", this.photo2);
-        bundle.putString("id", this.id);
-        ProfileFragment profileFragment = new ProfileFragment();
-        profileFragment.setArguments(bundle);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, profileFragment)
-                .commit();
+        if(this.profileFragment==null) {
+            Profile profile = Profile.getCurrentProfile();
+            this.name = profile.getFirstName();
+            this.surname = profile.getLastName();
+            this.id = profile.getId();
+            this.photo1 = "https://graph.facebook.com/";
+            this.photo2 = "/picture?height=105&width=105";
+
+            Bundle bundle = new Bundle();
+            bundle.putString("name", this.name);
+            bundle.putString("surname", this.surname);
+            bundle.putString("photo1", this.photo1);
+            bundle.putString("photo2", this.photo2);
+            bundle.putString("id", this.id);
+            this.profileFragment = new ProfileFragment();
+            profileFragment.setArguments(bundle);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, profileFragment, "P")
+                    .commit();
+        }else{
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, profileFragment, "P")
+                    .commit();
+        }
+
+
     }
 
 }

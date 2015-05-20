@@ -13,9 +13,12 @@
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
     <string name="title_activity_drawner">drawnerActivity</string>
 
-    <string name="title_section1">Ask a question</string>
-    <string name="title_section2">Profile</string>
+    <string name="title_section1">Profile</string>
+    <string name="title_section2">Ask a Question</string>
     <string name="title_section3">Logout</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="dialog_logout">Do you really want to logout?</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
