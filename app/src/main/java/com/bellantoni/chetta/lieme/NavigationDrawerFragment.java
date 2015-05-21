@@ -1,7 +1,9 @@
 package com.bellantoni.chetta.lieme;
 
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.Outline;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
@@ -106,7 +108,7 @@ public class NavigationDrawerFragment extends Fragment {
         final TypedArray typedArray = getResources().obtainTypedArray(R.array.sections_icons);
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
+                android.R.layout.simple_selectable_list_item,
                 android.R.id.text1,
                 getResources().getStringArray(R.array.sections)
         ) {
@@ -121,7 +123,7 @@ public class NavigationDrawerFragment extends Fragment {
         });
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
-        //
+
     }
 
     public boolean isDrawerOpen() {
@@ -277,7 +279,10 @@ public class NavigationDrawerFragment extends Fragment {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setTitle(R.string.app_name);
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ff9200")));
+        actionBar.setTitle("Lieme");
+        actionBar.setLogo(R.mipmap.logo_mini_dialog);
+
     }
 
     private ActionBar getActionBar() {
@@ -293,4 +298,6 @@ public class NavigationDrawerFragment extends Fragment {
          */
         void onNavigationDrawerItemSelected(int position);
     }
+
+
 }

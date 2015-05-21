@@ -18,7 +18,7 @@
     <string name="title_section3">Logout</string>
     <string name="yes">yes</string>
     <string name="no">no</string>
-    <string name="dialog_logout">Do you really want to logout?</string>
+    <string name="dialog_logout">  Do you want to logout?</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -35,7 +35,7 @@
     <string-array name="sections">
         <item>Profile</item>
         <item>Ask a Question</item>
-        <item>Loout</item>
+        <item>Logout</item>
     </string-array>
     <string-array name="section_titles">
         <item>Profile</item>
@@ -43,9 +43,9 @@
         <item>Logout</item>
     </string-array>
     <string-array name="sections_icons">
-        <item>@android:drawable/ic_menu_crop</item>
-        <item>@android:drawable/ic_menu_edit</item>
-        <item>@android:drawable/ic_lock_power_off</item>
+        <item>@drawable/ic_profile</item>
+        <item>@drawable/ic_pencil</item>
+        <item>@drawable/ic_logout</item>
     </string-array>
 
 

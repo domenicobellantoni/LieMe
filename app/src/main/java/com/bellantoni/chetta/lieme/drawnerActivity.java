@@ -2,6 +2,8 @@ package com.bellantoni.chetta.lieme;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -31,6 +33,7 @@ public class drawnerActivity extends ActionBarActivity
     private ProfileFragment profileFragment;
     private int selected=0;
     private AskFragment askFragment;
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +49,10 @@ public class drawnerActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        this.actionBar = getSupportActionBar();
+        this.actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ff9200")));
+        this.actionBar.setTitle("Lieme");
+
         this.intent = getIntent();
         if(intent.getStringExtra("idfromlogin")!=null) {
             this.surname = intent.getStringExtra("surnamefromlogin");
@@ -122,11 +127,7 @@ public class drawnerActivity extends ActionBarActivity
     }
 
     private void logout(){
-        /*
-        LoginManager.getInstance().logOut();
-        final Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();*/
+
         LogoutDialog logoutDialog = new LogoutDialog();
         logoutDialog.show(getSupportFragmentManager(), "PROGRESS_DIALOG");
     }
@@ -141,49 +142,8 @@ public class drawnerActivity extends ActionBarActivity
 
     @Override
     public void noPressed(){
-        //
+        //nothing to do
     }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_drawner, container, false);
-
-            return rootView;
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-
-        }
-    }
-
 
 
 
@@ -191,6 +151,9 @@ public class drawnerActivity extends ActionBarActivity
       //ho creato tutti i metodi necessari di set e get nel profile fragment
         //per la rotazione guadrare il manufest tag conf in questa attività
     private void goProfile(){
+
+        this.actionBar = getSupportActionBar();
+        this.actionBar.hide();
 
         if(this.profileFragment==null) {
             Profile profile = Profile.getCurrentProfile();
@@ -231,6 +194,9 @@ public class drawnerActivity extends ActionBarActivity
     }
 
     private void goAskQuestion(){
+
+
+        this.actionBar.show();
 
         if(this.askFragment==null) {
             this.askFragment = new AskFragment();

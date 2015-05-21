@@ -1,7 +1,23 @@
+
+
 <ListView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:choiceMode="singleChoice"
     android:divider="#ffffff" android:dividerHeight="1dp"
-    android:background="#cecece"
+    android:background="#80ffffff"
     tools:context="com.bellantoni.chetta.lieme.NavigationDrawerFragment"
-    android:drawSelectorOnTop="false" />
+    android:drawSelectorOnTop="false"
+    android:smoothScrollbar="true"
+    android:longClickable="false"
+    android:nestedScrollingEnabled="false"
+    android:footerDividersEnabled="false"
+    android:headerDividersEnabled="true"
+    android:paddingLeft="10dp"
+    android:stackFromBottom="false"
+    android:scrollingCache="false"
+    android:paddingRight="10dp"
+    android:textFilterEnabled="false"
+    android:theme="@style/Base.Widget.AppCompat.ActionMode"
+    android:textAlignment="center"
+    android:transitionGroup="true" />
+
