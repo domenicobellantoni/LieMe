@@ -32,6 +32,22 @@
     <string name="title_activity_main">MainActivity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string-array name="sections">
+        <item>Profile</item>
+        <item>Ask a Question</item>
+        <item>Loout</item>
+    </string-array>
+    <string-array name="section_titles">
+        <item>Profile</item>
+        <item>Ask a Question</item>
+        <item>Logout</item>
+    </string-array>
+    <string-array name="sections_icons">
+        <item>@android:drawable/ic_menu_crop</item>
+        <item>@android:drawable/ic_menu_edit</item>
+        <item>@android:drawable/ic_lock_power_off</item>
+    </string-array>
+
 
 
 

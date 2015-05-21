@@ -2,7 +2,6 @@ package com.bellantoni.chetta.lieme;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Outline;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -14,11 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.view.ViewOutlineProvider;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.graphics.Outline;
-
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -36,6 +30,7 @@ public class drawnerActivity extends ActionBarActivity
     private String photo1, photo2;
     private ProfileFragment profileFragment;
     private int selected=0;
+    private AskFragment askFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +78,7 @@ public class drawnerActivity extends ActionBarActivity
                 selected=0;
                 break;
             case 1:
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                        .commit();
+                goAskQuestion();
                 selected=1;
                 break;
             case 2:
@@ -230,6 +222,28 @@ public class drawnerActivity extends ActionBarActivity
         }
 
 
+    }
+
+    @Override
+    public void goaskQuestionFragment(){
+        goAskQuestion();
+
+    }
+
+    private void goAskQuestion(){
+
+        if(this.askFragment==null) {
+            this.askFragment = new AskFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, this.askFragment)
+                    .commit();
+        }else{
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, this.askFragment)
+                    .commit();
+        }
     }
 
 }

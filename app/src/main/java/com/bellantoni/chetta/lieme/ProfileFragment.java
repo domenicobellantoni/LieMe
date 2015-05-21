@@ -33,7 +33,7 @@ public class ProfileFragment extends Fragment {
     private ImageButton FAB;
 
     public interface ProfileFragmentInterface{
-        //public void goaskQuestionFragment();
+        public void goaskQuestionFragment();
 
     }
 
@@ -121,7 +121,7 @@ public class ProfileFragment extends Fragment {
         FAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mProfileFragmentInteface.goaskQuestionFragment();
 
             }
         });
