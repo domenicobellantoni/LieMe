@@ -1,5 +1,6 @@
 package com.bellantoni.chetta.lieme;
 
+import android.graphics.Outline;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -77,6 +78,8 @@ public class NavigationDrawerFragment extends Fragment {
 
         // Select either the default item (0) or the last selected item.
         selectItem(mCurrentSelectedPosition);
+        //Outline
+
     }
 
     @Override
@@ -99,7 +102,7 @@ public class NavigationDrawerFragment extends Fragment {
         });
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
+                android.R.layout.two_line_list_item,
                 android.R.id.text1,
                 new String[]{
                         getString(R.string.title_section1),

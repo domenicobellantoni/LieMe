@@ -51,6 +51,7 @@ public class LoginActivity extends ActionBarActivity implements LoginFragment.Li
     @Override
     public void goProfile(Profile profile){
         final Intent intent = new Intent(this, drawnerActivity.class);
+        //final Intent intent = new Intent(this, New_Drawner.class);
         intent.putExtra("namefromlogin", profile.getFirstName());
         intent.putExtra("surnamefromlogin", profile.getLastName());
         intent.putExtra("idfromlogin", profile.getId());

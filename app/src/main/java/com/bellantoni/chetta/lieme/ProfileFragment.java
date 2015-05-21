@@ -4,18 +4,19 @@ package com.bellantoni.chetta.lieme;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
 import com.facebook.FacebookSdk;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -27,11 +28,12 @@ public class ProfileFragment extends Fragment {
     private ImageView profileImage;
     private Bitmap bitmap = null;
     private RoundImage roundedImage;
+    private RoundImage roundFAB;
     private String id;
-    private Bundle savedState;
-
+    private ImageButton FAB;
 
     public interface ProfileFragmentInterface{
+        //public void goaskQuestionFragment();
 
     }
 
@@ -47,31 +49,59 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    public String getIdprofile() {
+        return id;
+    }
+
+    public RoundImage getRoundedImage() {
+        return roundedImage;
+    }
+
+    public String getNameSurnameString() {
+        return nameSurnameString;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setRoundedImage(RoundImage roundedImage) {
+        this.roundedImage = roundedImage;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
+    public void setNameSurnameString(String nameSurnameString) {
+        this.nameSurnameString = nameSurnameString;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public void onDestroy(){
-
         super.onDestroy();
+
+    }
+
+    public ProfileFragmentInterface getmProfileFragmentInteface() {
+        return mProfileFragmentInteface;
     }
 
     @Override
     public void onCreate(Bundle savedBundle){
         super.onCreate(savedBundle);
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
-        if(savedBundle!=null){
-            this.savedState=savedBundle;
+        setRetainInstance(true);
 
-        }
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            //Restore the fragment's state here
-            System.out.println("USO IMMAGINE SALVATA, RIPRISTINO I SINGOLI CAMPI DEL FRAGMENT");
-            this.nameSurname.setText(getArguments().getString("namesurname"));
-            this.profileImage.setImageBitmap((Bitmap)getArguments().getParcelable("imgprofile"));
-        }
     }
 
 
@@ -80,24 +110,23 @@ public class ProfileFragment extends Fragment {
         final View firstAccessView = inflater.inflate(R.layout.fragment_profile, null);
         this.profileImage = (ImageView) firstAccessView.findViewById(R.id.imageProfile);
         this.nameSurname = (TextView) firstAccessView.findViewById(R.id.nameSurname);
-        System.out.println("SCARICO IMMAGINE");
         this.nameSurnameString = getArguments().getString("name") + " " + getArguments().getString("surname");
         this.nameSurname.setText(nameSurnameString);
         DownloaderProfileImage downloaderProfileImage = new DownloaderProfileImage();
         downloaderProfileImage.execute(getArguments().getString("photo1") + getArguments().get("id") + getArguments().getString("photo2"));
+        FAB = (ImageButton) firstAccessView.findViewById(R.id.fab);
+        Drawable d = getResources().getDrawable(R.drawable.ic_action);
+        Bitmap bitmapAction = ((BitmapDrawable)d).getBitmap();
+        FAB.setImageDrawable(new RoundImage(bitmapAction));
+        FAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+
+            }
+        });
         return firstAccessView;
     }
-
-    @Override
-    public void onSaveInstanceState(Bundle bundle) {
-        super.onSaveInstanceState(bundle);
-        bundle.putString("namesurname", nameSurnameString);
-        bundle.putParcelable("imgprofile", bitmap);
-        System.out.println("SALVO SINGOLI CAMPI FRAGMENT");
-    }
-
-
 
 
     private class DownloaderProfileImage extends AsyncTask<String,String,Bitmap> {
@@ -140,9 +169,6 @@ public class ProfileFragment extends Fragment {
                 e.printStackTrace();
                 return null;
             }
-
-
-
 
         }
     }

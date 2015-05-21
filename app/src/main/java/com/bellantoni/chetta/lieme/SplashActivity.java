@@ -116,6 +116,7 @@ public class SplashActivity extends Activity {
             finish();
         }else{
             final Intent intent = new Intent(this, drawnerActivity.class);
+
             Profile profile = Profile.getCurrentProfile();
             intent.putExtra("namefromsplash", profile.getFirstName());
             intent.putExtra("surnamefromsplash", profile.getLastName());

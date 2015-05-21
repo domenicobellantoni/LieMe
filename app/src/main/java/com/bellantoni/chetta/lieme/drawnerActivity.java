@@ -2,6 +2,7 @@ package com.bellantoni.chetta.lieme;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Outline;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.view.ViewOutlineProvider;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.graphics.Outline;
+
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -29,7 +35,6 @@ public class drawnerActivity extends ActionBarActivity
     private Intent intent;
     private String photo1, photo2;
     private ProfileFragment profileFragment;
-    private boolean restoredProfile = false;
     private int selected=0;
 
     @Override
@@ -64,27 +69,10 @@ public class drawnerActivity extends ActionBarActivity
         this.photo1 = "https://graph.facebook.com/";
         this.photo2 = "/picture?height=105&width=105";
 
-        if (savedInstanceState != null && selected==0) {
-            //Restore the fragment's instance
-            System.out.println("RIPRISTINO FRAGMENT");
-            this.profileFragment = (ProfileFragment) getSupportFragmentManager().getFragment(
-                    savedInstanceState, "profileFragment");
-
-            restoredProfile=true;
-
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        System.out.println("SALVO FRAGMENT");
-        if(profileFragment!=null)
-            getSupportFragmentManager().putFragment(outState, "profileFragment", profileFragment);
-
 
 
     }
+
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
@@ -207,6 +195,9 @@ public class drawnerActivity extends ActionBarActivity
 
 
 
+      ///se un istanza del profilo è già stata creata imposto e basta
+      //ho creato tutti i metodi necessari di set e get nel profile fragment
+        //per la rotazione guadrare il manufest tag conf in questa attività
     private void goProfile(){
 
         if(this.profileFragment==null) {
@@ -230,6 +221,8 @@ public class drawnerActivity extends ActionBarActivity
                     .replace(R.id.container, profileFragment, "P")
                     .commit();
         }else{
+            this.profileFragment.setNameSurnameString(this.profileFragment.getNameSurnameString());
+            this.profileFragment.setBitmap(this.profileFragment.getBitmap());
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, profileFragment, "P")
