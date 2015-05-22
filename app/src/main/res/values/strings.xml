@@ -22,7 +22,8 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
+    <string name="write">Write your question:</string>
+    <string name="to">To:</string>
     <string name="action_example">Example action</string>
 
 <!-- TODO: Remove or change this placeholder text -->
@@ -33,9 +34,9 @@
 
     <string name="hello_world">Hello world!</string>
     <string-array name="sections">
-        <item>Profile</item>
-        <item>Ask a Question</item>
-        <item>Logout</item>
+        <item> \u0020 \u0020 \u0020 Profile</item>
+        <item> \u0020 \u0020 \u0020 Ask</item>
+        <item> \u0020 \u0020 \u0020 Logout</item>
     </string-array>
     <string-array name="section_titles">
         <item>Profile</item>

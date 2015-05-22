@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:choiceMode="singleChoice"
     android:divider="#ffffff" android:dividerHeight="1dp"
-    android:background="#80ffffff"
+    android:background="#cecece"
     tools:context="com.bellantoni.chetta.lieme.NavigationDrawerFragment"
     android:drawSelectorOnTop="false"
     android:smoothScrollbar="true"

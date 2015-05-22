@@ -1,19 +1,15 @@
 package com.bellantoni.chetta.lieme;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
@@ -31,7 +27,7 @@ public class drawnerActivity extends ActionBarActivity
     private Intent intent;
     private String photo1, photo2;
     private ProfileFragment profileFragment;
-    private int selected=0;
+
     private AskFragment askFragment;
     ActionBar actionBar;
 
@@ -51,7 +47,7 @@ public class drawnerActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         this.actionBar = getSupportActionBar();
         this.actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ff9200")));
-        this.actionBar.setTitle("Lieme");
+        this.actionBar.setTitle(R.string.app_name);
 
         this.intent = getIntent();
         if(intent.getStringExtra("idfromlogin")!=null) {
@@ -80,11 +76,11 @@ public class drawnerActivity extends ActionBarActivity
         switch (position){
             case 0:
                 goProfile();
-                selected=0;
+
                 break;
             case 1:
                 goAskQuestion();
-                selected=1;
+
                 break;
             case 2:
                 logout();
@@ -93,8 +89,6 @@ public class drawnerActivity extends ActionBarActivity
         }
 
     }
-
-
 
 
 

@@ -108,7 +108,9 @@ public class NavigationDrawerFragment extends Fragment {
         final TypedArray typedArray = getResources().obtainTypedArray(R.array.sections_icons);
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
-                android.R.layout.simple_selectable_list_item,
+                android.R.layout.simple_list_item_multiple_choice,
+
+
                 android.R.id.text1,
                 getResources().getStringArray(R.array.sections)
         ) {
@@ -118,6 +120,7 @@ public class NavigationDrawerFragment extends Fragment {
                 int resourceId = typedArray.getResourceId(position, 0);
                 Drawable drawable = getResources().getDrawable(resourceId);
                 ((TextView) v).setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+                //((TextView) v).setTextColor(Color.BLACK);
                 return v;
             }
         });
@@ -280,8 +283,7 @@ public class NavigationDrawerFragment extends Fragment {
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ff9200")));
-        actionBar.setTitle("Lieme");
-        actionBar.setLogo(R.mipmap.logo_mini_dialog);
+        actionBar.setTitle(R.string.app_name);
 
     }
 
