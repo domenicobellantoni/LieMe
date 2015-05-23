@@ -13,9 +13,14 @@ import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
 import com.facebook.FacebookSdk;
 import java.io.IOException;
@@ -32,6 +37,40 @@ public class ProfileFragment extends Fragment {
     private RoundImage roundFAB;
     private String id;
     private ImageButton FAB;
+
+    ListView list;
+
+    String[] itemname ={
+            "Federico Badini",
+            "Matteo Bana",
+            "Alessandro Donini",
+            "Nicora Elisa",
+            "Massimo De Marchi",
+            "Lorenzo Di tucci",
+            "Davide Dipinto",
+            "Leonardo Cavagnis"
+    };
+
+    Integer[] imgid={
+            R.drawable.badini,
+            R.drawable.bana,
+            R.drawable.donini,
+            R.drawable.elisa,
+            R.drawable.demarchi,
+            R.drawable.ditucci,
+            R.drawable.dipinto,
+            R.drawable.cavagnis,
+    };
+    String[] questions={
+            "domand fhuhfskjdjksw",
+            "domanda dkhsifgilfgilfguyeguyeg",
+            "domanda sdgiyodgtwoedjwkldlywgdlwigdhlwkd",
+            "domanda hdsdghs",
+            "domanda sihdguydgweudgwjhgdjwhgdjshgdsgdhlsgdjs",
+            "domanda iusgdilsyahgdlsjgdilys",
+            "domanda sidhiofygejbdjkgdjskldgysjgdxb",
+            "domanda lhdshdkjòsahdkasjdjqgdjshbjgd",
+    };
 
     public interface ProfileFragmentInterface{
         public void goaskQuestionFragment();
@@ -96,7 +135,10 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedBundle){
         super.onCreate(savedBundle);
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+
+
         setRetainInstance(true);
+
 
 
     }
@@ -128,6 +170,27 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+
+
+        CustomListAdapter adapter=new CustomListAdapter(getActivity(), itemname, imgid, questions);
+        list=(ListView)firstAccessView.findViewById(R.id.list);
+        list.setAdapter(adapter);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                // TODO Auto-generated method stub
+                String Slecteditem= itemname[+position];
+                Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+
+
         return firstAccessView;
     }
 

@@ -36,21 +36,12 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".drawnerActivity"
+
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/title_activity_drawner" >
         </activity>
-        <activity
-            android:name=".Prova_prova"
-            android:label="@string/title_activity_prova_prova" >
-        </activity>
-        <activity
-            android:name=".New_Drawner"
-            android:label="@string/title_activity_new__drawner" >
-        </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main" >
-        </activity>
+
+
     </application>
 
 </manifest>

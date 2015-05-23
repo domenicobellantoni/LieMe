@@ -1,6 +1,7 @@
 package com.bellantoni.chetta.lieme;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -11,6 +12,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -64,7 +68,6 @@ public class drawnerActivity extends ActionBarActivity
 
         this.photo1 = "https://graph.facebook.com/";
         this.photo2 = "/picture?height=105&width=105";
-
 
 
     }
@@ -148,6 +151,7 @@ public class drawnerActivity extends ActionBarActivity
 
         this.actionBar = getSupportActionBar();
         this.actionBar.hide();
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         if(this.profileFragment==null) {
             Profile profile = Profile.getCurrentProfile();
