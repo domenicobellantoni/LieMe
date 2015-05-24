@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+    android:id="@+id/lain"
+    android:nestedScrollingEnabled="true">
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:hint="To:"
+        android:id="@+id/who"
+        android:layout_alignParentTop="true"
+        android:inputType="textPersonName"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:paddingStart="20dp"
+        android:textIsSelectable="true"
+        android:padding="20dp"
+        android:enabled="true"
+        android:editable="true"
+        android:clickable="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:id="@+id/question"
+        android:hint="@string/write"
+        android:layout_below="@+id/who"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentEnd="true"
+        android:gravity="top"
+        android:editable="true"
+        android:paddingStart="20dp"
+        android:padding="20dp"
+        android:enabled="true"
+        android:autoText="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
+</RelativeLayout>

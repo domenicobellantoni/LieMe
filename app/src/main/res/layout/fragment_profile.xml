@@ -1,19 +1,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bellantoni.chetta.lieme.ProfileActivity">
+   >
 
     <LinearLayout
+        android:id ="@+id/layout_top"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="114dp"
             android:layout_gravity="center_horizontal"
             android:id="@+id/ack"
             android:background="#f59200">
@@ -21,7 +23,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="10dp"
                 android:id="@+id/imageProfile"
 
                 android:layout_gravity="center_horizontal|top" />
@@ -31,12 +33,39 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:id="@+id/nameSurname"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="38dp"
                 android:textStyle="bold"
                 android:layout_gravity="center"
                 android:textColor="#ffffff" />
 
 
+
+
         </FrameLayout>
+
+        <ListView
+
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:footerDividersEnabled="false"
+            android:headerDividersEnabled="false"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp" />
+
     </LinearLayout>
+
+    <ImageButton
+        android:layout_margin="15dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_action"
+        android:background="@drawable/round"
+        android:id="@+id/fab"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+
+         />
+
+
 </RelativeLayout>

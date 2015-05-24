@@ -9,6 +9,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
+
 import java.lang.ref.WeakReference;
 
 
@@ -61,12 +65,14 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_splash);
         if(savedInstanceState!=null){
             this.mStartTime = savedInstanceState.getLong(START_TIME_KEY);
 
         }
         mHandler = new UiHandler(this);
+        FacebookSdk.sdkInitialize(getApplicationContext());
     }
 
 
@@ -103,9 +109,26 @@ public class SplashActivity extends Activity {
     }
 
     private void goAhead(){
-        final Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+        AccessToken accessToken = checkSession();
+        if(accessToken==null) {
+            final Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }else{
+            final Intent intent = new Intent(this, drawnerActivity.class);
+
+            Profile profile = Profile.getCurrentProfile();
+            intent.putExtra("namefromsplash", profile.getFirstName());
+            intent.putExtra("surnamefromsplash", profile.getLastName());
+            intent.putExtra("idfromsplash", profile.getId());
+            intent.putExtra("photo1", "https://graph.facebook.com/" );
+            intent.putExtra("photo2","/picture?height=105&width=105");
+            System.out.println("NOMEEEEEEE "+profile.getFirstName());
+
+            startActivity(intent);
+            finish();
+
+        }
     }
 
     @Override
@@ -121,5 +144,10 @@ public class SplashActivity extends Activity {
         super.onRestoreInstanceState(savedInstance);
         this.mIsDone=savedInstance.getBoolean(IS_DONE_KEY);
 
+    }
+
+    private AccessToken checkSession() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        return accessToken;
     }
 }
