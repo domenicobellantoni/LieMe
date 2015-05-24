@@ -18,6 +18,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 
+
 public class LoginFragment extends Fragment {
 
     private CallbackManager mCallbackManager;
