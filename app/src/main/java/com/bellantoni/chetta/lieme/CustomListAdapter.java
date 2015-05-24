@@ -13,23 +13,32 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
+import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
 
-public class CustomListAdapter extends ArrayAdapter<String> {
+import java.util.List;
+
+public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
 
     private final Activity context;
-    private final String[] itemname;
+    /*private final String[] itemname;
     private final Integer[] imgid;
     private final String[] questions;
+    private final String[] ids;*/
+    List<RowItemProfile> rows;
 
-    public CustomListAdapter(Activity context, String[] itemname, Integer[] imgid, String[] questions) {
-        super(context, R.layout.mylist, itemname);
+    public CustomListAdapter(Activity context, List<RowItemProfile> rows) {
+        super(context, R.layout.mylist, rows);
         // TODO Auto-generated constructor stub
 
         this.context = context;
-        this.itemname = itemname;
+        /*this.itemname = itemname;
         this.imgid = imgid;
         this.questions=questions;
+        this.ids=ids;*/
+        this.rows=rows;
     }
+
+
 
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
@@ -40,14 +49,18 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         txtTitle.setTextColor(Color.BLACK);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imgList);
         TextView extratxt = (TextView) rowView.findViewById(R.id.question);
-
-        txtTitle.setText(itemname[position]);
-        imageView.setImageDrawable(new RoundImage(BitmapFactory.decodeResource(context.getResources(), imgid[position])));
+        TextView idfacebook = (TextView) rowView.findViewById(R.id.facebookId);
+        txtTitle.setText(this.rows.get(position).getNameSurname());
+        imageView.setImageDrawable(new RoundImage(BitmapFactory.decodeResource(context.getResources(), this.rows.get(position).getIdImg())));
         //imageView.setImageResource(imgid[position]);
-        extratxt.setText(questions[position]);
+        extratxt.setText(this.rows.get(position).getQuestion());
+        idfacebook.setText(this.rows.get(position).getId());
+
         return rowView;
 
     }
 
     ;
+
+
 }
