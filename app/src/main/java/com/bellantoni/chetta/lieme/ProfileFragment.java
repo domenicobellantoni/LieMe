@@ -9,32 +9,25 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.bellantoni.chetta.lieme.generalclasses.EndlessScrollListener;
 import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
-import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
 import com.facebook.FacebookSdk;
-import com.facebook.Profile;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
-public class ProfileFragment extends Fragment /*implements AbsListView.OnScrollListener*/ {
+public class ProfileFragment extends Fragment {
 
     private TextView nameSurname;
     private String nameSurnameString;
@@ -44,8 +37,6 @@ public class ProfileFragment extends Fragment /*implements AbsListView.OnScrollL
     private RoundImage roundFAB;
     private String id;
     private ImageButton FAB;
-    private CustomListAdapter adapter;
-    private List<RowItemProfile> rows;
 
     ListView list;
 
@@ -80,19 +71,6 @@ public class ProfileFragment extends Fragment /*implements AbsListView.OnScrollL
             "domanda sidhiofygejbdjkgdjskldgysjgdxb",
             "domanda lhdshdkjòsahdkasjdjqgdjshbjgd",
     };
-
-    String[] facebookids={
-        "564874648477",
-        "6264687618",
-        "624167341781",
-        "642787867354",
-        "35416681717",
-        "6541451738713",
-        "3482678173",
-        "56178531454187",
-    };
-
-
 
     public interface ProfileFragmentInterface{
         public void goaskQuestionFragment();
@@ -157,6 +135,8 @@ public class ProfileFragment extends Fragment /*implements AbsListView.OnScrollL
     public void onCreate(Bundle savedBundle){
         super.onCreate(savedBundle);
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+
+
         setRetainInstance(true);
 
 
@@ -191,15 +171,8 @@ public class ProfileFragment extends Fragment /*implements AbsListView.OnScrollL
             }
         });
 
-        RowItemProfile row =null;
-        this.rows = new ArrayList<RowItemProfile>();
-        for(int i=0; i<8; i++){
-             row = new RowItemProfile(questions[i],itemname[i], facebookids[i], imgid[i]);
-            rows.add(row);
-        }
-        this.adapter = new CustomListAdapter(getActivity(),rows);
 
-        //this.adapter=new CustomListAdapter(getActivity(), itemname, imgid, questions,facebookids);
+        CustomListAdapter adapter=new CustomListAdapter(getActivity(), itemname, imgid, questions);
         list=(ListView)firstAccessView.findViewById(R.id.list);
         list.setAdapter(adapter);
 
@@ -210,63 +183,16 @@ public class ProfileFragment extends Fragment /*implements AbsListView.OnScrollL
                                     int position, long id) {
                 // TODO Auto-generated method stub
                 String Slecteditem= itemname[+position];
-                String facebookid = facebookids[+position];
-                Toast.makeText(getActivity().getApplicationContext(), Slecteditem+" "+facebookid, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
 
             }
         });
 
-        /*list.setOnScrollListener(new EndlessScrollListener() {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to your AdapterView
-                customLoadMoreDataFromApi(page);
-                // or customLoadMoreDataFromApi(totalItemsCount);
-            }
-        });*/
-
-        /*list.setOnScrollListener(new EndlessScrollListener() {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                while (true){
-                    rows.add(new RowItemProfile("PIPPO", "PIPPO", "KDJWELIDJEKFJD", R.id.icon));
-
-                }
-            }
-        });*/
 
 
-       /* adapter.insert(row,8);
-        adapter.insert(row,9);
-        adapter.insert(row,9);
-        adapter.notifyDataSetChanged();*/
 
-
-        //
         return firstAccessView;
     }
-
-    /*@Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        System.out.println("FINE LISTAAAAAAAAA");
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem,
-                         int visibleItemCount, int totalItemCount) {
-
-        while(true){
-            rows.add(new RowItemProfile("PIPPO", "PIPPO", "KLJHKLDHN", R.id.icon));
-            this.adapter.notifyDataSetChanged();
-        }
-
-    }*/
-
-
-
-
-
 
 
     private class DownloaderProfileImage extends AsyncTask<String,String,Bitmap> {
