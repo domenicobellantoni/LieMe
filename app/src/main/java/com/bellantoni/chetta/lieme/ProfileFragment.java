@@ -230,7 +230,7 @@ public class ProfileFragment extends Fragment {
             gcm = GoogleCloudMessaging.getInstance(getActivity().getApplicationContext());
             regid = getRegistrationId(getActivity().getApplicationContext());
 
-            if (regid == null) {
+            if (regid.isEmpty()) {
                 registerInBackground();
                 Log.i(TAG, " not connected");
             }
