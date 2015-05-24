@@ -108,7 +108,7 @@ public class NavigationDrawerFragment extends Fragment {
         final TypedArray typedArray = getResources().obtainTypedArray(R.array.sections_icons);
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_multiple_choice,
+                android.R.layout.simple_list_item_single_choice,
 
 
                 android.R.id.text1,

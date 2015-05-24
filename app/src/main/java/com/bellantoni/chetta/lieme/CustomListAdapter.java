@@ -3,6 +3,7 @@ package com.bellantoni.chetta.lieme;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +34,10 @@ public class CustomListAdapter extends ArrayAdapter<String> {
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.mylist, null, true);
+        rowView.setPadding(0,10,0,10);
 
         TextView txtTitle = (TextView) rowView.findViewById(R.id.nameList);
+        txtTitle.setTextColor(Color.BLACK);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imgList);
         TextView extratxt = (TextView) rowView.findViewById(R.id.question);
 
