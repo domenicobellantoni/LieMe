@@ -19,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -70,16 +69,26 @@ public class ProfileFragment extends Fragment {
             "Davide Dipinto",
             "Leonardo Cavagnis"
     };
+    String[] idfb ={
+            "lkfhdkjhffFederico Badini",
+            "dfljhdfMatteo Bana",
+            "dfldsAlessandro Donini",
+            "dfsdfNicora Elisa",
+            "fddsfMassimo De Marchi",
+            "fdfasLorenzo Di tucci",
+            "sadfsfDavide Dipinto",
+            "sdfsdfsdafadLeonardo Cavagnis"
+    };
 
     Integer[] imgid={
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
-            R.drawable.ic_launcher,
+            R.drawable.badini,
+            R.drawable.bana,
+            R.drawable.donini,
+            R.drawable.elisa,
+            R.drawable.demarchi,
+            R.drawable.ditucci,
+            R.drawable.dipinto,
+            R.drawable.cavagnis,
     };
     String[] questions={
             "domand fhuhfskjdjksw",
@@ -206,7 +215,7 @@ public class ProfileFragment extends Fragment {
         });
 
 
-        CustomListAdapter adapter=new CustomListAdapter(getActivity(), itemname, imgid, questions);
+        CustomListAdapter adapter=new CustomListAdapter(getActivity(), itemname, imgid, questions,idfb);
         list=(ListView)firstAccessView.findViewById(R.id.list);
         list.setAdapter(adapter);
 
