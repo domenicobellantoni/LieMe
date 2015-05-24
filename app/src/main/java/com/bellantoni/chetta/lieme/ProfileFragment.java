@@ -344,13 +344,8 @@ public class ProfileFragment extends Fragment {
                     regid = gcm.register(SENDER_ID);
                     msg = "Device registered, registration ID=" + regid;
 
-                    // You should send the registration ID to your server over HTTP, so it
-                    // can use GCM/HTTP or CCS to send messages to your app.
-                    sendRegistrationIdToBackend();
-
-                    // For this demo: we don't need to send it because the device will send
-                    // upstream messages to a server that echo back the message using the
-                    // 'from' address in the message.
+                    LoginUserToServer loginUserToServer = new LoginUserToServer();
+                    loginUserToServer.execute(getArguments().get("id").toString(), regid);
 
                     // Persist the regID - no need to register again.
                     storeRegistrationId(getActivity().getApplicationContext(), regid);
@@ -393,10 +388,6 @@ public class ProfileFragment extends Fragment {
             // should never happen
             throw new RuntimeException("Could not get package name: " + e);
         }
-    }
-
-    private void sendRegistrationIdToBackend() {
-
     }
 
     private class LoginUserToServer extends AsyncTask<String,String,String> {
