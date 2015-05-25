@@ -14,10 +14,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -39,8 +41,15 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -56,6 +65,8 @@ public class ProfileFragment extends Fragment {
     private RoundImage roundFAB;
     private String id;
     private ImageButton FAB;
+
+
 
     ListView list;
 
@@ -81,14 +92,15 @@ public class ProfileFragment extends Fragment {
     };
 
     Integer[] imgid={
-            R.drawable.badini,
-            R.drawable.bana,
-            R.drawable.donini,
-            R.drawable.elisa,
-            R.drawable.demarchi,
-            R.drawable.ditucci,
-            R.drawable.dipinto,
-            R.drawable.cavagnis,
+            R.drawable.ic_profile,
+            R.drawable.ic_profile,
+            R.drawable.ic_profile,
+            R.drawable.ic_profile,
+            R.drawable.ic_profile,
+            R.drawable.ic_profile,
+            R.drawable.ic_profile,
+            R.drawable.ic_profile,
+
     };
     String[] questions={
             "domand fhuhfskjdjksw",
@@ -215,7 +227,7 @@ public class ProfileFragment extends Fragment {
         });
 
 
-        CustomListAdapter adapter=new CustomListAdapter(getActivity(), itemname, imgid, questions,idfb);
+        final CustomListAdapter adapter=new CustomListAdapter(getActivity(), itemname, imgid, questions,idfb);
         list=(ListView)firstAccessView.findViewById(R.id.list);
         list.setAdapter(adapter);
 
@@ -230,6 +242,7 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+
 
         // GCM
         // Check device for Play Services APK.
@@ -259,8 +272,11 @@ public class ProfileFragment extends Fragment {
         }
 
 
+
         return firstAccessView;
     }
+
+
 
 
     private class DownloaderProfileImage extends AsyncTask<String,String,Bitmap> {
@@ -443,4 +459,11 @@ public class ProfileFragment extends Fragment {
             return null;
         }
     }
+
+
+
+
+
+
+
 }
