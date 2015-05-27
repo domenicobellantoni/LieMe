@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
+import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
 import com.facebook.FacebookSdk;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -55,7 +56,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements AbsListView.OnScrollListener {
 
     private TextView nameSurname;
     private String nameSurnameString;
@@ -65,6 +66,12 @@ public class ProfileFragment extends Fragment {
     private RoundImage roundFAB;
     private String id;
     private ImageButton FAB;
+    private CustomListAdapter adapter;
+
+
+
+
+    private List<RowItemProfile> rows;
 
 
 
@@ -92,14 +99,14 @@ public class ProfileFragment extends Fragment {
     };
 
     Integer[] imgid={
-            R.drawable.ic_profile,
-            R.drawable.ic_profile,
-            R.drawable.ic_profile,
-            R.drawable.ic_profile,
-            R.drawable.ic_profile,
-            R.drawable.ic_profile,
-            R.drawable.ic_profile,
-            R.drawable.ic_profile,
+            R.drawable.badini,
+            R.drawable.bana,
+            R.drawable.donini,
+            R.drawable.elisa,
+            R.drawable.demarchi,
+            R.drawable.ditucci,
+            R.drawable.dipinto,
+            R.drawable.cavagnis,
 
     };
     String[] questions={
@@ -190,8 +197,7 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedBundle){
         super.onCreate(savedBundle);
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
-
-
+        this.rows = new ArrayList<RowItemProfile>();
         setRetainInstance(true);
 
 
@@ -207,41 +213,59 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedBundle) {
-        final View firstAccessView = inflater.inflate(R.layout.fragment_profile, null);
-        this.profileImage = (ImageView) firstAccessView.findViewById(R.id.imageProfile);
-        this.nameSurname = (TextView) firstAccessView.findViewById(R.id.nameSurname);
-        this.nameSurnameString = getArguments().getString("name") + " " + getArguments().getString("surname");
-        this.nameSurname.setText(nameSurnameString);
-        DownloaderProfileImage downloaderProfileImage = new DownloaderProfileImage();
-        downloaderProfileImage.execute(getArguments().getString("photo1") + getArguments().get("id") + getArguments().getString("photo2"));
-        FAB = (ImageButton) firstAccessView.findViewById(R.id.fab);
-        Drawable d = getResources().getDrawable(R.drawable.ic_action);
-        Bitmap bitmapAction = ((BitmapDrawable)d).getBitmap();
-        FAB.setImageDrawable(new RoundImage(bitmapAction));
-        FAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mProfileFragmentInteface.goaskQuestionFragment();
+
+        View firstAccessView;
+        if(savedBundle==null) {
+            firstAccessView = inflater.inflate(R.layout.fragment_profile, null);
+            this.profileImage = (ImageView) firstAccessView.findViewById(R.id.imageProfile);
+            this.nameSurname = (TextView) firstAccessView.findViewById(R.id.nameSurname);
+            this.nameSurnameString = getArguments().getString("name") + " " + getArguments().getString("surname");
+            this.nameSurname.setText(nameSurnameString);
+            DownloaderProfileImage downloaderProfileImage = new DownloaderProfileImage();
+            downloaderProfileImage.execute(getArguments().getString("photo1") + getArguments().get("id") + getArguments().getString("photo2"));
+            FAB = (ImageButton) firstAccessView.findViewById(R.id.fab);
+            Drawable d = getResources().getDrawable(R.drawable.ic_action);
+            Bitmap bitmapAction = ((BitmapDrawable) d).getBitmap();
+            FAB.setImageDrawable(new RoundImage(bitmapAction));
+            FAB.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mProfileFragmentInteface.goaskQuestionFragment();
+
+                }
+            });
+
+            for (int i = 0; i < 8; i++) {
+
+                RowItemProfile row = new RowItemProfile(questions[i], itemname[i], idfb[i], imgid[i]);
+                this.rows.add(row);
 
             }
-        });
 
 
-        final CustomListAdapter adapter=new CustomListAdapter(getActivity(), itemname, imgid, questions,idfb);
-        list=(ListView)firstAccessView.findViewById(R.id.list);
-        list.setAdapter(adapter);
+            //final CustomListAdapter adapter=new CustomListAdapter(getActivity(), itemname, imgid, questions,idfb);
+            adapter = new CustomListAdapter(getActivity(), this.rows);
+            list = (ListView) firstAccessView.findViewById(R.id.list);
+            list.setAdapter(adapter);
 
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            list.setOnScrollListener(this);
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                // TODO Auto-generated method stub
-                String Slecteditem= itemname[+position];
-                Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            }
-        });
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+                    // TODO Auto-generated method stub
+                    String Slecteditem = itemname[+position] + idfb[+position];
+                    Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+
+        }else{
+            firstAccessView = getView();
+        }
 
 
         // GCM
@@ -274,6 +298,46 @@ public class ProfileFragment extends Fragment {
 
 
         return firstAccessView;
+    }
+
+
+
+    public void onScroll(AbsListView view,
+                         int firstVisible, int visibleCount, int totalCount) {
+        System.out.println("QUESTO "+adapter.getItem(firstVisible).getId());
+
+        boolean loadMore =
+                firstVisible + visibleCount >= totalCount;
+
+        if(loadMore) {
+
+            this.adapter.setCount(this.adapter.getCount()+1);
+
+            //QUI DA FARE UNA QUERY ALLA VOLTA HO PROVATO A CARICARE TIPO 8 ELEMENTI ALLA VOLTA MA CRASHA, SPERO CHE LA QUERY SIA
+            //VELOCE, AL MASSIMO POSSIAMO PROVARE 2/3 ALLA VOLTA
+            rows.add(new RowItemProfile("Pippo", "Pippo", "Pippo", R.id.icon));
+            //this.adapter.addAll(this.rows);
+
+
+            System.out.println("CONTATORE "+ this.adapter.getCount());
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    public void onScrollStateChanged(AbsListView v, int s) {
+
+
+
+        //this.adapter.setCount(this.adapter.getCount()+8);
+        //this.adapter.addData(this.rows);
+
+            //this.adapter.addAll(this.rows);
+
+
+            System.out.println("CONTATORE "+ this.adapter.getCount());
+            adapter.notifyDataSetChanged();
+
+
     }
 
 
