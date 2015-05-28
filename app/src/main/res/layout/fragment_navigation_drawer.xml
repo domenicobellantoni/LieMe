@@ -1,23 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_weight="0.40"
+        android:background="#f39200">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/imageViewProfileDrawer"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="20px"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Medium Text"
+            android:id="@+id/textViewDrawner"
+            android:layout_gravity="right|bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:textIsSelectable="true" />
+
+        <ImageView
+            android:layout_width="83dp"
+            android:layout_height="66dp"
+            android:id="@+id/imgHeader"
+            android:layout_gravity="right|top"
+            android:background="@drawable/header" />
 
 
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:choiceMode="singleChoice"
-    android:divider="#ffffff" android:dividerHeight="1dp"
-    android:background="#cecece"
-    tools:context="com.bellantoni.chetta.lieme.NavigationDrawerFragment"
-    android:drawSelectorOnTop="false"
-    android:smoothScrollbar="true"
-    android:longClickable="false"
-    android:nestedScrollingEnabled="false"
-    android:footerDividersEnabled="false"
-    android:headerDividersEnabled="true"
-    android:paddingLeft="10dp"
-    android:stackFromBottom="false"
-    android:scrollingCache="false"
-    android:paddingRight="10dp"
-    android:textFilterEnabled="false"
-    android:theme="@style/Base.Widget.AppCompat.ActionMode"
-    android:textAlignment="center"
-    android:transitionGroup="true" />
+    </FrameLayout>
+
+
+    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        android:layout_height="262dp" android:choiceMode="singleChoice"
+        android:divider="#cecece" android:dividerHeight="1dp"
+        android:background="#FFFFFF"
+        tools:context="com.bellantoni.chetta.lieme.NavigationDrawerFragment"
+        android:id="@+id/listDrawer"
+        android:drawSelectorOnTop="false"
+        android:smoothScrollbar="true"
+        android:longClickable="false"
+        android:nestedScrollingEnabled="false"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="true"
+        android:paddingLeft="10dp"
+        android:stackFromBottom="false"
+        android:scrollingCache="false"
+        android:paddingRight="10dp"
+        android:textFilterEnabled="false"
+        android:theme="@style/Base.Widget.AppCompat.ActionMode"
+        android:textAlignment="center"
+        android:transitionGroup="true"
+        android:layout_weight="0.60" />
+
+
+
+</LinearLayout>
+
 

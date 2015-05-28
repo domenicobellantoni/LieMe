@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -27,6 +28,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
 import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
 import com.facebook.FacebookSdk;
@@ -34,6 +36,7 @@ import com.facebook.FacebookSdk;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -199,9 +202,6 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
         this.rows = new ArrayList<RowItemProfile>();
         setRetainInstance(true);
-
-
-
     }
 
     @Override
@@ -219,6 +219,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             firstAccessView = inflater.inflate(R.layout.fragment_profile, null);
             this.profileImage = (ImageView) firstAccessView.findViewById(R.id.imageProfile);
             this.nameSurname = (TextView) firstAccessView.findViewById(R.id.nameSurname);
+            //this.nameSurname.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Light.ttf"));
             this.nameSurnameString = getArguments().getString("name") + " " + getArguments().getString("surname");
             this.nameSurname.setText(nameSurnameString);
             DownloaderProfileImage downloaderProfileImage = new DownloaderProfileImage();
@@ -317,6 +318,17 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             //VELOCE, AL MASSIMO POSSIAMO PROVARE 2/3 ALLA VOLTA
             rows.add(new RowItemProfile("Pippo", "Pippo", "Pippo", R.id.icon));
             //this.adapter.addAll(this.rows);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+                    // TODO Auto-generated method stub
+                    String Slecteditem = adapter.getItem(position).getId();
+                    Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
+
+                }
+            });
 
 
             System.out.println("CONTATORE "+ this.adapter.getCount());

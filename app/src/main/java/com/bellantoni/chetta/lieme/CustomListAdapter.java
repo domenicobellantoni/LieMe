@@ -1,33 +1,23 @@
 package com.bellantoni.chetta.lieme;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.support.v7.widget.RecyclerView;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.squareup.picasso.Picasso;
-
-
-import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
 import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
-
-import java.sql.RowIdLifetime;
 import java.util.List;
 
 public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
 
     private final Activity context;
-    /*private final String[] itemname;
-    private final Integer[] imgid;
-    private final String[] questions;
-    private final String[] ids;*/
     private List<RowItemProfile> rows;
     private int count = 1;
     private TextView txtTitle;
@@ -35,17 +25,18 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
     private TextView extratxt;
     private TextView idfacebook;
     private View view;
+    private ListView list;
+    private Typeface tf;
 
-    public CustomListAdapter(Activity context, List<RowItemProfile> rows /*String[] itemname, Integer[] imgid, String[] questions, String[] ids*/) {
-        super(context, R.layout.mylist, rows);
-        // TODO Auto-generated constructor stub
 
+
+    public CustomListAdapter(Activity context, List<RowItemProfile> firstRows ) {
+
+        super(context, R.layout.mylist, firstRows);
         this.context = context;
-        /*this.itemname = itemname;
-        this.imgid = imgid;
-        this.questions=questions;
-        this.ids=ids;*/
-        this.rows = rows;
+        this.rows = firstRows;
+        //this.tf = Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Light.ttf");
+
     }
 
 
@@ -64,6 +55,7 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
 
             System.out.println("INFLATE VIEW");
 
+            view.setPadding(0,10,0,10);
             // Create a ViewHolder and store references to the two children views
             holder = new ViewHolder();
             holder.txtTitle = (TextView) view.findViewById(R.id.nameList);
@@ -71,8 +63,12 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
             holder.idfacebook = (TextView) view.findViewById(R.id.facebookId);
             holder. imageView = (ImageView) view.findViewById(R.id.imgList);
 
+
             // The tag can be any Object, this just happens to be the ViewHolder
             view.setTag(holder);
+
+
+
         } else {
             // Get the ViewHolder back to get fast access to the TextView
             // and the ImageView.
@@ -82,11 +78,15 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
         }
 
         // Bind that data efficiently!
+        //holder.txtTitle.setTypeface(tf);
 
         holder.txtTitle.setTextColor(Color.BLACK);
         holder.txtTitle.setText(this.rows.get(position).getNameSurname());
         //holder.imageView.setImageResource(R.mipmap.iconuseranonymous);
-        Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").fit().centerCrop().into(holder.imageView);
+        Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").transform(new CircleTransform()).fit().centerCrop().into(holder.imageView);
+
+        //holder.extratxt.setTypeface(tf);
+
         holder.extratxt.setText(this.rows.get(position).getQuestion());
 
         holder.idfacebook.setText(this.rows.get(position).getId());

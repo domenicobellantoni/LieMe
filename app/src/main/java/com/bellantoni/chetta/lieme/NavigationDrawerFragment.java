@@ -1,10 +1,6 @@
 package com.bellantoni.chetta.lieme;
 
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.Outline;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -17,16 +13,25 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
+import com.bellantoni.chetta.lieme.generalclasses.DrawerAdapter;
+import com.bellantoni.chetta.lieme.generalclasses.DrawerElement;
+import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -63,6 +68,25 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    private ImageView profileImageDrawer;
+    private TextView nameSurnameDrawer;
+    private DrawerAdapter adapter;
+    private ListView list;
+
+    private List<DrawerElement> drawerElements;
+
+    private final String[] sections= {
+            "Profile",
+            "Ask",
+            "Logout",
+    };
+
+    private final int[] idIcons = {
+
+            R.drawable.ic_profile,
+            R.drawable.ic_pencil,
+            R.drawable.ic_logout,
+    };
 
     public NavigationDrawerFragment() {
     }
@@ -70,7 +94,9 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
 
+        initList();
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -95,20 +121,53 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
-                R.layout.fragment_navigation_drawer, container, false);
-        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
+        View firstAccessView = inflater.inflate(R.layout.fragment_navigation_drawer, null);
+        this.profileImageDrawer = (ImageView) firstAccessView.findViewById(R.id.imageViewProfileDrawer);
+        RoundImage roundedImage = new RoundImage(BitmapFactory.decodeResource(getResources(), R.mipmap.iconuseranonymous));
+
+
+        //this.profileImageDrawer.setImageDrawable(roundedImage);
+
+        Picasso.with((Activity) getActivity()).load("https://graph.facebook.com/" + Profile.getCurrentProfile().getId() + "/picture?height=105&width=105")
+                .placeholder(roundedImage)
+                   .transform(new CircleTransform()).fit().centerCrop().into(this.profileImageDrawer);
+        this.nameSurnameDrawer = (TextView) firstAccessView.findViewById(R.id.textViewDrawner);
+        this.nameSurnameDrawer.setText(Profile.getCurrentProfile().getFirstName() + " " + Profile.getCurrentProfile().getLastName());
+
+
+        this.adapter = new DrawerAdapter(getActivity(), drawerElements);
+        list = (ListView) firstAccessView.findViewById(R.id.listDrawer);
+        list.setAdapter(adapter);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
             }
         });
-        final TypedArray typedArray = getResources().obtainTypedArray(R.array.sections_icons);
+
+
+        list.setItemChecked(mCurrentSelectedPosition,true);
+
+        return firstAccessView;
+
+        /*mDrawerListView = (ListView) inflater.inflate( R.layout.fragment_navigation_drawer, container, false);
+        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectItem(position);
+            }
+        });*/
+
+
+
+        /*final TypedArray typedArray = getResources().obtainTypedArray(R.array.sections_icons);
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_single_choice,
+                android.R.layout.simple_list_item_1,
 
 
                 android.R.id.text1,
@@ -117,6 +176,8 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
+                TextView tv = (TextView) v.findViewById(android.R.id.text1);
+                tv.setTextColor(Color.BLACK);
                 int resourceId = typedArray.getResourceId(position, 0);
                 Drawable drawable = getResources().getDrawable(resourceId);
                 ((TextView) v).setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
@@ -125,8 +186,17 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
+        return mDrawerListView;*/
 
+    }
+
+    private void initList(){
+        this.drawerElements = new ArrayList<DrawerElement>();
+        for(int i=0; i<idIcons.length; i++){
+            DrawerElement elem = new DrawerElement(idIcons[i], sections[i]);
+            this.drawerElements.add(elem);
+
+        }
     }
 
     public boolean isDrawerOpen() {
@@ -173,6 +243,7 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+
                 if (!isAdded()) {
                     return;
                 }
@@ -249,16 +320,17 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    @Override
+    /*@Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // If the drawer is open, show the global app actions in the action bar. See also
         // showGlobalContextActionBar, which controls the top-left area of the action bar.
-        if (mDrawerLayout != null && isDrawerOpen()) {
+        /*if (mDrawerLayout != null && isDrawerOpen()) {
             inflater.inflate(R.menu.global, menu);
             showGlobalContextActionBar();
-        }
-        super.onCreateOptionsMenu(menu, inflater);
-    }
+        }*/
+        /*super.onCreateOptionsMenu(menu, inflater);
+
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -278,14 +350,14 @@ public class NavigationDrawerFragment extends Fragment {
      * Per the navigation drawer design guidelines, updates the action bar to show the global app
      * 'context', rather than just what's in the current screen.
      */
-    private void showGlobalContextActionBar() {
+   /* private void showGlobalContextActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ff9200")));
         actionBar.setTitle(R.string.app_name);
 
-    }
+    }*/
 
     private ActionBar getActionBar() {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();

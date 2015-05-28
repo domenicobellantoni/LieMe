@@ -32,6 +32,9 @@
     <string name="title_activity_new__drawner">New_Drawner</string>
     <string name="title_activity_main">MainActivity</string>
 
+
+
+
     <string name="hello_world">Hello world!</string>
     <string-array name="sections">
         <item> \u0020 \u0020 \u0020 Profile</item>
