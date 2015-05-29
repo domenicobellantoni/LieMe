@@ -33,6 +33,7 @@ import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
 import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
 import com.facebook.FacebookSdk;
 
+import com.facebook.Profile;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -222,8 +223,12 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             //this.nameSurname.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Light.ttf"));
             this.nameSurnameString = getArguments().getString("name") + " " + getArguments().getString("surname");
             this.nameSurname.setText(nameSurnameString);
-            DownloaderProfileImage downloaderProfileImage = new DownloaderProfileImage();
-            downloaderProfileImage.execute(getArguments().getString("photo1") + getArguments().get("id") + getArguments().getString("photo2"));
+            //DownloaderProfileImage downloaderProfileImage = new DownloaderProfileImage();
+            //downloaderProfileImage.execute(getArguments().getString("photo1") + getArguments().get("id") + getArguments().getString("photo2"));
+            RoundImage roundedImage = new RoundImage(BitmapFactory.decodeResource(getResources(), R.mipmap.iconuseranonymous));
+            Picasso.with((Activity) getActivity()).load("https://graph.facebook.com/" + Profile.getCurrentProfile().getId() + "/picture?height=105&width=105")
+                    .placeholder(roundedImage)
+                    .transform(new CircleTransform()).fit().centerCrop().into(this.profileImage);
             FAB = (ImageButton) firstAccessView.findViewById(R.id.fab);
             Drawable d = getResources().getDrawable(R.drawable.ic_action);
             Bitmap bitmapAction = ((BitmapDrawable) d).getBitmap();
