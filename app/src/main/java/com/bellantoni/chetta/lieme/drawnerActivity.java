@@ -13,8 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -31,6 +29,7 @@ public class drawnerActivity extends ActionBarActivity
     private Intent intent;
     private String photo1, photo2;
     private ProfileFragment profileFragment;
+    private Intent serviceIntent;
 
     private AskFragment askFragment;
     ActionBar actionBar;
@@ -70,6 +69,9 @@ public class drawnerActivity extends ActionBarActivity
         this.photo2 = "/picture?height=105&width=105";
 
 
+
+
+
     }
 
 
@@ -90,6 +92,7 @@ public class drawnerActivity extends ActionBarActivity
                 break;
 
         }
+
 
     }
 

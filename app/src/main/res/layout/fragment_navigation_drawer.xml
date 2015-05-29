@@ -2,13 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+
+    >
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_weight="0.40"
-        android:background="#f39200">
+        android:layout_height="150dp"
+        android:layout_gravity="top"
+        android:background="@drawable/headerblur"
+        android:id="@+id/frameLayout">
 
         <ImageView
             android:layout_width="80dp"
@@ -16,6 +18,7 @@
             android:id="@+id/imageViewProfileDrawer"
             android:layout_gravity="left|center_vertical"
             android:layout_marginLeft="20px"
+
             />
 
         <TextView
@@ -29,14 +32,7 @@
             android:layout_marginRight="10dp"
             android:textColor="#ffffff"
             android:textStyle="bold"
-            android:textIsSelectable="true" />
-
-        <ImageView
-            android:layout_width="83dp"
-            android:layout_height="66dp"
-            android:id="@+id/imgHeader"
-            android:layout_gravity="right|top"
-            android:background="@drawable/header" />
+             />
 
 
     </FrameLayout>
@@ -44,7 +40,8 @@
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-        android:layout_height="262dp" android:choiceMode="singleChoice"
+        android:layout_height="fill_parent" android:choiceMode="singleChoice"
+
         android:divider="#cecece" android:dividerHeight="1dp"
         android:background="#FFFFFF"
         tools:context="com.bellantoni.chetta.lieme.NavigationDrawerFragment"
@@ -63,7 +60,8 @@
         android:theme="@style/Base.Widget.AppCompat.ActionMode"
         android:textAlignment="center"
         android:transitionGroup="true"
-        android:layout_weight="0.60" />
+        android:layout_gravity="bottom"
+        />
 
 
 
