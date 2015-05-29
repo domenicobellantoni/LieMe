@@ -241,6 +241,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
                 }
             });
 
+            //la lista andrà creata in un async task e nel frattempo mostrato uno spin
             for (int i = 0; i < 8; i++) {
 
                 RowItemProfile row = new RowItemProfile(questions[i], itemname[i], idfb[i], imgid[i]);
@@ -310,13 +311,14 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
     public void onScroll(AbsListView view,
                          int firstVisible, int visibleCount, int totalCount) {
-        System.out.println("QUESTO "+adapter.getItem(firstVisible).getId());
+        //System.out.println("QUESTO "+adapter.getItem(firstVisible).getId());
+
 
         boolean loadMore =
                 firstVisible + visibleCount >= totalCount;
 
         if(loadMore) {
-
+            //scaricare sempre in async task  e far vedere spiner
             this.adapter.setCount(this.adapter.getCount()+1);
 
             //QUI DA FARE UNA QUERY ALLA VOLTA HO PROVATO A CARICARE TIPO 8 ELEMENTI ALLA VOLTA MA CRASHA, SPERO CHE LA QUERY SIA
@@ -343,15 +345,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
     public void onScrollStateChanged(AbsListView v, int s) {
 
-
-
-        //this.adapter.setCount(this.adapter.getCount()+8);
-        //this.adapter.addData(this.rows);
-
-            //this.adapter.addAll(this.rows);
-
-
-            System.out.println("CONTATORE "+ this.adapter.getCount());
+            //System.out.println("CONTATORE "+ this.adapter.getCount());
             adapter.notifyDataSetChanged();
 
 

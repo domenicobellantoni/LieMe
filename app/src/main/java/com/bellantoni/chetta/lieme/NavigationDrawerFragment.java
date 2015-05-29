@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -258,6 +259,16 @@ public class NavigationDrawerFragment extends Fragment {
                 }
 
                 getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+            }
+
+            @Override
+        public void onDrawerSlide(View drawerView, float slideOffset){
+                InputMethodManager inputMethodManager = (InputMethodManager) getActivity()
+                        .getSystemService(Activity.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(
+                        getActivity().getCurrentFocus().getWindowToken(),
+                        0
+                );
             }
         };
 

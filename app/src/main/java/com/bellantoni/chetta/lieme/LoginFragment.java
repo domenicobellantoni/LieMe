@@ -8,6 +8,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
+import com.bellantoni.chetta.lieme.network.NetworkController;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -27,6 +30,7 @@ public class LoginFragment extends Fragment {
 
     public interface ListenerInterface{
         void goProfile(Profile profile);
+       void errorConnection();
     }
 
     private ListenerInterface mListener;
@@ -45,10 +49,18 @@ public class LoginFragment extends Fragment {
         @Override
         public void onCancel() {
 
+            if(NetworkController.isOnline(getActivity().getApplicationContext())==false) {
+                mListener.errorConnection();
+            }
         }
 
         @Override
         public void onError(FacebookException e) {
+
+            if(NetworkController.isOnline(getActivity().getApplicationContext())==false) {
+                mListener.errorConnection();
+
+            }
 
         }
     };

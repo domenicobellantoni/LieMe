@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_gravity="top"
-        android:background="@drawable/headerblur"
+        android:background="@drawable/headerheart"
         android:id="@+id/frameLayout">
 
         <ImageView

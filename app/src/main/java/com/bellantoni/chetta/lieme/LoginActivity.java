@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
+import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
+import com.bellantoni.chetta.lieme.network.NetworkController;
 import com.facebook.Profile;
 
 
-public class LoginActivity extends ActionBarActivity implements LoginFragment.ListenerInterface{
+public class LoginActivity extends ActionBarActivity implements LoginFragment.ListenerInterface, NetworkDialog.NetworkInfoInteface{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,21 @@ public class LoginActivity extends ActionBarActivity implements LoginFragment.Li
         //intent.putExtra("IMAGE", profile.getProfilePictureUri(40,40).toString());
         startActivity(intent);
         finish();
+
+    }
+
+    @Override
+    public void errorConnection(){
+
+            NetworkDialog networkDialog = new NetworkDialog();
+            networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
+
+    }
+
+    @Override
+    public void okInfoInterface(){
+
+        //nothing to do
 
     }
 

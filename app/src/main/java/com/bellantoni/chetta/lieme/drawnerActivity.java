@@ -1,7 +1,6 @@
 package com.bellantoni.chetta.lieme;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -13,6 +12,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.WindowManager;
+
+import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
+import com.bellantoni.chetta.lieme.network.NetworkController;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -68,7 +70,11 @@ public class drawnerActivity extends ActionBarActivity
         this.photo1 = "https://graph.facebook.com/";
         this.photo2 = "/picture?height=105&width=105";
 
-
+        if(NetworkController.isOnline(this.getApplicationContext())==true){
+            System.out.print("SONO ONLINE");
+        }else{
+            System.out.print("SONO OFFLINE");
+        }
 
 
 
@@ -174,14 +180,14 @@ public class drawnerActivity extends ActionBarActivity
             profileFragment.setArguments(bundle);
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, profileFragment, "P")
+                    .replace(R.id.container, profileFragment, "ProfileFragment")
                     .commit();
         }else{
             this.profileFragment.setNameSurnameString(this.profileFragment.getNameSurnameString());
             this.profileFragment.setBitmap(this.profileFragment.getBitmap());
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, profileFragment, "P")
+                    .replace(R.id.container, profileFragment, "ProfileFragment")
                     .commit();
         }
 
@@ -202,15 +208,30 @@ public class drawnerActivity extends ActionBarActivity
         if(this.askFragment==null) {
             this.askFragment = new AskFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
+
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, this.askFragment)
+                    .replace(R.id.container, this.askFragment,"AskFragment")
                     .commit();
+
         }else{
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, this.askFragment)
+                    .replace(R.id.container, this.askFragment, "AskFragment")
                     .commit();
+
         }
     }
+
+    //se c'è solo un fragment chiudo l'attività
+    @Override
+    public void onBackPressed(){
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1){
+            finish();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
 
 }

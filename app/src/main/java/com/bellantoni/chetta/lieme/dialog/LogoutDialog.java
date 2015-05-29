@@ -1,4 +1,4 @@
-package com.bellantoni.chetta.lieme;
+package com.bellantoni.chetta.lieme.dialog;
 
 import android.app.Activity;
 
@@ -7,6 +7,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+
+import com.bellantoni.chetta.lieme.R;
 
 
 public class LogoutDialog extends DialogFragment {

@@ -74,12 +74,9 @@ public class SplashActivity extends Activity {
         }
         mHandler = new UiHandler(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        /*AccessToken token = AccessToken.getCurrentAccessToken();
-        token=null;
-        LoginManager.getInstance().logOut();
-        final Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();*/
+
+        //LoginManager.getInstance().logOut();
+
     }
 
 
