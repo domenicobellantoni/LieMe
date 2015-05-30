@@ -89,7 +89,7 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
 
         holder.extratxt.setText(this.rows.get(position).getQuestion());
 
-        holder.idfacebook.setText(this.rows.get(position).getId());
+        holder.idfacebook.setText(this.rows.get(position).getFacebookId());
 
         return view;
     }

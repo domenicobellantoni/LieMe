@@ -23,7 +23,6 @@ import com.facebook.login.LoginManager;
 public class drawnerActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface {
 
-
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private String surname;
     private String name;
@@ -32,6 +31,7 @@ public class drawnerActivity extends ActionBarActivity
     private String photo1, photo2;
     private ProfileFragment profileFragment;
     private Intent serviceIntent;
+    private FriendProfileFragment friendProfileFragment;
 
     private AskFragment askFragment;
     ActionBar actionBar;
@@ -70,13 +70,6 @@ public class drawnerActivity extends ActionBarActivity
         this.photo1 = "https://graph.facebook.com/";
         this.photo2 = "/picture?height=105&width=105";
 
-        if(NetworkController.isOnline(this.getApplicationContext())==true){
-            System.out.print("SONO ONLINE");
-        }else{
-            System.out.print("SONO OFFLINE");
-        }
-
-
 
     }
 
@@ -87,13 +80,14 @@ public class drawnerActivity extends ActionBarActivity
         switch (position){
             case 0:
                 goProfile();
-
                 break;
             case 1:
-                goAskQuestion();
-
+                goHome();
                 break;
             case 2:
+                goAskQuestion();
+                break;
+            case 3:
                 logout();
                 break;
 
@@ -191,7 +185,6 @@ public class drawnerActivity extends ActionBarActivity
                     .commit();
         }
 
-
     }
 
     @Override
@@ -231,6 +224,27 @@ public class drawnerActivity extends ActionBarActivity
         else {
             super.onBackPressed();
         }
+    }
+
+
+    private void goHome(){
+        //da fare quando faccio fragment home
+
+    }
+
+    @Override
+    public void goFriendProfile(String facebookId){
+
+            Bundle bundle=new Bundle();
+            bundle.putString("facebookIdFriend", facebookId);
+
+            this.friendProfileFragment = new FriendProfileFragment();
+            this.friendProfileFragment.setArguments(bundle);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, friendProfileFragment, "FriendProfileFragment")
+                    .commit();
+
     }
 
 

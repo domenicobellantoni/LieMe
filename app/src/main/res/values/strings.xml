@@ -46,6 +46,7 @@
     <string-array name="section_titles">
         <item>Profile</item>
         <item>Ask a Question</item>
+        <item>Home</item>
         <item>Logout</item>
     </string-array>
     <string-array name="sections_icons">

@@ -78,6 +78,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     private final String[] sections= {
             "Profile",
+            "Home",
             "Ask",
             "Logout",
     };
@@ -85,6 +86,7 @@ public class NavigationDrawerFragment extends Fragment {
     private final int[] idIcons = {
 
             R.drawable.ic_profile,
+            R.drawable.ic_home,
             R.drawable.ic_pencil,
             R.drawable.ic_logout,
     };

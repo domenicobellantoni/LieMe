@@ -34,11 +34,11 @@ public class RowItemProfile {
         this.nameSurname = nameSurname;
     }
 
-    public String getId() {
+    public String getFacebookId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setFacebookId(String id) {
         this.id = id;
     }
 

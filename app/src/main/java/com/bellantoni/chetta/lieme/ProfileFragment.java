@@ -8,14 +8,11 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,19 +23,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
 import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
 import com.facebook.FacebookSdk;
-
 import com.facebook.Profile;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.squareup.picasso.Picasso;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -46,17 +39,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,25 +75,25 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             "Leonardo Cavagnis"
     };
     String[] idfb ={
-            "lkfhdkjhffFederico Badini",
-            "dfljhdfMatteo Bana",
-            "dfldsAlessandro Donini",
-            "dfsdfNicora Elisa",
-            "fddsfMassimo De Marchi",
-            "fdfasLorenzo Di tucci",
-            "sadfsfDavide Dipinto",
-            "sdfsdfsdafadLeonardo Cavagnis"
+            "id fb Federico Badini",
+            "id fb Matteo Bana",
+            "id fb Alessandro Donini",
+            "id fb fNicora Elisa",
+            "id fb fMassimo De Marchi",
+            "id fb Lorenzo Di tucci",
+            "id fb Davide Dipinto",
+            "id fb Leonardo Cavagnis"
     };
 
     Integer[] imgid={
-            R.drawable.badini,
-            R.drawable.bana,
-            R.drawable.donini,
-            R.drawable.elisa,
-            R.drawable.demarchi,
-            R.drawable.ditucci,
-            R.drawable.dipinto,
-            R.drawable.cavagnis,
+            R.drawable.ic_profile,
+            R.drawable.ic_profile,
+            R.drawable.ic_profile,
+            R.drawable.ic_profile,
+            R.drawable.ic_profile,
+            R.drawable.ic_profile,
+            R.drawable.ic_profile,
+            R.drawable.ic_profile,
 
     };
     String[] questions={
@@ -140,6 +123,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
     public interface ProfileFragmentInterface{
         public void goaskQuestionFragment();
+        public void goFriendProfile(String facebookId);
 
     }
 
@@ -263,8 +247,9 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
                     // TODO Auto-generated method stub
-                    String Slecteditem = itemname[+position] + idfb[+position];
-                    Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
+                    //String Slecteditem = itemname[+position] + idfb[+position];
+                    //Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
+                    mProfileFragmentInteface.goFriendProfile(adapter.getItem(position).getFacebookId());
 
                 }
             });
@@ -323,7 +308,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
             //QUI DA FARE UNA QUERY ALLA VOLTA HO PROVATO A CARICARE TIPO 8 ELEMENTI ALLA VOLTA MA CRASHA, SPERO CHE LA QUERY SIA
             //VELOCE, AL MASSIMO POSSIAMO PROVARE 2/3 ALLA VOLTA
-            rows.add(new RowItemProfile("Pippo", "Pippo", "Pippo", R.id.icon));
+            rows.add(new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon));
             //this.adapter.addAll(this.rows);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -331,8 +316,9 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
                     // TODO Auto-generated method stub
-                    String Slecteditem = adapter.getItem(position).getId();
-                    Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
+                    //String Slecteditem = adapter.getItem(position).getFacebookId();
+                    //Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
+                    mProfileFragmentInteface.goFriendProfile(adapter.getItem(position).getFacebookId());
 
                 }
             });
@@ -354,7 +340,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
 
 
-    private class DownloaderProfileImage extends AsyncTask<String,String,Bitmap> {
+    /*private class DownloaderProfileImage extends AsyncTask<String,String,Bitmap> {
 
         @Override
         protected void onPreExecute(){
@@ -396,7 +382,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             }
 
         }
-    }
+    }*/
 
     // GCM
     private boolean checkPlayServices() {
