@@ -13,52 +13,142 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-        <FrameLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
-            android:layout_gravity="center_horizontal"
             android:id="@+id/infoContainer"
             android:background="#ff9200"
 
             >
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <ImageView
+
+                <ImageButton
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/backFromProfile"
+                    android:background="@null"
+                    android:layout_marginTop="9dp"
+                    android:paddingStart="10dp"
+                    android:layout_alignBaseline="@+id/backFromProfile"
+                    android:backgroundTint="#cdcdcd"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Small Text"
+                    android:id="@+id/friendName"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="#ffffff"
+                    android:gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:layout_gravity="center" />
+
+                <ImageView
+                    android:layout_width="42dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/friendImgProfile"
+                    android:layout_toRightOf="@+id/backFromProfile"
+                    android:layout_marginStart="60dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:layout_gravity="left|center_vertical" />
+
+
+            </FrameLayout>
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:clickable="false"
+            android:background="#cecece"
+            android:layout_height="wrap_content">
+
+
+            <Space
+                android:layout_width="20px"
+                android:background="#ffffff"
+                android:layout_height="match_parent" />
+
+
+
+            <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/friendImgProfile"
-                android:layout_gravity="center" />
+                android:layout_height="fill_parent">
 
-            <TextView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Medium Text"
+                    android:id="@+id/textView" />
+            </FrameLayout>
+            <Space
+                android:layout_width="20px"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:longClickable="true" />
+
+            <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Small Text"
-                android:id="@+id/friendName"
-                android:layout_gravity="right|center_vertical" />
+                android:layout_height="fill_parent">
 
-            <ImageButton
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Medium Text"
+                    android:id="@+id/textView2" />
+            </FrameLayout>
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/backFromProfile"
-                android:layout_gravity="left|center_vertical" />
+            <Space
+                android:layout_width="20px"
+                android:background="#ffffff"
+                android:layout_height="match_parent"
+                android:longClickable="true"
+                android:backgroundTint="#ffffff" />
 
-        </FrameLayout>
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Medium Text"
+                    android:id="@+id/textView3" />
+            </FrameLayout>
+            <Space
+                android:layout_width="20px"
+                android:background="#ffffff"
+                android:layout_height="match_parent" />
 
+        </LinearLayout>
 
         <ListView
 
-            android:id="@+id/listFriendProfile"
+            android:id="@+id/listQuestionFriendProfile"
             android:scrollbars="none"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:footerDividersEnabled="false"
             android:headerDividersEnabled="false"
             android:paddingStart="15dp"
-            android:paddingEnd="15dp" />
+            android:paddingEnd="15dp"
+
+            />
 
 
     </LinearLayout>

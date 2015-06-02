@@ -21,7 +21,7 @@ import com.facebook.login.LoginManager;
 
 
 public class drawnerActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface, FriendProfileFragment.FriendProfileFragmentInterface {
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private String surname;
@@ -247,5 +247,19 @@ public class drawnerActivity extends ActionBarActivity
 
     }
 
+    @Override
+    public void goFriendProfileFromFriend(String facebookId){
+
+        Bundle bundle=new Bundle();
+        bundle.putString("facebookIdFriend", facebookId);
+
+        this.friendProfileFragment = new FriendProfileFragment();
+        this.friendProfileFragment.setArguments(bundle);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, friendProfileFragment, "FriendProfileFragment")
+                .commit();
+
+    }
 
 }
