@@ -15,9 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-/**
- * Created by Domenico on 03/06/2015.
- */
+
 public class ListInFriendFragmentAdapter extends ArrayAdapter<RowItemProfile> {
 
 
