@@ -45,7 +45,7 @@ public class ListInFriendFragmentAdapter extends ArrayAdapter<RowItemProfile> {
             System.out.println("INFLATE VIEW");
 
             view.setPadding(0,10,0,10);
-            // Create a ViewHolder and store references to the two children views
+
             holder = new ViewHolder();
             holder.txtTitle = (TextView) view.findViewById(R.id.nameListFriend);
             holder.extratxt = (TextView) view.findViewById(R.id.questionFriend);
