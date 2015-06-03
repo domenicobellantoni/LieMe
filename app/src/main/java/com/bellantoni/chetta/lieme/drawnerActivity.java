@@ -21,7 +21,7 @@ import com.facebook.login.LoginManager;
 
 
 public class drawnerActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface, FriendProfileFragment.FriendProfileFragmentInterface {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface, FriendProfileFragment.FriendProfileFragmentInterface, ContactListFragment.ContactListFragmentInterface, ContactListFragment.OnFragmentInteractionListener {
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private String surname;
@@ -34,6 +34,8 @@ public class drawnerActivity extends ActionBarActivity
     private FriendProfileFragment friendProfileFragment;
 
     private AskFragment askFragment;
+    private ContactListFragment contactListFragment;
+
     ActionBar actionBar;
 
     @Override
@@ -262,4 +264,33 @@ public class drawnerActivity extends ActionBarActivity
 
     }
 
+    @Override
+    public void onFragmentInteraction(String id) {
+
+    }
+
+    @Override
+    public void goContactListFragment() {
+        contactListFragment();
+    }
+
+    private void contactListFragment(){
+        this.actionBar.show();
+
+        if(this.contactListFragment==null) {
+            this.contactListFragment = new ContactListFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, this.contactListFragment,"ContactListFragment")
+                    .commit();
+
+        }else{
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, this.contactListFragment, "ContactListFragment")
+                    .commit();
+
+        }
+    }
 }

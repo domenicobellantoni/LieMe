@@ -2,7 +2,6 @@ package com.bellantoni.chetta.lieme;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,7 @@ import com.bellantoni.chetta.lieme.dummy.DummyContent;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class ContactListFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class ContactListFragment extends android.support.v4.app.Fragment implements AbsListView.OnItemClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,8 +34,12 @@ public class ContactListFragment extends Fragment implements AbsListView.OnItemC
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    public interface ContactListFragmentInterface{
 
+    }
+
+    private OnFragmentInteractionListener mListener;
+    private ContactListFragmentInterface mContactListFragmentInterface;
     /**
      * The fragment's ListView/GridView.
      */
@@ -102,6 +105,9 @@ public class ContactListFragment extends Fragment implements AbsListView.OnItemC
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
+        }
+        if(activity instanceof ContactListFragmentInterface){
+             mContactListFragmentInterface = (ContactListFragmentInterface)activity;
         }
     }
 
