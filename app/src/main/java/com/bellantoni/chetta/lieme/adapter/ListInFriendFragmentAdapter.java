@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
@@ -72,7 +71,7 @@ public class ListInFriendFragmentAdapter extends ArrayAdapter<RowItemProfile> {
 
         holder.txtTitle.setTextColor(Color.BLACK);
         holder.txtTitle.setText(this.rows.get(position).getNameSurname());
-        //holder.imageView.setImageResource(R.mipmap.iconuseranonymous);
+
         //l'immagine ovviamente la scarico dall'id
         Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").transform(new CircleTransform()).fit().centerCrop().into(holder.imageView);
         //holder.extratxt.setTypeface(tf);
