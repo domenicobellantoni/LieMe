@@ -107,6 +107,17 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             "domanda lhdshdkjòsahdkasjdjqgdjshbjgd",
     };
 
+    Boolean[] resultsQuestion ={
+            true,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+    };
+
     // GCM
     String regid;
     GoogleCloudMessaging gcm;
@@ -229,7 +240,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             //la lista andrà creata in un async task e nel frattempo mostrato uno spin
             for (int i = 0; i < 8; i++) {
 
-                RowItemProfile row = new RowItemProfile(questions[i], itemname[i], idfb[i], imgid[i]);
+                RowItemProfile row = new RowItemProfile(questions[i], itemname[i], idfb[i], imgid[i], resultsQuestion[i]);
                 this.rows.add(row);
 
             }
@@ -309,7 +320,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
             //QUI DA FARE UNA QUERY ALLA VOLTA HO PROVATO A CARICARE TIPO 8 ELEMENTI ALLA VOLTA MA CRASHA, SPERO CHE LA QUERY SIA
             //VELOCE, AL MASSIMO POSSIAMO PROVARE 2/3 ALLA VOLTA
-            rows.add(new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon));
+            rows.add(new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon, true));
             //this.adapter.addAll(this.rows);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

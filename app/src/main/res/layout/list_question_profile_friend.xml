@@ -2,7 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:weightSum="1">
+
+    <LinearLayout android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
+        >
 
     <ImageView
         android:id="@+id/imgListFriend"
@@ -27,7 +34,7 @@
 
         <TextView
             android:id="@+id/questionFriend"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
             android:layout_marginLeft="10dp"/>
@@ -39,11 +46,22 @@
             android:text="facebookid"
             android:visibility="invisible"/>
 
+
     </LinearLayout>
-    <ImageView
-        android:id="@+id/imgResponse"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:padding="5dp" />
+        <ImageView
+            android:id="@+id/imgResponseFriend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:paddingLeft="13dp"
+            android:layout_gravity="right|center_vertical"></ImageView>
+
+
+
+
+
+    </LinearLayout>
+
+
 
 </LinearLayout>

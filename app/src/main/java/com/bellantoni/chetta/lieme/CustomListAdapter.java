@@ -62,6 +62,7 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
             holder.extratxt = (TextView) view.findViewById(R.id.question);
             holder.idfacebook = (TextView) view.findViewById(R.id.facebookId);
             holder. imageView = (ImageView) view.findViewById(R.id.imgList);
+            holder.imgResponse = (ImageView) view.findViewById(R.id.imgResponse);
 
 
             // The tag can be any Object, this just happens to be the ViewHolder
@@ -90,6 +91,17 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
         holder.extratxt.setText(this.rows.get(position).getQuestion());
 
         holder.idfacebook.setText(this.rows.get(position).getFacebookId());
+
+        if(this.rows.get(position).getResultQuestion()==true){
+            holder.imgResponse.setImageResource(R.drawable.heart_green);
+
+            //holder.txtTitle.setCompoundDrawables(null,null,context.getResources().getDrawable(R.drawable.heart_green),null);
+
+        }else{
+            //holder.txtTitle.setCompoundDrawables(null,null,context.getResources().getDrawable(R.drawable.heart_red),null);
+
+            holder.imgResponse.setImageResource(R.drawable.heart_red);
+        }
 
         return view;
     }
@@ -120,6 +132,7 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
         TextView extratxt;
         ImageView imageView;
         TextView idfacebook;
+        ImageView imgResponse;
         int position;
     }
 }
