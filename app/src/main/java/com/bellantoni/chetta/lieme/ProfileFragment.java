@@ -135,6 +135,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
     public interface ProfileFragmentInterface{
         public void goaskQuestionFragment();
         public void goFriendProfile(String facebookId);
+        public void goContactListFragment();
 
     }
 
@@ -231,8 +232,8 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             FAB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mProfileFragmentInteface.goaskQuestionFragment();
-
+                    //mProfileFragmentInteface.goaskQuestionFragment();
+                    mProfileFragmentInteface.goContactListFragment();
                 }
             });
 
