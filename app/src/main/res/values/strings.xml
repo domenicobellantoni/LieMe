@@ -25,7 +25,7 @@
     <string name="write">Write your question:</string>
     <string name="to">To:</string>
     <string name="action_example">Example action</string>
-    <string name="check_connection">Please check your netwok connection and try again.</string>
+    <string name="check_connection">Please check your network connection and try again.</string>
     <string name="retry">Retry!</string>
 
 <!-- TODO: Remove or change this placeholder text -->

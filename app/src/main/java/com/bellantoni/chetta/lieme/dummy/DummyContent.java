@@ -40,16 +40,16 @@ public class DummyContent {
      */
     public static class DummyItem {
         public String id;
-        public String content;
+        public String name;
 
         public DummyItem(String id, String content) {
             this.id = id;
-            this.content = content;
+            this.name = content;
         }
 
         @Override
         public String toString() {
-            return content;
+            return name;
         }
     }
 }

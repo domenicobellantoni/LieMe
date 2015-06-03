@@ -1,7 +1,11 @@
 package com.bellantoni.chetta.lieme;
 
 import android.app.Activity;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +16,22 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 
+import com.bellantoni.chetta.lieme.db.FeedReaderContract;
+import com.bellantoni.chetta.lieme.db.FeedReaderDbHelper;
 import com.bellantoni.chetta.lieme.dummy.DummyContent;
+import com.bellantoni.chetta.lieme.generalclasses.Contact;
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -29,7 +48,7 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private final String TAG = "CONTACT_LIST_FRAGMENT";
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -49,9 +68,23 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    private ArrayAdapter mAdapter;
+    /**
+    * Db access object
+    * */
+    private FeedReaderDbHelper mDbHelper;
+    /**
+     * contact list
+     * */
+    private List<Contact> contacts;
 
-    // TODO: Rename and change types of parameters
+    /**
+     *
+     * async class that retrieve data from DB
+     */
+    RetrieveContactsFromLocalDataBase retrieveContactsFromLocalDataBaseAsync;
+
+     // TODO: Rename and change types of parameters
     public static ContactListFragment newInstance(String param1, String param2) {
         ContactListFragment fragment = new ContactListFragment();
         Bundle args = new Bundle();
@@ -71,15 +104,40 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+        mDbHelper = new FeedReaderDbHelper(getActivity().getApplicationContext());
+        contacts = new ArrayList<Contact>();
+        retrieveContactsFromLocalDataBaseAsync = new RetrieveContactsFromLocalDataBase();
+
+        /* Add test
+        contacts.add(new Contact("ok","ok","ok","ok","ok"));
+        */
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        // TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
+        mAdapter = new ArrayAdapter<Contact>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, contacts);
+
+        retrieveContactsFromLocalDataBaseAsync.execute(null, null, null);
+
+        Log.i(TAG, "Retrieving facebook friends that use the application");
+
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/me/friends",
+                null,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse graphResponse) {
+                        updateContactList(graphResponse);
+                    }
+                }
+        ).executeAsync();
+
+
     }
 
     @Override
@@ -95,6 +153,10 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
         mListView.setOnItemClickListener(this);
 
         return view;
+    }
+
+    private void updateList(){
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -155,4 +217,135 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
         public void onFragmentInteraction(String id);
     }
 
+    private void updateContactList(GraphResponse response){
+        try {
+            JSONObject jObject = response.getJSONObject();
+            JSONArray users = jObject.getJSONArray("data");
+            JSONObject user = users.getJSONObject(0);
+            String username = user.getString("name");
+            Log.i(TAG, username);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+    }
+
+    /* previous synchronous method
+    private void retrieveContactsFromLocalDataBase(){
+        /* Insert test
+         *
+         *
+        // Gets the data repository in write mode
+        SQLiteDatabase db1 = mDbHelper.getWritableDatabase();
+
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_NAME, "Hayley");
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SURNAME, "Pascus");
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID, "00000");
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP, "00000");
+
+        // Insert the new row, returning the primary key value of the new row
+        long newRowId;
+        newRowId = db1.insert(
+                FeedReaderContract.FeedEntry.TABLE_NAME,
+                null,
+                values);
+
+
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                FeedReaderContract.FeedEntry._ID,
+                FeedReaderContract.FeedEntry.COLUMN_NAME_NAME,
+                FeedReaderContract.FeedEntry.COLUMN_NAME_SURNAME,
+                FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID,
+                FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP
+        };
+
+        // How you want the results sorted in the resulting Cursor
+        String sortOrder =
+                FeedReaderContract.FeedEntry.COLUMN_NAME_NAME + " ASC";
+
+        Cursor c = db.query(
+                FeedReaderContract.FeedEntry.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                null,                                // The columns for the WHERE clause
+                null,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+
+        fillTheContactListArray(c);
+
+
+    }*/
+
+    private class RetrieveContactsFromLocalDataBase extends AsyncTask<Void, Void, Void>{
+        private Cursor c;
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+            // Define a projection that specifies which columns from the database
+            // you will actually use after this query.
+            String[] projection = {
+                    FeedReaderContract.FeedEntry._ID,
+                    FeedReaderContract.FeedEntry.COLUMN_NAME_NAME,
+                    FeedReaderContract.FeedEntry.COLUMN_NAME_SURNAME,
+                    FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID,
+                    FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP
+            };
+
+            // How you want the results sorted in the resulting Cursor
+            String sortOrder =
+                    FeedReaderContract.FeedEntry.COLUMN_NAME_NAME + " ASC";
+
+            c = db.query(
+                    FeedReaderContract.FeedEntry.TABLE_NAME,  // The table to query
+                    projection,                               // The columns to return
+                    null,                                // The columns for the WHERE clause
+                    null,                            // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    sortOrder                                 // The sort order
+            );
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            fillTheContactListArray(c);
+        }
+    }
+
+    private void fillTheContactListArray(Cursor c){
+        // Clear the array
+        contacts.clear();
+
+        if(c != null){
+            if(c.moveToFirst()){
+                do{
+                    String id = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry._ID));
+                    String name = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_NAME));
+                    String surname = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_SURNAME));
+                    String facebook_id = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID));
+                    String timestamp = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP));
+                    contacts.add(new Contact(id, name, surname,facebook_id, timestamp));
+                }while(c.moveToNext());
+            }
+        }
+
+        updateList();
+
+    }
 }

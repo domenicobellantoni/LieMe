@@ -507,7 +507,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             HttpPost post = new HttpPost(SERVER_URL);
             try {
                 List<NameValuePair> parameter = new ArrayList<>(1);
-                parameter.add(new BasicNameValuePair("userId", params[1]));
+                parameter.add(new BasicNameValuePair("userId", params[0]));
                 parameter.add(new BasicNameValuePair("regId", regid));
 
                 post.setEntity(new UrlEncodedFormEntity(parameter));
