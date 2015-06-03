@@ -38,7 +38,7 @@ public class ListInFriendFragmentAdapter extends ArrayAdapter<RowItemProfile> {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Avoid unneccessary calls to findViewById() on each row, which is expensive!
+
         ViewHolder holder;
 
         if (convertView == null) {
