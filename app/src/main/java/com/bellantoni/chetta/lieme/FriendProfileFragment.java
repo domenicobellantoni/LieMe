@@ -81,6 +81,17 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
             "domanda lhdshdkjòsahdkasjdjqgdjshbjgd",
     };
 
+    Boolean[] resultsQuestion ={
+            true,
+            false,
+            true,
+            false,
+            false,
+            false,
+            true,
+            false,
+    };
+
 
     public interface FriendProfileFragmentInterface{
        // public void goaskQuestionFragment();
@@ -147,7 +158,7 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
 
             for (int i = 0; i < 8; i++) {
 
-                RowItemProfile row = new RowItemProfile(questions[i], itemname[i], idfb[i], imgid[i]);
+                RowItemProfile row = new RowItemProfile(questions[i], itemname[i], idfb[i], imgid[i], resultsQuestion[i]);
                 this.rows.add(row);
 
             }
@@ -198,7 +209,7 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
 
             //QUI DA FARE UNA QUERY ALLA VOLTA HO PROVATO A CARICARE TIPO 8 ELEMENTI ALLA VOLTA MA CRASHA, SPERO CHE LA QUERY SIA
             //VELOCE, AL MASSIMO POSSIAMO PROVARE 2/3 ALLA VOLTA
-            rows.add(new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon));
+            rows.add(new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon, true));
             //this.adapter.addAll(this.rows);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

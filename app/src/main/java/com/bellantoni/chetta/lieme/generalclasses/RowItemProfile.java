@@ -9,12 +9,14 @@ public class RowItemProfile {
     private String nameSurname;
     private String id;
     private int idImg;
+    private boolean resultQuestion;
 
-    public RowItemProfile(String question, String nameSurname, String id, int idImg){
+    public RowItemProfile(String question, String nameSurname, String id, int idImg, boolean resultQuestion){
         this.question=question;
         this.nameSurname=nameSurname;
         this.id=id;
         this.idImg=idImg;
+        this.resultQuestion=resultQuestion;
 
     }
 
@@ -48,5 +50,13 @@ public class RowItemProfile {
 
     public void setIdImg(int idImg) {
         this.idImg = idImg;
+    }
+
+    public boolean getResultQuestion() {
+        return resultQuestion;
+    }
+
+    public void setResultQuestion(boolean resultQuestion) {
+        this.resultQuestion = resultQuestion;
     }
 }
