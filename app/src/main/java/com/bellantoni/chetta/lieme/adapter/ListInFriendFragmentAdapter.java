@@ -82,10 +82,7 @@ public class ListInFriendFragmentAdapter extends ArrayAdapter<RowItemProfile> {
         if(this.rows.get(position).getResultQuestion()==true){
            holder.imgResponse.setImageResource(R.drawable.heart_green);
 
-            //holder.txtTitle.setCompoundDrawables(null,null,context.getResources().getDrawable(R.drawable.heart_green),null);
-
         }else{
-            //holder.txtTitle.setCompoundDrawables(null,null,context.getResources().getDrawable(R.drawable.heart_red),null);
 
             holder.imgResponse.setImageResource(R.drawable.heart_red);
         }
