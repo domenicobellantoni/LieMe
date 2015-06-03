@@ -60,8 +60,7 @@ public class ListInFriendFragmentAdapter extends ArrayAdapter<RowItemProfile> {
 
 
         } else {
-            // Get the ViewHolder back to get fast access to the TextView
-            // and the ImageView.
+
             System.out.println("NO INFLATE VIEW");
             view=convertView;
             holder = (ViewHolder) convertView.getTag();
