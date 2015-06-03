@@ -14,7 +14,6 @@ public final class FeedReaderContract {
             "CREATE TABLE " + FeedEntry.TABLE_NAME + " (" +
                     FeedEntry._ID + " INTEGER PRIMARY KEY," +
                     FeedEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
-                    FeedEntry.COLUMN_NAME_SURNAME + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_NAME_FACEBOOK_ID + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_NAME_TIMESTAMP + TIMESTAMP + " )";
 
@@ -29,7 +28,6 @@ public final class FeedReaderContract {
     public static abstract class FeedEntry implements BaseColumns {
         public static final String TABLE_NAME = "contact";
         public static final String COLUMN_NAME_NAME = "name";
-        public static final String COLUMN_NAME_SURNAME = "surname";
         public static final String COLUMN_NAME_FACEBOOK_ID = "facebook_id";
         public static final String COLUMN_NAME_TIMESTAMP = "timestamp";
     }

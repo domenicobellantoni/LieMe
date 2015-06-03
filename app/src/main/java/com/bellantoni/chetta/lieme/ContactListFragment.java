@@ -1,6 +1,7 @@
 package com.bellantoni.chetta.lieme;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -30,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,6 +86,15 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
      */
     RetrieveContactsFromLocalDataBase retrieveContactsFromLocalDataBaseAsync;
 
+    // Define a projection that specifies which columns from the database
+    // you will actually use after this query.
+    private String[] projection = {
+            FeedReaderContract.FeedEntry._ID,
+            FeedReaderContract.FeedEntry.COLUMN_NAME_NAME,
+            FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID,
+            FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP
+    };
+
      // TODO: Rename and change types of parameters
     public static ContactListFragment newInstance(String param1, String param2) {
         ContactListFragment fragment = new ContactListFragment();
@@ -108,7 +119,7 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
         mDbHelper = new FeedReaderDbHelper(getActivity().getApplicationContext());
         contacts = new ArrayList<Contact>();
         retrieveContactsFromLocalDataBaseAsync = new RetrieveContactsFromLocalDataBase();
-
+        //retrieveContactsFromLocalDataBase();
         /* Add test
         contacts.add(new Contact("ok","ok","ok","ok","ok"));
         */
@@ -218,45 +229,79 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
     }
 
     private void updateContactList(GraphResponse response){
+
+        ArrayList<Contact> newContacts = new ArrayList<>();
         try {
             JSONObject jObject = response.getJSONObject();
             JSONArray users = jObject.getJSONArray("data");
-            JSONObject user = users.getJSONObject(0);
-            String username = user.getString("name");
-            Log.i(TAG, username);
+            for(int i = 0; i< users.length(); i++)
+            {
+                JSONObject user = users.getJSONObject(i);
+                String name = user.getString("name");
+                String facebook_id = user.getString("id");
+                int time = (int) (System.currentTimeMillis());
+                Timestamp tsTemp = new Timestamp(time);
+                String ts =  tsTemp.toString();
+                newContacts.add(new Contact(null, name, facebook_id, ts));
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+        SQLiteDatabase dbReader = mDbHelper.getReadableDatabase();
+        SQLiteDatabase dbWriter = mDbHelper.getWritableDatabase();
 
+        for(Contact contact: newContacts){
+            Cursor c = dbReader.query(
+                    FeedReaderContract.FeedEntry.TABLE_NAME,  // The table to query
+                    projection,                               // The columns to return
+                    FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID + "=?",   // The columns for the WHERE clause
+                    new String[]{contact.getFacebook_id()},                            // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    null                                 // The sort order
+            );
 
+            if(c.moveToNext()){
+                Log.i(TAG, "user " + contact.getName() + " is already present in the local db");
+            }
+            else {
+                Log.i(TAG, "user " + contact.getName() + " is not present in the local db");
+
+                ContentValues values = new ContentValues();
+                values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_NAME, contact.getName());
+                values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID, contact.getFacebook_id());
+                values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP, contact.getTimestamp());
+                long newRowId = dbWriter.insert(FeedReaderContract.FeedEntry.TABLE_NAME,null,values);
+            }
+        }
+
+        new RetrieveContactsFromLocalDataBaseAfterUpdate().execute(null, null, null);
 
     }
 
-    /* previous synchronous method
+    /* previous synchronous method*/
     private void retrieveContactsFromLocalDataBase(){
         /* Insert test
          *
-         *
+         */
         // Gets the data repository in write mode
         SQLiteDatabase db1 = mDbHelper.getWritableDatabase();
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_NAME, "Hayley");
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SURNAME, "Pascus");
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_NAME, "mario rossi");
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID, "00000");
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP, "00000");
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId;
-        newRowId = db1.insert(
-                FeedReaderContract.FeedEntry.TABLE_NAME,
+        newRowId = db1.insert(FeedReaderContract.FeedEntry.TABLE_NAME,
                 null,
                 values);
 
-
+        /*
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         // Define a projection that specifies which columns from the database
@@ -264,7 +309,6 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
         String[] projection = {
                 FeedReaderContract.FeedEntry._ID,
                 FeedReaderContract.FeedEntry.COLUMN_NAME_NAME,
-                FeedReaderContract.FeedEntry.COLUMN_NAME_SURNAME,
                 FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID,
                 FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP
         };
@@ -284,9 +328,10 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
         );
 
         fillTheContactListArray(c);
+        */
 
 
-    }*/
+    }
 
     private class RetrieveContactsFromLocalDataBase extends AsyncTask<Void, Void, Void>{
         private Cursor c;
@@ -295,15 +340,35 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
         protected Void doInBackground(Void... params) {
             SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-            // Define a projection that specifies which columns from the database
-            // you will actually use after this query.
-            String[] projection = {
-                    FeedReaderContract.FeedEntry._ID,
-                    FeedReaderContract.FeedEntry.COLUMN_NAME_NAME,
-                    FeedReaderContract.FeedEntry.COLUMN_NAME_SURNAME,
-                    FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID,
-                    FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP
-            };
+            // How you want the results sorted in the resulting Cursor
+            String sortOrder =
+                    FeedReaderContract.FeedEntry.COLUMN_NAME_NAME + " ASC";
+
+            c = db.query(
+                    FeedReaderContract.FeedEntry.TABLE_NAME,  // The table to query
+                    projection,                               // The columns to return
+                    null,                                // The columns for the WHERE clause
+                    null,                            // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    sortOrder                                 // The sort order
+            );
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            fillTheContactListArray(c);
+        }
+    }
+
+    private class RetrieveContactsFromLocalDataBaseAfterUpdate extends AsyncTask<Void, Void, Void>{
+        private Cursor c;
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
             // How you want the results sorted in the resulting Cursor
             String sortOrder =
@@ -337,10 +402,9 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
                 do{
                     String id = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry._ID));
                     String name = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_NAME));
-                    String surname = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_SURNAME));
                     String facebook_id = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID));
                     String timestamp = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP));
-                    contacts.add(new Contact(id, name, surname,facebook_id, timestamp));
+                    contacts.add(new Contact(id, name, facebook_id, timestamp));
                 }while(c.moveToNext());
             }
         }
