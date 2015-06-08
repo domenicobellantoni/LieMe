@@ -62,4 +62,12 @@
         android:autoText="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp" />
+
+    <Button
+        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:text="@string/send"
+        android:gravity="top"
+        android:id="@+id/send"
+        android:onClick="sendMessage" />
 </RelativeLayout>

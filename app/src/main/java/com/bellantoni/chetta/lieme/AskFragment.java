@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -75,6 +76,14 @@ public class AskFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedBundle) {
         firstAccessView = inflater.inflate(R.layout.ask_question, null);
+
+        final Button button = (Button) firstAccessView.findViewById(R.id.send);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sendMessage();
+            }
+        });
+
         setReceiverName();
         return firstAccessView;
     }
@@ -117,5 +126,10 @@ public class AskFragment extends android.support.v4.app.Fragment {
     private void  setReceiverName(){
         TextView receiverTextView = (TextView)firstAccessView.findViewById(R.id.who);
         receiverTextView.setText("To: " + receiverContact.getName());
+    }
+
+    public void sendMessage(){
+        MessageHandler messageHandler = new MessageHandler(receiverContact,null, null);
+        messageHandler.send();
     }
 }
