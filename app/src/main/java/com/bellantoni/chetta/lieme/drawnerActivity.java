@@ -1,19 +1,26 @@
 package com.bellantoni.chetta.lieme;
 
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.WindowManager;
 
+import com.bellantoni.chetta.lieme.db.FeedReaderContract;
+import com.bellantoni.chetta.lieme.db.FeedReaderDbHelper;
 import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
+import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.bellantoni.chetta.lieme.network.NetworkController;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
@@ -33,6 +40,12 @@ public class drawnerActivity extends ActionBarActivity
     private Intent serviceIntent;
     private FriendProfileFragment friendProfileFragment;
 
+    private final String TAG = "DrawnerActivity";
+    /**
+     * Db access object
+     * */
+    private FeedReaderDbHelper mDbHelper;
+
     private AskFragment askFragment;
     private ContactListFragment contactListFragment;
 
@@ -41,6 +54,7 @@ public class drawnerActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FacebookSdk.sdkInitialize(getApplicationContext());
+        mDbHelper = new FeedReaderDbHelper(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawner);
 
@@ -266,6 +280,38 @@ public class drawnerActivity extends ActionBarActivity
 
     @Override
     public void onFragmentInteraction(String id) {
+        SQLiteDatabase dbReader = mDbHelper.getReadableDatabase();
+        Contact receiverContact;
+
+        String[] projection = {
+                FeedReaderContract.FeedEntry._ID,
+                FeedReaderContract.FeedEntry.COLUMN_NAME_NAME,
+                FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID,
+                FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP
+        };
+
+        Cursor c = dbReader.query(
+                FeedReaderContract.FeedEntry.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                FeedReaderContract.FeedEntry._ID + "=?",  // The columns for the WHERE clause
+                new String[]{id},                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                 // The sort order
+        );
+
+
+        if(c.moveToNext()){
+            String id_r = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry._ID));
+            String name = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_NAME));
+            String facebook_id = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID));
+            String timestamp = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP));
+            receiverContact = new Contact(id_r, name, facebook_id, timestamp);
+            Log.i(TAG, "Message receiver: " + receiverContact.getName());
+        }
+        else {
+            Log.i(TAG, "ERROR: user id " + id + " not found");
+        }
 
     }
 
