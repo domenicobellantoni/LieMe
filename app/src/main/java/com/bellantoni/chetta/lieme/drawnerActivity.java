@@ -41,10 +41,7 @@ public class drawnerActivity extends ActionBarActivity
     private FriendProfileFragment friendProfileFragment;
 
     private final String TAG = "DrawnerActivity";
-    /**
-     * Db access object
-     * */
-    private FeedReaderDbHelper mDbHelper;
+
 
     private AskFragment askFragment;
     private ContactListFragment contactListFragment;
@@ -54,7 +51,6 @@ public class drawnerActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FacebookSdk.sdkInitialize(getApplicationContext());
-        mDbHelper = new FeedReaderDbHelper(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawner);
 
@@ -101,7 +97,8 @@ public class drawnerActivity extends ActionBarActivity
                 goHome();
                 break;
             case 2:
-                goAskQuestion();
+                goContactListFragment();
+                // goAskQuestion(null);
                 break;
             case 3:
                 logout();
@@ -202,15 +199,16 @@ public class drawnerActivity extends ActionBarActivity
         }
 
     }
-
+/*
     @Override
     public void goaskQuestionFragment(){
         goAskQuestion();
-
     }
 
     private void goAskQuestion(){
-
+        // The ask fragment will be called always after the selection of the receiver
+        Bundle bundle = new Bundle();
+        bundle.putString("edttext", "From Activity");
 
         this.actionBar.show();
 
@@ -224,6 +222,34 @@ public class drawnerActivity extends ActionBarActivity
 
         }else{
             FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, this.askFragment, "AskFragment")
+                    .commit();
+
+        }
+    }
+*/
+    private void goAskQuestion( String receiver_id){
+        // The ask fragment will be called always after the selection of the receiver
+        Bundle bundle = new Bundle();
+        bundle.putString("receiver", receiver_id);
+
+        this.actionBar.show();
+
+        if(this.askFragment==null) {
+            this.askFragment = new AskFragment();
+            Log.i(TAG, bundle.toString());
+            this.askFragment.setArguments(bundle);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, this.askFragment,"AskFragment")
+                    .commit();
+
+        }else{
+            this.askFragment.setArguments(bundle);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
             fragmentManager.beginTransaction()
                     .replace(R.id.container, this.askFragment, "AskFragment")
                     .commit();
@@ -280,39 +306,7 @@ public class drawnerActivity extends ActionBarActivity
 
     @Override
     public void onFragmentInteraction(String id) {
-        SQLiteDatabase dbReader = mDbHelper.getReadableDatabase();
-        Contact receiverContact;
-
-        String[] projection = {
-                FeedReaderContract.FeedEntry._ID,
-                FeedReaderContract.FeedEntry.COLUMN_NAME_NAME,
-                FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID,
-                FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP
-        };
-
-        Cursor c = dbReader.query(
-                FeedReaderContract.FeedEntry.TABLE_NAME,  // The table to query
-                projection,                               // The columns to return
-                FeedReaderContract.FeedEntry._ID + "=?",  // The columns for the WHERE clause
-                new String[]{id},                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                null                                 // The sort order
-        );
-
-
-        if(c.moveToNext()){
-            String id_r = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry._ID));
-            String name = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_NAME));
-            String facebook_id = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID));
-            String timestamp = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP));
-            receiverContact = new Contact(id_r, name, facebook_id, timestamp);
-            Log.i(TAG, "Message receiver: " + receiverContact.getName());
-        }
-        else {
-            Log.i(TAG, "ERROR: user id " + id + " not found");
-        }
-
+        goAskQuestion(id);
     }
 
     @Override

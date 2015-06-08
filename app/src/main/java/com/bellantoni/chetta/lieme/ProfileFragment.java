@@ -133,7 +133,6 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
     static final String TAG = "LieMe";
 
     public interface ProfileFragmentInterface{
-        public void goaskQuestionFragment();
         public void goFriendProfile(String facebookId);
         public void goContactListFragment();
 
