@@ -125,7 +125,8 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private static final String SERVER_URL = "http://computersecurityproject.altervista.org/gcm_server_php/register.php";
+    public static final String SERVER_URL_REGISTRATION = "http://computersecurityproject.altervista.org/gcm_server_php/register.php";
+    public static final String SERVER_URL_SEND_MESSAGE = "http://computersecurityproject.altervista.org/gcm_server_php/send_message.php";
     String SENDER_ID = "706561393502";
     /**
      * Tag used on log messages.
@@ -514,7 +515,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             String msg = "";
 
             HttpClient client = new DefaultHttpClient();
-            HttpPost post = new HttpPost(SERVER_URL);
+            HttpPost post = new HttpPost(SERVER_URL_REGISTRATION);
             try {
                 List<NameValuePair> parameter = new ArrayList<>(1);
                 parameter.add(new BasicNameValuePair("userId", params[0]));
