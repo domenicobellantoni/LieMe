@@ -20,6 +20,7 @@ public class MessageHandler {
     }
 
     public void send(){
-        Log.i(TAG, "Sending message to " + receiver.getName());
+        Log.i(TAG, "Sending message to " + receiver.getName() + " receiver id: " + receiver.getFacebook_id() + " sender id: " + senderFacebookId + " message: " + message);
+
     }
 }

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -129,7 +130,8 @@ public class AskFragment extends android.support.v4.app.Fragment {
     }
 
     public void sendMessage(){
-        MessageHandler messageHandler = new MessageHandler(receiverContact,null, null);
+        EditText mEdit   = (EditText)firstAccessView.findViewById(R.id.question);
+        MessageHandler messageHandler = new MessageHandler(receiverContact, getArguments().getString("facebook_id"), mEdit.getText().toString());
         messageHandler.send();
     }
 }

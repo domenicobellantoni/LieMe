@@ -233,6 +233,7 @@ public class drawnerActivity extends ActionBarActivity
         // The ask fragment will be called always after the selection of the receiver
         Bundle bundle = new Bundle();
         bundle.putString("receiver", receiver_id);
+        bundle.putString("facebook_id", this.id);
 
         this.actionBar.show();
 
