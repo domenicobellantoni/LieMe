@@ -6,10 +6,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -77,8 +76,11 @@ public class GcmIntentService extends IntentService {
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.logo_mini_dialog)
                         .setContentTitle("LieMe")
-                        .setStyle(new NotificationCompat.BigTextStyle().bigText(msg.get("message").toString()))
-                        .setContentText(msg.get("message").toString());
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText("New question"))
+                        .setContentText("New question");
+
+        Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(400);
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
