@@ -4,7 +4,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
     android:id="@+id/lain"
-    android:nestedScrollingEnabled="true">
+    android:nestedScrollingEnabled="true"
+    android:background="#ffffff">
 
 
     <!--EditText
@@ -72,5 +73,6 @@
         android:onClick="sendMessage"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:background="#ffffff" />
 </RelativeLayout>

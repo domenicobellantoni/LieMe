@@ -215,14 +215,14 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
         if(savedBundle==null) {
             firstAccessView = inflater.inflate(R.layout.fragment_profile, null);
             this.profileImage = (ImageView) firstAccessView.findViewById(R.id.imageProfile);
-            this.nameSurname = (TextView) firstAccessView.findViewById(R.id.nameSurname);
+            //this.nameSurname = (TextView) firstAccessView.findViewById(R.id.nameSurname);
             //this.nameSurname.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Light.ttf"));
-            this.nameSurnameString = getArguments().getString("name") + " " + getArguments().getString("surname");
-            this.nameSurname.setText(nameSurnameString);
+            //this.nameSurnameString = getArguments().getString("name") + " " + getArguments().getString("surname");
+            //this.nameSurname.setText(nameSurnameString);
             //DownloaderProfileImage downloaderProfileImage = new DownloaderProfileImage();
             //downloaderProfileImage.execute(getArguments().getString("photo1") + getArguments().get("id") + getArguments().getString("photo2"));
             RoundImage roundedImage = new RoundImage(BitmapFactory.decodeResource(getResources(), R.mipmap.iconuseranonymous));
-            Picasso.with((Activity) getActivity()).load("https://graph.facebook.com/" + Profile.getCurrentProfile().getId() + "/picture?height=105&width=105")
+            Picasso.with((Activity) getActivity()).load("https://graph.facebook.com/" + Profile.getCurrentProfile().getId() + "/picture?height=115&width=115")
                     .placeholder(roundedImage)
                     .transform(new CircleTransform()).fit().centerCrop().into(this.profileImage);
             FAB = (ImageButton) firstAccessView.findViewById(R.id.fab);

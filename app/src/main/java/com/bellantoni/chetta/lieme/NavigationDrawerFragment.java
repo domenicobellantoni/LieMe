@@ -80,6 +80,7 @@ public class NavigationDrawerFragment extends Fragment {
             "Profile",
             "Home",
             "Ask",
+            "Notifications",
             "Logout",
     };
 
@@ -88,6 +89,7 @@ public class NavigationDrawerFragment extends Fragment {
             R.drawable.ic_profile,
             R.drawable.ic_home,
             R.drawable.ic_pencil,
+            R.drawable.ic_notification,
             R.drawable.ic_logout,
     };
 

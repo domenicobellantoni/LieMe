@@ -1,10 +1,7 @@
 package com.bellantoni.chetta.lieme;
 
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBarActivity;
@@ -16,12 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.WindowManager;
-
-import com.bellantoni.chetta.lieme.db.FeedReaderContract;
-import com.bellantoni.chetta.lieme.db.FeedReaderDbHelper;
 import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
-import com.bellantoni.chetta.lieme.generalclasses.Contact;
-import com.bellantoni.chetta.lieme.network.NetworkController;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -39,6 +31,7 @@ public class drawnerActivity extends ActionBarActivity
     private ProfileFragment profileFragment;
     private Intent serviceIntent;
     private FriendProfileFragment friendProfileFragment;
+    private NotificationFragment notificationFragment;
 
     private final String TAG = "DrawnerActivity";
 
@@ -50,6 +43,7 @@ public class drawnerActivity extends ActionBarActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         FacebookSdk.sdkInitialize(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawner);
@@ -63,8 +57,8 @@ public class drawnerActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         this.actionBar = getSupportActionBar();
-        this.actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ff9200")));
-        this.actionBar.setTitle(R.string.app_name);
+        this.actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#f59200")));
+        this.actionBar.setTitle(Profile.getCurrentProfile().getFirstName() + " " + Profile.getCurrentProfile().getLastName());
 
         this.intent = getIntent();
         if(intent.getStringExtra("idfromlogin")!=null) {
@@ -101,6 +95,9 @@ public class drawnerActivity extends ActionBarActivity
                 // goAskQuestion(null);
                 break;
             case 3:
+                goNotifications();
+                break;
+            case 4:
                 logout();
                 break;
 
@@ -108,8 +105,6 @@ public class drawnerActivity extends ActionBarActivity
 
 
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -166,7 +161,8 @@ public class drawnerActivity extends ActionBarActivity
     private void goProfile(){
 
         this.actionBar = getSupportActionBar();
-        this.actionBar.hide();
+        actionBar.setTitle(Profile.getCurrentProfile().getFirstName()+" "+Profile.getCurrentProfile().getLastName());
+        //this.actionBar.hide();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         if(this.profileFragment==null) {
@@ -187,14 +183,14 @@ public class drawnerActivity extends ActionBarActivity
             profileFragment.setArguments(bundle);
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, profileFragment, "ProfileFragment")
+                    .add(R.id.container, profileFragment, "ProfileFragment").addToBackStack("ProfileFragment")
                     .commit();
         }else{
             this.profileFragment.setNameSurnameString(this.profileFragment.getNameSurnameString());
             this.profileFragment.setBitmap(this.profileFragment.getBitmap());
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, profileFragment, "ProfileFragment")
+                    .replace(R.id.container, profileFragment, "ProfileFragment").addToBackStack("ProfileFragmemt")
                     .commit();
         }
 
@@ -244,7 +240,7 @@ public class drawnerActivity extends ActionBarActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
 
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, this.askFragment,"AskFragment")
+                    .add(R.id.container, this.askFragment, "AskFragment").addToBackStack("AskFragment")
                     .commit();
 
         }else{
@@ -252,7 +248,7 @@ public class drawnerActivity extends ActionBarActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
 
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, this.askFragment, "AskFragment")
+                    .replace(R.id.container, this.askFragment, "AskFragment").addToBackStack("AskFragment")
                     .commit();
 
         }
@@ -285,7 +281,7 @@ public class drawnerActivity extends ActionBarActivity
             this.friendProfileFragment.setArguments(bundle);
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, friendProfileFragment, "FriendProfileFragment")
+                    .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
                     .commit();
 
     }
@@ -300,7 +296,7 @@ public class drawnerActivity extends ActionBarActivity
         this.friendProfileFragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, friendProfileFragment, "FriendProfileFragment")
+                .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
                 .commit();
 
     }
@@ -323,15 +319,33 @@ public class drawnerActivity extends ActionBarActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
 
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, this.contactListFragment,"ContactListFragment")
+                    .add(R.id.container, this.contactListFragment,"ContactListFragment").addToBackStack("ContactListFragment")
                     .commit();
 
         }else{
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, this.contactListFragment, "ContactListFragment")
+                    .replace(R.id.container, this.contactListFragment, "ContactListFragment").addToBackStack("ContactListFragment")
                     .commit();
 
         }
+    }
+
+    private void goNotifications(){
+
+        if(this.notificationFragment==null){
+            this.notificationFragment = new NotificationFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .add(R.id.container, this.notificationFragment,"NotificationFragment").addToBackStack("NotificationFragment")
+                    .commit();
+
+        }else{
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, this.notificationFragment, "NotificationFragment").addToBackStack("NotificationFragment")
+                    .commit();
+        }
+
     }
 }

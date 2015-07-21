@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/ont">
+    android:id="@+id/ont"
+    android:background="#ffffff">
 
     <LinearLayout
         android:id ="@+id/layout_top_friend"
@@ -13,130 +14,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal"
-            android:id="@+id/infoContainer"
-            android:background="#ff9200"
-
-            >
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentBottom="true">
-
-
-                <ImageButton
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/backFromProfile"
-                    android:background="@null"
-                    android:layout_marginTop="13dp"
-                    android:paddingStart="10dp"
-                    android:layout_alignBaseline="@+id/backFromProfile"
-                    android:backgroundTint="#cdcdcd"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Small Text"
-                    android:id="@+id/friendName"
-                    android:layout_marginLeft="20dp"
-                    android:textColor="#ffffff"
-                    android:gravity="center_vertical"
-                    android:textStyle="bold"
-                    android:layout_gravity="center" />
-
-                <ImageView
-                    android:layout_width="42dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/friendImgProfile"
-                    android:layout_toRightOf="@+id/backFromProfile"
-                    android:layout_marginStart="60dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:layout_gravity="left|center_vertical" />
-
-
-            </FrameLayout>
-
-        </RelativeLayout>
-
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:clickable="false"
-            android:background="#33b5e5"
-            android:layout_height="wrap_content">
-
-
-            <Space
-                android:layout_width="20px"
-                android:background="#ffffff"
-                android:layout_height="match_parent" />
-
-
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Medium Text"
-                    android:id="@+id/textView" />
-            </FrameLayout>
-            <Space
-                android:layout_width="20px"
-                android:layout_height="match_parent"
-                android:background="#ffffff"
-                android:longClickable="true" />
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Medium Text"
-                    android:id="@+id/textView2" />
-            </FrameLayout>
-
-            <Space
-                android:layout_width="20px"
-                android:background="#ffffff"
-                android:layout_height="match_parent"
-                android:longClickable="true"
-                android:backgroundTint="#ffffff" />
-
-            <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Medium Text"
-                    android:id="@+id/textView3" />
-            </FrameLayout>
-            <Space
-                android:layout_width="20px"
-                android:background="#ffffff"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
 
         <ListView
 
