@@ -2,6 +2,7 @@ package com.bellantoni.chetta.lieme;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -78,7 +80,7 @@ public class AskFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedBundle) {
         firstAccessView = inflater.inflate(R.layout.ask_question, null);
 
-        final Button button = (Button) firstAccessView.findViewById(R.id.send);
+        final ImageButton button = (ImageButton) firstAccessView.findViewById(R.id.send);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 sendMessage();
@@ -133,5 +135,13 @@ public class AskFragment extends android.support.v4.app.Fragment {
         EditText mEdit   = (EditText)firstAccessView.findViewById(R.id.question);
         MessageHandler messageHandler = new MessageHandler(receiverContact, getArguments().getString("facebook_id"), mEdit.getText().toString());
         messageHandler.send();
+        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(
+                    Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
     }
 }

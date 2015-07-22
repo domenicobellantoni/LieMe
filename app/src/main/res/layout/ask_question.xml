@@ -64,15 +64,15 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp" />
 
-    <Button
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:text="@string/send"
+    <ImageButton
+        android:layout_height="50dp"
+        android:layout_width="50dp"
+        android:src="@drawable/ic_send"
         android:gravity="center"
         android:id="@+id/send"
         android:onClick="sendMessage"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="#ffffff" />
+        android:background="@drawable/round"
+        android:layout_above="@+id/question"
+        android:layout_alignRight="@+id/who"
+        android:layout_alignEnd="@+id/who" />
 </RelativeLayout>

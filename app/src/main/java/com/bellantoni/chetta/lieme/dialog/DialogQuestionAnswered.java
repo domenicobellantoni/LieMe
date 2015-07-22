@@ -22,7 +22,7 @@ import java.util.Random;
 public class DialogQuestionAnswered extends DialogFragment {
 
     private ImageView imageViewProdileFriend;
-    private TextView resultAnswer;
+    private ImageView resultAnswer;
     private Button okButton;
     private TextView question;
 
@@ -31,7 +31,7 @@ public class DialogQuestionAnswered extends DialogFragment {
         View view = inflater.inflate(R.layout.layout_dialog_question_answered, null);
 
         this.imageViewProdileFriend = (ImageView) view.findViewById(R.id.imageFriendQuestionResult);
-        this.resultAnswer  = (TextView) view.findViewById(R.id.resultAnswer);
+        this.resultAnswer  = (ImageView) view.findViewById(R.id.resultAnswer);
         this.okButton = (Button) view.findViewById(R.id.okButtonReadQuestion);
         this.question = (TextView)view.findViewById(R.id.questionReadAnswer);
 
@@ -50,9 +50,10 @@ public class DialogQuestionAnswered extends DialogFragment {
         Random rand = new Random();
         int n = rand.nextInt(2);
         if(n==0){
-            this.resultAnswer.setText(R.string.lied);
+            this.resultAnswer.setImageResource(R.drawable.big_heart_red);
+
         }else{
-            this.resultAnswer.setText(R.string.truth);
+            this.resultAnswer.setImageResource(R.drawable.big_heart_green);
         }
 
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -3,15 +3,6 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <ImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:gravity="center"
-        android:id="@+id/imageFriendQuestionResult"
-        android:layout_gravity="center_horizontal" />
-
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,17 +12,40 @@
         android:id="@+id/questionReadAnswer"
         android:padding="20dp" />
 
-
-    <TextView
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/resultAnswer"
+        android:weightSum="2">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal" />
+        android:id="@+id/imageFriendQuestionResult"
+        android:layout_weight="1"
+
+        />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/resultAnswer"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingTop="5dp" />
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
 
     <Button
         android:layout_width="fill_parent"
@@ -39,6 +53,8 @@
         android:text="OK"
         android:id="@+id/okButtonReadQuestion"
         />
+
+
 
 
 </LinearLayout>
