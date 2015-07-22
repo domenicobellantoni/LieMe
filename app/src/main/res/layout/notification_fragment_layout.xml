@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    android:clickable="true">
+    >
 
 
     <ListView
@@ -16,7 +16,7 @@
         android:headerDividersEnabled="false"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
-        android:clickable="true"
+
 
         android:focusable="false" />
 

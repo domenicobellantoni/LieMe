@@ -190,6 +190,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
 
                     if(adapter.getItem(position).getTypeNotification()==0) {
+                        //prima di leggere la domanda qui devo controllare se ho un dispositivo bluetooth attaccato
                         mNotificationInteface.readQuestion(adapter.getItem(position).getQuestionId());
                     }
                     if(adapter.getItem(position).getTypeNotification()==1){

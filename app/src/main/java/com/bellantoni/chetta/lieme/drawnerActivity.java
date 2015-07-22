@@ -14,13 +14,14 @@ import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.WindowManager;
 import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
+import com.bellantoni.chetta.lieme.dialog.QuestionDialog;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 
 
 public class drawnerActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface, FriendProfileFragment.FriendProfileFragmentInterface, ContactListFragment.ContactListFragmentInterface, ContactListFragment.OnFragmentInteractionListener, NotificationFragment.NotificationInterface {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface, QuestionDialog.QuestionInterface, FriendProfileFragment.FriendProfileFragmentInterface, ContactListFragment.ContactListFragmentInterface, ContactListFragment.OnFragmentInteractionListener, NotificationFragment.NotificationInterface {
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private String surname;
@@ -32,6 +33,7 @@ public class drawnerActivity extends ActionBarActivity
     private Intent serviceIntent;
     private FriendProfileFragment friendProfileFragment;
     private NotificationFragment notificationFragment;
+    private QuestionDialog questionDialog;
 
     private final String TAG = "DrawnerActivity";
 
@@ -351,11 +353,29 @@ public class drawnerActivity extends ActionBarActivity
 
     @Override
     public void readQuestion(int questionId){
+
         System.out.println("DOMANDA CLICCATA");
+        this.questionDialog = new QuestionDialog();
+
+        Bundle args = new Bundle();
+        args.putInt("questionId", questionId);
+        questionDialog.setArguments(args);
+        questionDialog.show(getSupportFragmentManager(), "QUESTION_DIALOG");
     }
 
     @Override
     public void readAnswer(int questionId){
+
+    }
+
+    @Override
+    public void yesQuestionPressed(int idQuestion){
+        //STORE THE ANSWER
+    }
+
+    @Override
+    public void noQuestionPressed(int idQuestion){
+        //STORE THE ANSWER
 
     }
 }

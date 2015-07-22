@@ -83,6 +83,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
 
         }
 
+
         return view;
     }
 
