@@ -10,12 +10,9 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import com.bellantoni.chetta.lieme.adapter.ListInFriendFragmentAdapter;
 import com.bellantoni.chetta.lieme.adapter.NotificationListAdapter;
 import com.bellantoni.chetta.lieme.generalclasses.NotificationItem;
-import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
 import com.facebook.FacebookSdk;
-import com.facebook.Profile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,12 +40,36 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
     };
 
+    int[] typeNotifications = {
+            0,
+            0,
+            1,
+            0,
+            2,
+            1,
+            0,
+            1
+    };
+
+    int[] stateNotification = {
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1
+
+    };
+
 
 
 
     public interface NotificationInterface{
         // public void goaskQuestionFragment();
         public void readQuestion(int questionId);
+        public void readAnswer(int questionId );
 
     }
 
@@ -66,6 +87,10 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
     public NotificationFragment(){
 
+    }
+
+    public NotificationInterface mNotificationInteface() {
+        return mNotificationInteface;
     }
 
     @Override
@@ -96,23 +121,19 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
         if(savedBundle==null) {
             firstAccessView = inflater.inflate(R.layout.notification_fragment_layout, null);
 
-
-
-
-            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle(Profile.getCurrentProfile().getFirstName()+" "+Profile.getCurrentProfile().getLastName());
+            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Notifications");
 
 
             for (int i = 0; i < 8; i++) {
 
-                NotificationItem row = new NotificationItem(idQuestions[i]);
+                NotificationItem row = new NotificationItem(idQuestions[i], typeNotifications[i], stateNotification[i]);
                 this.rows.add(row);
 
             }
 
 
-            //final CustomListAdapter adapter=new CustomListAdapter(getActivity(), itemname, imgid, questions,idfb);
             adapter = new NotificationListAdapter(getActivity(), this.rows);
-            list = (ListView) firstAccessView.findViewById(R.id.listNotifiation);
+            list = (ListView) firstAccessView.findViewById(R.id.listNotification);
             list.setAdapter(adapter);
 
             list.setOnScrollListener(this);
@@ -121,9 +142,14 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
-                    // TODO Auto-generated method stub
 
-                    mNotificationInteface.readQuestion(adapter.getItem(position).getQuestionId());
+                    if(adapter.getItem(position).getTypeNotification()==0) {
+                        mNotificationInteface.readQuestion(adapter.getItem(position).getQuestionId());
+                    }
+                    if(adapter.getItem(position).getTypeNotification()==1){
+                        mNotificationInteface.readAnswer(adapter.getItem(position).getQuestionId());
+
+                    }
 
                 }
             });
@@ -132,6 +158,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
         }else{
             firstAccessView = getView();
+
         }
 
 
@@ -142,35 +169,39 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
     public void onScroll(AbsListView view,
                          int firstVisible, int visibleCount, int totalCount) {
-        //System.out.println("QUESTO "+adapter.getItem(firstVisible).getId());
+
 
 
         boolean loadMore =
                 firstVisible + visibleCount >= totalCount;
 
         if(loadMore) {
-            //scaricare sempre in async task  e far vedere spiner
+
             this.adapter.setCount(this.adapter.getCount()+1);
 
-            //QUI DA FARE UNA QUERY ALLA VOLTA HO PROVATO A CARICARE TIPO 8 ELEMENTI ALLA VOLTA MA CRASHA, SPERO CHE LA QUERY SIA
-            //VELOCE, AL MASSIMO POSSIAMO PROVARE 2/3 ALLA VOLTA
-            rows.add(new NotificationItem(545154));
+
+            rows.add(new NotificationItem(545154,0,1));
             //this.adapter.addAll(this.rows);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
-                    // TODO Auto-generated method stub
-                    //String Slecteditem = adapter.getItem(position).getFacebookId();
-                    //Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
-                    mNotificationInteface.readQuestion(adapter.getItem(position).getQuestionId());
+
+
+                    if(adapter.getItem(position).getTypeNotification()==0) {
+                        mNotificationInteface.readQuestion(adapter.getItem(position).getQuestionId());
+                    }
+                    if(adapter.getItem(position).getTypeNotification()==1){
+                        mNotificationInteface.readAnswer(adapter.getItem(position).getQuestionId());
+
+                    }
 
                 }
             });
 
 
-            System.out.println("CONTATORE "+ this.adapter.getCount());
+            //System.out.println("CONTATORE "+ this.adapter.getCount());
             adapter.notifyDataSetChanged();
         }
     }

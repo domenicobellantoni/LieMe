@@ -20,14 +20,8 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
     private final Activity context;
     private List<RowItemProfile> rows;
     private int count = 1;
-    private TextView txtTitle;
-    private ImageView imageView;
-    private TextView extratxt;
-    private TextView idfacebook;
-    private View view;
-    private ListView list;
-    private Typeface tf;
 
+    private View view;
 
 
     public CustomListAdapter(Activity context, List<RowItemProfile> firstRows ) {
@@ -35,7 +29,7 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
         super(context, R.layout.mylist, firstRows);
         this.context = context;
         this.rows = firstRows;
-        //this.tf = Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Light.ttf");
+
 
     }
 

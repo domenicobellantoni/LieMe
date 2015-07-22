@@ -20,7 +20,7 @@ import com.facebook.login.LoginManager;
 
 
 public class drawnerActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface, FriendProfileFragment.FriendProfileFragmentInterface, ContactListFragment.ContactListFragmentInterface, ContactListFragment.OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface, FriendProfileFragment.FriendProfileFragmentInterface, ContactListFragment.ContactListFragmentInterface, ContactListFragment.OnFragmentInteractionListener, NotificationFragment.NotificationInterface {
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private String surname;
@@ -337,7 +337,7 @@ public class drawnerActivity extends ActionBarActivity
             this.notificationFragment = new NotificationFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .add(R.id.container, this.notificationFragment,"NotificationFragment").addToBackStack("NotificationFragment")
+                    .replace(R.id.container, this.notificationFragment,"NotificationFragment").addToBackStack("NotificationFragment")
                     .commit();
 
         }else{
@@ -346,6 +346,16 @@ public class drawnerActivity extends ActionBarActivity
                     .replace(R.id.container, this.notificationFragment, "NotificationFragment").addToBackStack("NotificationFragment")
                     .commit();
         }
+
+    }
+
+    @Override
+    public void readQuestion(int questionId){
+        System.out.println("DOMANDA CLICCATA");
+    }
+
+    @Override
+    public void readAnswer(int questionId){
 
     }
 }

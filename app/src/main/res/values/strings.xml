@@ -29,11 +29,20 @@
     <string name="retry">Retry!</string>
     <string name="send">Send</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_prova_prova">Prova_prova</string>
     <string name="title_activity_new__drawner">New_Drawner</string>
     <string name="title_activity_main">MainActivity</string>
+
+
+    //strings per notifiche
+
+    <string name="askQuestion">One of your friends would like to ask you something</string>
+    <string name="answerQuestion">answered your question</string>
+    <string name="newFriend">is now on LieMe</string>
+
+
 
 
 
