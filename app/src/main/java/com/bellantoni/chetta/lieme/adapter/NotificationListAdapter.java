@@ -13,6 +13,7 @@ import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.generalclasses.NotificationItem;
 import com.squareup.picasso.Picasso;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -50,6 +51,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
             holder.idQuestion = (TextView) view.findViewById(R.id.idQuestion);
             holder.typeNotification = (TextView) view.findViewById(R.id.typeNotification);
             holder.imageNotification = (ImageView) view.findViewById(R.id.imageNotification);
+            holder.timeNotification = (TextView) view.findViewById(R.id.timeNotification);
 
             view.setTag(holder);
 
@@ -66,6 +68,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
 
         holder.idQuestion.setText(String.valueOf(this.rows.get(position).getQuestionId()));
         holder.typeNotification.setText(String.valueOf(this.rows.get(position).getTypeNotification()));
+        holder.timeNotification.setText(String.valueOf(new Timestamp(this.rows.get(position).getTimeNotification())));
         if(typeNotification==0){
             holder.textNotification.setText(R.string.askQuestion);
             holder.imageNotification.setImageResource(R.mipmap.iconuseranonymous);
@@ -109,6 +112,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
         TextView textNotification;
         TextView idQuestion;
         TextView typeNotification;
+        TextView timeNotification;
         int position;
 
     }

@@ -41,6 +41,11 @@
     <string name="askQuestion">One of your friends would like to ask you something</string>
     <string name="answerQuestion">answered your question</string>
     <string name="newFriend">is now on LieMe</string>
+    
+    
+    //string per visualizzazione risposta
+    <string name="lied">has lied</string>
+    <string name="truth">has told the truth</string>
 
 
 

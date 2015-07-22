@@ -13,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.WindowManager;
+
+import com.bellantoni.chetta.lieme.dialog.DialogQuestionAnswered;
 import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
 import com.bellantoni.chetta.lieme.dialog.QuestionDialog;
 import com.facebook.FacebookSdk;
@@ -34,6 +36,7 @@ public class drawnerActivity extends ActionBarActivity
     private FriendProfileFragment friendProfileFragment;
     private NotificationFragment notificationFragment;
     private QuestionDialog questionDialog;
+    private DialogQuestionAnswered dialogQuestionAnswered;
 
     private final String TAG = "DrawnerActivity";
 
@@ -365,6 +368,12 @@ public class drawnerActivity extends ActionBarActivity
 
     @Override
     public void readAnswer(int questionId){
+
+        this.dialogQuestionAnswered = new DialogQuestionAnswered();
+        Bundle args = new Bundle();
+        args.putInt("questionId", questionId);
+        this.dialogQuestionAnswered.setArguments(args);
+        dialogQuestionAnswered.show(getSupportFragmentManager(), "READ_ANSWER_DIALOG");
 
     }
 

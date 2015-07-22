@@ -70,30 +70,7 @@ public class QuestionDialog extends DialogFragment /*implements View.OnClickList
         getDialog().setTitle("Name and Surname asks you");
         return view;
 
-
-
     }
-
-
-
-    /*@Override
-    public void onClick(View v) {
-        if(v.getId()==R.id.yesButtonAnswer){
-            System.out.println("BELLAAAAAAA");
-            dismiss();
-            mQuestionInterface.yesQuestionPressed(getArguments().getInt("questionId"));
-
-        }
-        if(v.getId()==R.id.noButtonAnswer){
-
-            dismiss();
-            mQuestionInterface.noQuestionPressed(getArguments().getInt("questionId"));
-
-        }
-    }*/
-
-
-
 
 
     @Override
@@ -101,40 +78,11 @@ public class QuestionDialog extends DialogFragment /*implements View.OnClickList
         super.onAttach(activity);
         if(activity instanceof QuestionInterface) {
             mQuestionInterface = (QuestionInterface) activity;
-            /*mOnclickListener = new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    switch (which) {
-                        case R.id.yesButtonAnswer:
-                            System.out.println("BELLAAAAAAA");
-                            mQuestionInterface.yesQuestionPressed(getArguments().getInt("questionId"));
-                            break;
-                        case R.id.noButtonAnswer:
-                            dismiss();
-                            mQuestionInterface.noQuestionPressed(getArguments().getInt("questionId"));
-                            break;
-                        default:
-                            break;
-                    }
-
-                }
-
-            };*/
 
         }
     }
 
-    /*@Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Here we create and return the AlertDialog using a Builder
-        AlertDialog.Builder builder =  new AlertDialog.Builder(getActivity()).setIcon(R.mipmap.logo_mini_dialog)
-                .setTitle("here there should be the text of the question retrived using the id of the question, also the image on the left should be the image of" +
-                        "the friend that sent the question, the id of the question is " + String.valueOf(this.idQuestion))
-                .setPositiveButton(R.string.yes,mOnclickListener)
-                .setNegativeButton(R.string.no, mOnclickListener);
 
-        return builder.create();
-    }*/
 
 
 }

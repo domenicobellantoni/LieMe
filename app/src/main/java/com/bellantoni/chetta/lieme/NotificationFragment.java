@@ -15,6 +15,7 @@ import com.bellantoni.chetta.lieme.generalclasses.NotificationItem;
 import com.facebook.FacebookSdk;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,6 +62,17 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
             1,
             1
 
+    };
+
+    long[] timeNotifications = {
+            new Date().getTime(),
+            new Date().getTime(),
+            new Date().getTime(),
+            new Date().getTime(),
+            new Date().getTime(),
+            new Date().getTime(),
+            new Date().getTime(),
+            new Date().getTime(),
     };
 
 
@@ -126,7 +138,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
             for (int i = 0; i < 8; i++) {
 
-                NotificationItem row = new NotificationItem(idQuestions[i], typeNotifications[i], stateNotification[i]);
+                NotificationItem row = new NotificationItem(idQuestions[i], typeNotifications[i], stateNotification[i], timeNotifications[i]);
                 this.rows.add(row);
 
             }
@@ -180,7 +192,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
             this.adapter.setCount(this.adapter.getCount()+1);
 
 
-            rows.add(new NotificationItem(545154,0,1));
+            rows.add(new NotificationItem(545154,0,1, new Date().getTime()));
             //this.adapter.addAll(this.rows);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
