@@ -23,7 +23,7 @@ import com.facebook.login.LoginManager;
 
 
 public class drawnerActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface, QuestionDialog.QuestionInterface, FriendProfileFragment.FriendProfileFragmentInterface, ContactListFragment.ContactListFragmentInterface, ContactListFragment.OnFragmentInteractionListener, NotificationFragment.NotificationInterface {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface, QuestionDialog.QuestionInterface, FriendProfileFragment.FriendProfileFragmentInterface, ContactListFragment.ContactListFragmentInterface, ContactListFragment.OnFragmentInteractionListener, NotificationFragment.NotificationInterface, HomeFragment.HomeFragmentInterface {
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private String surname;
@@ -37,6 +37,7 @@ public class drawnerActivity extends ActionBarActivity
     private NotificationFragment notificationFragment;
     private QuestionDialog questionDialog;
     private DialogQuestionAnswered dialogQuestionAnswered;
+    private HomeFragment homefragment;
 
     private final String TAG = "DrawnerActivity";
 
@@ -272,7 +273,26 @@ public class drawnerActivity extends ActionBarActivity
 
 
     private void goHome(){
-        //da fare quando faccio fragment home
+       if(this.homefragment==null){
+           this.homefragment = new HomeFragment();
+
+
+           FragmentManager fragmentManager = getSupportFragmentManager();
+
+           fragmentManager.beginTransaction()
+                   .add(R.id.container, this.homefragment, "HomeFragment").addToBackStack("HomeFragment")
+                   .commit();
+
+
+       }else{
+
+           FragmentManager fragmentManager = getSupportFragmentManager();
+
+           fragmentManager.beginTransaction()
+                   .add(R.id.container, this.homefragment, "HomeFragment").addToBackStack("HomeFragment")
+                   .commit();
+
+       }
 
     }
 
@@ -387,4 +407,23 @@ public class drawnerActivity extends ActionBarActivity
         //STORE THE ANSWER
 
     }
+
+
+    @Override
+    public void goFriendProfileFromHome(String facebookId){
+
+        Bundle bundle=new Bundle();
+        bundle.putString("facebookIdFriend", facebookId);
+
+        this.friendProfileFragment = new FriendProfileFragment();
+        this.friendProfileFragment.setArguments(bundle);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
+                .commit();
+
+    }
+
+
+
 }

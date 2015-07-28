@@ -1,5 +1,6 @@
 package com.bellantoni.chetta.lieme;
 
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,33 +10,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-import com.bellantoni.chetta.lieme.adapter.ListInFriendFragmentAdapter;
-import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
+import com.bellantoni.chetta.lieme.adapter.ListInHomeAdapter;
+import com.bellantoni.chetta.lieme.generalclasses.ItemHome;
 import com.facebook.FacebookSdk;
-
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * Created by Domenico on 30/05/2015.
+ * Created by Domenico on 28/07/2015.
  */
-public class FriendProfileFragment extends Fragment implements AbsListView.OnScrollListener {
-
-    private String facebookId;
-    private ImageButton imageButtonBack;
-    private TextView nameSurnameFriend;
-    private ImageView friendProfileImage;
-    private ListInFriendFragmentAdapter adapter;
-    private List<RowItemProfile> rows;
+public class HomeFragment extends Fragment implements AbsListView.OnScrollListener {
 
     ListView list;
+    private List<ItemHome> rows;
+    private ListInHomeAdapter adapter;
 
-    String[] itemname ={
+    String[] itemnameTo ={
             "Federico Badini",
             "Matteo Bana",
             "Alessandro Donini",
@@ -45,15 +36,17 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
             "Davide Dipinto",
             "Leonardo Cavagnis"
     };
-    String[] idfb ={
-            "id fb Federico Badini",
-            "id fb Matteo Bana",
-            "id fb Alessandro Donini",
-            "id fb fNicora Elisa",
-            "id fb fMassimo De Marchi",
-            "id fb Lorenzo Di tucci",
-            "id fb Davide Dipinto",
-            "id fb Leonardo Cavagnis"
+
+
+    String[] itemnameFrom ={
+            "Pippo Zaffaroni",
+            "Claudio Giorgi",
+            "Alessandra Giannini",
+            "Teresa Amedeo",
+            "Carola Bummo",
+            "Giancarlo Fiumi",
+            "Davide Fioggi",
+            "Brioschi Giacomo Lizzardo"
     };
 
     Integer[] imgid={
@@ -89,32 +82,48 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
             false,
     };
 
+    String[] idfbFrom ={
+            "id fb Pippo Zaffaroni",
+            "id fb Claudio Giorgi",
+            "id fb Alessandra Giannini",
+            "id fb Teresa Amedeo",
+            "id fb Carola Bummo",
+            "id fb Giancarlo Fiumi",
+            "id fb Davide Fioggi",
+            "id fb Brioschi Giacomo Lizzardo"
+    };
 
-    public interface FriendProfileFragmentInterface{
 
-        public void goFriendProfileFromFriend(String facebookId);
+    String[] idfbTo ={
+            "id fb Federico Badini",
+            "id fb Matteo Bana",
+            "id fb Alessandro Donini",
+            "id fb fNicora Elisa",
+            "id fb fMassimo De Marchi",
+            "id fb Lorenzo Di tucci",
+            "id fb Davide Dipinto",
+            "id fb Leonardo Cavagnis"
+    };
 
+
+
+    public interface HomeFragmentInterface{
+        public void goFriendProfileFromHome(String facebookId);
     }
 
-    private FriendProfileFragmentInterface mFriendProfileFragmentInteface;
-
+    private HomeFragmentInterface mHomeFragmentInterface;
 
     @Override
     public void onAttach(Activity activity){
         super.onAttach(activity);
-        if(activity instanceof FriendProfileFragmentInterface){
-            mFriendProfileFragmentInteface = (FriendProfileFragmentInterface)activity;
+        if(activity instanceof HomeFragmentInterface){
+            mHomeFragmentInterface = (HomeFragmentInterface)activity;
 
         }
-    }
-
-    public FriendProfileFragment(){
 
     }
 
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
+    public HomeFragment(){
 
     }
 
@@ -122,40 +131,28 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
     public void onCreate(Bundle savedBundle){
         super.onCreate(savedBundle);
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
-        this.rows = new ArrayList<RowItemProfile>();
+        this.rows = new ArrayList<ItemHome>();
         setRetainInstance(true);
     }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedBundle) {
 
         View firstAccessView;
         if(savedBundle==null) {
-            firstAccessView = inflater.inflate(R.layout.friend_profile_fragment_layout, null);
-
-
-            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle(getArguments().getString("facebookIdFriend"));
-
+            firstAccessView = inflater.inflate(R.layout.home_fragment_layout, null);
+            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Home");
 
 
             for (int i = 0; i < 8; i++) {
 
-                RowItemProfile row = new RowItemProfile(questions[i], itemname[i], idfb[i], imgid[i], resultsQuestion[i]);
+                ItemHome row = new ItemHome(questions[i], itemnameFrom[i], itemnameTo[i], idfbFrom[i],idfbTo[i], imgid[i], resultsQuestion[i]);
                 this.rows.add(row);
 
             }
 
-
-            //final CustomListAdapter adapter=new CustomListAdapter(getActivity(), itemname, imgid, questions,idfb);
-            adapter = new ListInFriendFragmentAdapter(getActivity(), this.rows);
-            list = (ListView) firstAccessView.findViewById(R.id.listQuestionFriendProfile);
+            adapter = new ListInHomeAdapter(getActivity(), this.rows);
+            list = (ListView) firstAccessView.findViewById(R.id.listHome);
             list.setAdapter(adapter);
 
             list.setOnScrollListener(this);
@@ -167,21 +164,18 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
                     // TODO Auto-generated method stub
                     //String Slecteditem = itemname[+position] + idfb[+position];
                     //Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
-                    mFriendProfileFragmentInteface.goFriendProfileFromFriend(adapter.getItem(position).getFacebookId());
+                    mHomeFragmentInterface.goFriendProfileFromHome(adapter.getItem(position).getIdTo());
 
                 }
             });
-
-
-
         }else{
             firstAccessView = getView();
         }
 
-
-
         return firstAccessView;
+
     }
+
 
 
     public void onScroll(AbsListView view,
@@ -198,7 +192,7 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
 
             //QUI DA FARE UNA QUERY ALLA VOLTA HO PROVATO A CARICARE TIPO 8 ELEMENTI ALLA VOLTA MA CRASHA, SPERO CHE LA QUERY SIA
             //VELOCE, AL MASSIMO POSSIAMO PROVARE 2/3 ALLA VOLTA
-            rows.add(new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon, true));
+            rows.add(new ItemHome("question question question", "Pippofrom", "pippoTO","id fb form","id fb to", R.id.icon, true));
             //this.adapter.addAll(this.rows);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -208,7 +202,7 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
                     // TODO Auto-generated method stub
                     //String Slecteditem = adapter.getItem(position).getFacebookId();
                     //Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
-                    mFriendProfileFragmentInteface.goFriendProfileFromFriend(adapter.getItem(position).getFacebookId());
+                    mHomeFragmentInterface.goFriendProfileFromHome(adapter.getItem(position).getIdTo());
 
                 }
             });
@@ -218,6 +212,7 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
             adapter.notifyDataSetChanged();
         }
     }
+
 
     public void onScrollStateChanged(AbsListView v, int s) {
 
@@ -230,8 +225,5 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
 
 
 
+
 }
-
-
-
-
