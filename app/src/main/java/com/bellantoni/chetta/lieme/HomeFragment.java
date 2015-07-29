@@ -4,6 +4,7 @@ package com.bellantoni.chetta.lieme;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +21,11 @@ import java.util.List;
 /**
  * Created by Domenico on 28/07/2015.
  */
-public class HomeFragment extends Fragment implements AbsListView.OnScrollListener {
+public class HomeFragment extends Fragment implements AbsListView.OnScrollListener,SwipeRefreshLayout.OnRefreshListener {
 
     ListView list;
     private List<ItemHome> rows;
+    private SwipeRefreshLayout swipeLayout;
     private ListInHomeAdapter adapter;
 
     String[] itemnameTo ={
@@ -141,6 +143,24 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
         View firstAccessView;
         if(savedBundle==null) {
             firstAccessView = inflater.inflate(R.layout.home_fragment_layout, null);
+            swipeLayout = (SwipeRefreshLayout) firstAccessView.findViewById(R.id.swipe_refresh_layout);
+            swipeLayout.setOnRefreshListener(this);
+            swipeLayout.setColorScheme(android.R.color.holo_blue_bright,
+                    android.R.color.holo_green_light,
+                    android.R.color.holo_orange_light,
+                    android.R.color.holo_red_light);
+
+
+
+            /*swipeLayout.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            swipeLayout.setRefreshing(true);
+
+                                            fetchMovies();
+                                        }
+                                    }
+            );*/
             ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Home");
 
 
@@ -176,6 +196,29 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
 
     }
 
+    @Override
+    public void onRefresh() {
+        /*for (int i = 7; i >= 0; i--) {
+
+            ItemHome row = new ItemHome(questions[i], itemnameFrom[i], itemnameTo[i], idfbFrom[i],idfbTo[i], imgid[i], resultsQuestion[i]);
+            this.rows.add(0,row);
+            adapter.notifyDataSetChanged();
+
+        }*/
+        fetchMovies();
+    }
+
+
+    private void fetchMovies() {
+        swipeLayout.setRefreshing(true);
+
+
+        //QUI RICOSTRUISCO LA LISTA
+       //MI SA CHE è DA FARE IN UN ASYNC TASK O UN NUOVO THREAD, DA PROVARE ALTRIMENTI è UN DRAMMA PER LA GRAFICA
+
+        //swipeLayout.setRefreshing(false);
+
+    }
 
 
     public void onScroll(AbsListView view,
