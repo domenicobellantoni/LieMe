@@ -2,6 +2,7 @@ package com.bellantoni.chetta.lieme;
 
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -198,13 +199,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
 
     @Override
     public void onRefresh() {
-        /*for (int i = 7; i >= 0; i--) {
 
-            ItemHome row = new ItemHome(questions[i], itemnameFrom[i], itemnameTo[i], idfbFrom[i],idfbTo[i], imgid[i], resultsQuestion[i]);
-            this.rows.add(0,row);
-            adapter.notifyDataSetChanged();
-
-        }*/
         fetchMovies();
     }
 
@@ -212,6 +207,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
     private void fetchMovies() {
         swipeLayout.setRefreshing(true);
 
+        new UpdateListTask().execute(null, null, null);
 
         //QUI RICOSTRUISCO LA LISTA
        //MI SA CHE è DA FARE IN UN ASYNC TASK O UN NUOVO THREAD, DA PROVARE ALTRIMENTI è UN DRAMMA PER LA GRAFICA
@@ -263,6 +259,23 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
         adapter.notifyDataSetChanged();
 
 
+    }
+
+    private class UpdateListTask extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            for(int i=0; i<10000; i++){
+                System.out.print("PROVA PER PERDER TEMPO");
+
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void result){
+            HomeFragment.this.swipeLayout.setRefreshing(false);
+
+        }
     }
 
 
