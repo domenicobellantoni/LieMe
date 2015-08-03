@@ -146,22 +146,11 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
             firstAccessView = inflater.inflate(R.layout.home_fragment_layout, null);
             swipeLayout = (SwipeRefreshLayout) firstAccessView.findViewById(R.id.swipe_refresh_layout);
             swipeLayout.setOnRefreshListener(this);
-            swipeLayout.setColorScheme(android.R.color.holo_blue_bright,
+            swipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                     android.R.color.holo_green_light,
                     android.R.color.holo_orange_light,
                     android.R.color.holo_red_light);
 
-
-
-            /*swipeLayout.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            swipeLayout.setRefreshing(true);
-
-                                            fetchMovies();
-                                        }
-                                    }
-            );*/
             ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Home");
 
 
@@ -182,13 +171,13 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
-                    // TODO Auto-generated method stub
-                    //String Slecteditem = itemname[+position] + idfb[+position];
-                    //Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
+
                     mHomeFragmentInterface.goFriendProfileFromHome(adapter.getItem(position).getIdTo());
 
                 }
             });
+
+
         }else{
             firstAccessView = getView();
         }
@@ -208,29 +197,23 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
         swipeLayout.setRefreshing(true);
 
         new UpdateListTask().execute(null, null, null);
+        this.adapter.notifyDataSetChanged();
 
-        //QUI RICOSTRUISCO LA LISTA
-       //MI SA CHE è DA FARE IN UN ASYNC TASK O UN NUOVO THREAD, DA PROVARE ALTRIMENTI è UN DRAMMA PER LA GRAFICA
-
-        //swipeLayout.setRefreshing(false);
 
     }
 
 
     public void onScroll(AbsListView view,
                          int firstVisible, int visibleCount, int totalCount) {
-        //System.out.println("QUESTO "+adapter.getItem(firstVisible).getId());
 
 
         boolean loadMore =
                 firstVisible + visibleCount >= totalCount;
 
         if(loadMore) {
-            //scaricare sempre in async task  e far vedere spiner
+            //scaricare sempre in async task
             this.adapter.setCount(this.adapter.getCount()+1);
 
-            //QUI DA FARE UNA QUERY ALLA VOLTA HO PROVATO A CARICARE TIPO 8 ELEMENTI ALLA VOLTA MA CRASHA, SPERO CHE LA QUERY SIA
-            //VELOCE, AL MASSIMO POSSIAMO PROVARE 2/3 ALLA VOLTA
             rows.add(new ItemHome("question question question", "Pippofrom", "pippoTO","id fb form","id fb to", R.id.icon, true));
             //this.adapter.addAll(this.rows);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -238,16 +221,14 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
-                    // TODO Auto-generated method stub
-                    //String Slecteditem = adapter.getItem(position).getFacebookId();
-                    //Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
+
                     mHomeFragmentInterface.goFriendProfileFromHome(adapter.getItem(position).getIdTo());
 
                 }
             });
 
 
-            System.out.println("CONTATORE "+ this.adapter.getCount());
+
             adapter.notifyDataSetChanged();
         }
     }
@@ -255,20 +236,31 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
 
     public void onScrollStateChanged(AbsListView v, int s) {
 
-        //System.out.println("CONTATORE "+ this.adapter.getCount());
         adapter.notifyDataSetChanged();
-
-
     }
 
     private class UpdateListTask extends AsyncTask<Void,Void,Void>{
 
         @Override
         protected Void doInBackground(Void... params) {
-            for(int i=0; i<10000; i++){
+            /*for(int i=0; i<10000; i++){
                 System.out.print("PROVA PER PERDER TEMPO");
 
-            }
+            }*/
+            ItemHome row = new ItemHome("domanda aggiunta eh ciao", "Ettusi Gianpaolo", "Babbo di Minchia", "54ds754ds","87987dfd", 547887, true);
+            HomeFragment.this.rows.add(0,row);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+
+                    mHomeFragmentInterface.goFriendProfileFromHome(adapter.getItem(position).getIdTo());
+
+                }
+            });
+
+
             return null;
         }
 
@@ -277,9 +269,6 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
 
         }
     }
-
-
-
 
 
 }
