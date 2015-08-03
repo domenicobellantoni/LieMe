@@ -45,6 +45,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
+
 public class ContactListFragment extends android.support.v4.app.Fragment implements AbsListView.OnItemClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -72,10 +73,12 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
      * Views.
      */
     private ArrayAdapter mAdapter;
+
     /**
     * Db access object
     * */
     private FeedReaderDbHelper mDbHelper;
+
     /**
      * contact list
      * */
