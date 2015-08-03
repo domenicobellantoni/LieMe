@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.bellantoni.chetta.lieme.db.FeedReaderContract;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelper;
+import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
 import com.bellantoni.chetta.lieme.dummy.DummyContent;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.facebook.AccessToken;
@@ -248,6 +249,7 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
 
         } catch (JSONException e) {
             e.printStackTrace();
+            //new NetworkDialog().show(getActivity().getSupportFragmentManager(), "NETWORK_DIALOG");
         }
 
         SQLiteDatabase dbReader = mDbHelper.getReadableDatabase();

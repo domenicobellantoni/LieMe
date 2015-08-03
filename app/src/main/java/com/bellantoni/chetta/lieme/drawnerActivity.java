@@ -21,6 +21,9 @@ import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class drawnerActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface, QuestionDialog.QuestionInterface, FriendProfileFragment.FriendProfileFragmentInterface, ContactListFragment.ContactListFragmentInterface, ContactListFragment.OnFragmentInteractionListener, NotificationFragment.NotificationInterface, HomeFragment.HomeFragmentInterface {
@@ -38,6 +41,7 @@ public class drawnerActivity extends ActionBarActivity
     private QuestionDialog questionDialog;
     private DialogQuestionAnswered dialogQuestionAnswered;
     private HomeFragment homefragment;
+    private List<String> titlesActionbar = new ArrayList<String>();
 
     private final String TAG = "DrawnerActivity";
 
@@ -53,6 +57,7 @@ public class drawnerActivity extends ActionBarActivity
         FacebookSdk.sdkInitialize(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawner);
+
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -166,10 +171,14 @@ public class drawnerActivity extends ActionBarActivity
         //per la rotazione guadrare il manufest tag conf in questa attività
     private void goProfile(){
 
+
+
         this.actionBar = getSupportActionBar();
         actionBar.setTitle(Profile.getCurrentProfile().getFirstName()+" "+Profile.getCurrentProfile().getLastName());
         //this.actionBar.hide();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+
 
         if(this.profileFragment==null) {
             Profile profile = Profile.getCurrentProfile();
@@ -186,12 +195,14 @@ public class drawnerActivity extends ActionBarActivity
             bundle.putString("photo2", this.photo2);
             bundle.putString("id", this.id);
             this.profileFragment = new ProfileFragment();
+            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             profileFragment.setArguments(bundle);
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .add(R.id.container, profileFragment, "ProfileFragment").addToBackStack("ProfileFragment")
                     .commit();
         }else{
+            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             this.profileFragment.setNameSurnameString(this.profileFragment.getNameSurnameString());
             this.profileFragment.setBitmap(this.profileFragment.getBitmap());
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -199,6 +210,7 @@ public class drawnerActivity extends ActionBarActivity
                     .replace(R.id.container, profileFragment, "ProfileFragment").addToBackStack("ProfileFragmemt")
                     .commit();
         }
+
 
     }
 /*
@@ -238,9 +250,12 @@ public class drawnerActivity extends ActionBarActivity
         bundle.putString("facebook_id", this.id);
 
         this.actionBar.show();
+        this.actionBar.setTitle("Ask a Question");
+
 
         if(this.askFragment==null) {
             this.askFragment = new AskFragment();
+            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             Log.i(TAG, bundle.toString());
             this.askFragment.setArguments(bundle);
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -250,6 +265,7 @@ public class drawnerActivity extends ActionBarActivity
                     .commit();
 
         }else{
+            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             this.askFragment.setArguments(bundle);
             FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -267,15 +283,19 @@ public class drawnerActivity extends ActionBarActivity
             finish();
         }
         else {
+            this.actionBar.setTitle(titlesActionbar.get(titlesActionbar.size() - 1));
+            this.titlesActionbar.remove(titlesActionbar.size() - 1);
             super.onBackPressed();
+
         }
     }
 
 
     private void goHome(){
+
        if(this.homefragment==null){
            this.homefragment = new HomeFragment();
-
+           this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
 
            FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -285,6 +305,7 @@ public class drawnerActivity extends ActionBarActivity
 
 
        }else{
+           this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
 
            FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -299,10 +320,13 @@ public class drawnerActivity extends ActionBarActivity
     @Override
     public void goFriendProfile(String facebookId){
 
+
+
             Bundle bundle=new Bundle();
             bundle.putString("facebookIdFriend", facebookId);
 
             this.friendProfileFragment = new FriendProfileFragment();
+        this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             this.friendProfileFragment.setArguments(bundle);
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
@@ -314,10 +338,13 @@ public class drawnerActivity extends ActionBarActivity
     @Override
     public void goFriendProfileFromFriend(String facebookId){
 
+
+
         Bundle bundle=new Bundle();
         bundle.putString("facebookIdFriend", facebookId);
 
         this.friendProfileFragment = new FriendProfileFragment();
+        this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
         this.friendProfileFragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -358,14 +385,18 @@ public class drawnerActivity extends ActionBarActivity
 
     private void goNotifications(){
 
+
+
         if(this.notificationFragment==null){
             this.notificationFragment = new NotificationFragment();
+            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, this.notificationFragment,"NotificationFragment").addToBackStack("NotificationFragment")
                     .commit();
 
         }else{
+            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, this.notificationFragment, "NotificationFragment").addToBackStack("NotificationFragment")
@@ -412,10 +443,13 @@ public class drawnerActivity extends ActionBarActivity
     @Override
     public void goFriendProfileFromHome(String facebookId){
 
+
+
         Bundle bundle=new Bundle();
         bundle.putString("facebookIdFriend", facebookId);
 
         this.friendProfileFragment = new FriendProfileFragment();
+        this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
         this.friendProfileFragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
