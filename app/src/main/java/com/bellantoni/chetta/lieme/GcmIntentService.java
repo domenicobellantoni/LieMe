@@ -3,13 +3,20 @@ package com.bellantoni.chetta.lieme;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.bellantoni.chetta.lieme.db.FeedReaderContract;
+import com.bellantoni.chetta.lieme.db.FeedReaderContractMessages;
+import com.bellantoni.chetta.lieme.db.FeedReaderDbHelper;
+import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class GcmIntentService extends IntentService {
@@ -20,7 +27,10 @@ public class GcmIntentService extends IntentService {
      * Tag used on log messages.
      */
     static final String TAG = "GCM Intent";
-
+    /**
+     * Db access object
+     * */
+    private FeedReaderDbHelperMessages mDbHelper;
 
     public GcmIntentService() {
         super("GcmIntentService");
@@ -84,5 +94,38 @@ public class GcmIntentService extends IntentService {
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+
+        mDbHelper = new FeedReaderDbHelperMessages(getApplicationContext());
+        SQLiteDatabase dbWriter = mDbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_SENDER_ID, msg.getString("sender_facebook_id"));
+        values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE, msg.getString("message"));
+        values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE_READ, 0);
+        values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_RECEIVER_ID, "me");
+        values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP, "");
+        long newRowId = dbWriter.insert(FeedReaderContractMessages.FeedEntry.TABLE_NAME,null,values);
+
+
+        String[] projection = {
+                FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE
+        };
+
+        SQLiteDatabase dbReader = mDbHelper.getReadableDatabase();
+        Cursor c = dbReader.query(
+                FeedReaderContractMessages.FeedEntry.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                FeedReaderContractMessages.FeedEntry._ID + "=?",   // The columns for the WHERE clause
+                new String[]{String.valueOf(newRowId)},                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                 // The sort order
+        );
+
+        if(c.moveToNext()){
+            Log.i(TAG, "MESSAGGIO PRESO" + c.getString(c.getColumnIndex("message")));
+        }
+
+
     }
 }
