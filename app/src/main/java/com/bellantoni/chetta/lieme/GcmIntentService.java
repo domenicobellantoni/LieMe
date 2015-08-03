@@ -108,7 +108,11 @@ public class GcmIntentService extends IntentService {
 
 
         String[] projection = {
-                FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE
+                FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE,
+                FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE_READ,
+                FeedReaderContractMessages.FeedEntry.COLUMN_NAME_RECEIVER_ID,
+                FeedReaderContractMessages.FeedEntry.COLUMN_NAME_SENDER_ID,
+                FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP
         };
 
         SQLiteDatabase dbReader = mDbHelper.getReadableDatabase();
