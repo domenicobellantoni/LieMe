@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
@@ -17,7 +18,33 @@ import com.bellantoni.chetta.lieme.db.FeedReaderContract;
 import com.bellantoni.chetta.lieme.db.FeedReaderContractMessages;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelper;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
+import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
@@ -31,7 +58,7 @@ public class GcmIntentService extends IntentService {
      * Db access object
      * */
     private FeedReaderDbHelperMessages mDbHelper;
-
+    private final String MESSAGE_MANAGER_URL = "http://computersecurityproject.altervista.org/gcm_server_php/message_manager.php?user_id=";
     public GcmIntentService() {
         super("GcmIntentService");
     }
@@ -131,5 +158,80 @@ public class GcmIntentService extends IntentService {
         }
 
 
+        GetMessagesFromServer getMessagesFromServer = new GetMessagesFromServer();
+        getMessagesFromServer.execute("455542404610206");
+
+
+
+    }
+
+    private class GetMessagesFromServer extends AsyncTask<String,String,String> {
+        JSONArray messages;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+
+        public String convertStreamToString(InputStream inputStream) throws IOException {
+            if (inputStream != null) {
+                Writer writer = new StringWriter();
+
+                char[] buffer = new char[1024];
+                try {
+                    Reader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"),1024);
+                    int n;
+                    while ((n = reader.read(buffer)) != -1) {
+                        writer.write(buffer, 0, n);
+                    }
+                } finally {
+                    inputStream.close();
+                }
+                return writer.toString();
+            } else {
+                return "";
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String userId = params[0];
+            Log.i(TAG, "Downloading messages for:  " + userId);
+            String msg = "";
+            String s = "";
+            HttpClient client = new DefaultHttpClient();
+            HttpGet get = new HttpGet();
+            Log.i(TAG, "URL " + MESSAGE_MANAGER_URL+userId);
+            try {
+                get.setURI(new URI(MESSAGE_MANAGER_URL+userId));
+                HttpResponse resp = client.execute(get);
+                s = convertStreamToString(resp.getEntity().getContent());
+
+                Log.i(TAG, "Messages JSON: " + s);
+            } catch (IOException | URISyntaxException e) {
+                msg = "Error :" + e.getMessage();
+                Log.i(TAG, "Error: " + msg);
+            }
+
+            JSONObject json = null;
+            try {
+                json = new JSONObject(s);
+                messages = json.getJSONArray("messages");
+                for(int i = 0; i< messages.length(); i++)
+                {
+                    JSONObject message = messages.getJSONObject(i);
+                    Log.i(TAG, "message: "+ i + " " + message.getString("message"));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
     }
 }
