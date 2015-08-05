@@ -137,7 +137,6 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
 
             for (int i = 0; i < 8; i++) {
-
                 NotificationItem row = new NotificationItem(idQuestions[i], typeNotifications[i], stateNotification[i], timeNotifications[i]);
                 this.rows.add(row);
 

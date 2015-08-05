@@ -14,11 +14,14 @@ import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.bellantoni.chetta.lieme.network.UpdateMessages;
+import com.facebook.Profile;
 import com.bellantoni.chetta.lieme.db.FeedReaderContract;
 import com.bellantoni.chetta.lieme.db.FeedReaderContractMessages;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelper;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
+import com.facebook.FacebookSdk;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.apache.http.HttpResponse;
@@ -104,6 +107,10 @@ public class GcmIntentService extends IntentService {
     // This is just one simple example of what you might choose to do with
     // a GCM message.
     private void sendNotification(Bundle msg) {
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        Profile userProfile = Profile.getCurrentProfile();
+        String user_id= userProfile.getId();
+
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -122,116 +129,15 @@ public class GcmIntentService extends IntentService {
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 
+
         mDbHelper = new FeedReaderDbHelperMessages(getApplicationContext());
-        SQLiteDatabase dbWriter = mDbHelper.getWritableDatabase();
 
-        ContentValues values = new ContentValues();
-        values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_SENDER_ID, msg.getString("sender_facebook_id"));
-        values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE, msg.getString("message"));
-        values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE_READ, 0);
-        values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_RECEIVER_ID, "me");
-        values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP, "");
-        long newRowId = dbWriter.insert(FeedReaderContractMessages.FeedEntry.TABLE_NAME,null,values);
-
-
-        String[] projection = {
-                FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE,
-                FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE_READ,
-                FeedReaderContractMessages.FeedEntry.COLUMN_NAME_RECEIVER_ID,
-                FeedReaderContractMessages.FeedEntry.COLUMN_NAME_SENDER_ID,
-                FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP
-        };
-
-        SQLiteDatabase dbReader = mDbHelper.getReadableDatabase();
-        Cursor c = dbReader.query(
-                FeedReaderContractMessages.FeedEntry.TABLE_NAME,  // The table to query
-                projection,                               // The columns to return
-                FeedReaderContractMessages.FeedEntry._ID + "=?",   // The columns for the WHERE clause
-                new String[]{String.valueOf(newRowId)},                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                null                                 // The sort order
-        );
-
-        if(c.moveToNext()){
-            Log.i(TAG, "MESSAGGIO PRESO" + c.getString(c.getColumnIndex("message")));
-        }
-
-
-        GetMessagesFromServer getMessagesFromServer = new GetMessagesFromServer();
-        getMessagesFromServer.execute("455542404610206");
+        UpdateMessages updateMessages = new UpdateMessages(mDbHelper);
+        updateMessages.update(user_id);
 
 
 
     }
 
-    private class GetMessagesFromServer extends AsyncTask<String,String,String> {
-        JSONArray messages;
 
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-        }
-
-        public String convertStreamToString(InputStream inputStream) throws IOException {
-            if (inputStream != null) {
-                Writer writer = new StringWriter();
-
-                char[] buffer = new char[1024];
-                try {
-                    Reader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"),1024);
-                    int n;
-                    while ((n = reader.read(buffer)) != -1) {
-                        writer.write(buffer, 0, n);
-                    }
-                } finally {
-                    inputStream.close();
-                }
-                return writer.toString();
-            } else {
-                return "";
-            }
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            String userId = params[0];
-            Log.i(TAG, "Downloading messages for:  " + userId);
-            String msg = "";
-            String s = "";
-            HttpClient client = new DefaultHttpClient();
-            HttpGet get = new HttpGet();
-            Log.i(TAG, "URL " + MESSAGE_MANAGER_URL+userId);
-            try {
-                get.setURI(new URI(MESSAGE_MANAGER_URL+userId));
-                HttpResponse resp = client.execute(get);
-                s = convertStreamToString(resp.getEntity().getContent());
-
-                Log.i(TAG, "Messages JSON: " + s);
-            } catch (IOException | URISyntaxException e) {
-                msg = "Error :" + e.getMessage();
-                Log.i(TAG, "Error: " + msg);
-            }
-
-            JSONObject json = null;
-            try {
-                json = new JSONObject(s);
-                messages = json.getJSONArray("messages");
-                for(int i = 0; i< messages.length(); i++)
-                {
-                    JSONObject message = messages.getJSONObject(i);
-                    Log.i(TAG, "message: "+ i + " " + message.getString("message"));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-    }
 }

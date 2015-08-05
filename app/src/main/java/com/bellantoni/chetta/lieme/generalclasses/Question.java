@@ -1,18 +1,20 @@
 package com.bellantoni.chetta.lieme.generalclasses;
 
+import java.sql.Timestamp;
+
 /**
  * Created by alessandro on 8/3/15.
  */
-public class Question {
+public class Question implements Timestampable{
 
     private String id;
     private String sender_id;
     private String receiver_id;
-    private int message_read;
+    private String message_read;
     private String message;
-    private String timestamp;
+    private Timestamp timestamp;
 
-    public Question(String id, String sender_id, String receiver_id, int message_read, String message, String timestamp) {
+    public Question(String id, String sender_id, String receiver_id, String message_read, String message, Timestamp timestamp) {
         this.id = id;
         this.sender_id = sender_id;
         this.receiver_id = receiver_id;
@@ -38,7 +40,7 @@ public class Question {
         return receiver_id;
     }
 
-    public int getMessage_read() {
+    public String getMessage_read() {
         return message_read;
     }
 
@@ -46,7 +48,7 @@ public class Question {
         return message;
     }
 
-    public String getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 }

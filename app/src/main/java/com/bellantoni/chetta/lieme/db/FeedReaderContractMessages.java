@@ -9,14 +9,13 @@ public final class FeedReaderContractMessages {
 
     private static final String TEXT_TYPE = " TEXT";
     private static final String TIMESTAMP = " TIMESTAMP";
-    private static final String INT = " INT";
     private static final String COMMA_SEP = ",";
     public static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + FeedEntry.TABLE_NAME + " (" +
                     FeedEntry._ID + " INTEGER PRIMARY KEY," +
                     FeedEntry.COLUMN_NAME_SENDER_ID + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_NAME_RECEIVER_ID + TEXT_TYPE + COMMA_SEP +
-                    FeedEntry.COLUMN_NAME_MESSAGE_READ + INT + COMMA_SEP +
+                    FeedEntry.COLUMN_NAME_MESSAGE_READ + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_NAME_MESSAGE + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_NAME_TIMESTAMP + TIMESTAMP + " )";
 
