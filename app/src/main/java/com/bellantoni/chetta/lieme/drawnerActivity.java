@@ -406,23 +406,23 @@ public class drawnerActivity extends ActionBarActivity
     }
 
     @Override
-    public void readQuestion(int questionId){
+    public void readQuestion(String questionId){
 
         System.out.println("DOMANDA CLICCATA");
         this.questionDialog = new QuestionDialog();
 
         Bundle args = new Bundle();
-        args.putInt("questionId", questionId);
+        args.putInt("questionId", Integer.valueOf(questionId));
         questionDialog.setArguments(args);
         questionDialog.show(getSupportFragmentManager(), "QUESTION_DIALOG");
     }
 
     @Override
-    public void readAnswer(int questionId){
+    public void readAnswer(String questionId){
 
         this.dialogQuestionAnswered = new DialogQuestionAnswered();
         Bundle args = new Bundle();
-        args.putInt("questionId", questionId);
+        args.putInt("questionId", Integer.valueOf(questionId));
         this.dialogQuestionAnswered.setArguments(args);
         dialogQuestionAnswered.show(getSupportFragmentManager(), "READ_ANSWER_DIALOG");
 

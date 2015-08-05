@@ -8,10 +8,6 @@ import android.util.Log;
 
 import com.bellantoni.chetta.lieme.db.FeedReaderContractMessages;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
-import com.bellantoni.chetta.lieme.generalclasses.Question;
-import com.bellantoni.chetta.lieme.generalclasses.Timestampable;
-import com.facebook.FacebookSdk;
-import com.facebook.Profile;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -30,9 +26,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 
 /**
  * Created by alessandro on 8/4/15.

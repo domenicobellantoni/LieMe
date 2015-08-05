@@ -1,18 +1,19 @@
 package com.bellantoni.chetta.lieme.generalclasses;
 
-import java.util.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 
 /**
  * Created by Domenico on 21/07/2015.
  */
 public class NotificationItem {
 
-    private int idQuestion;
+    private String idQuestion;
     private int typeNotification;
     private int stateNotification;
-    private long timeNotification;
+    private Timestamp timeNotification;
 
-    public NotificationItem(int idQuestion, int typeNotification, int stateNotification, long timeNotification){
+    public NotificationItem(String idQuestion, int typeNotification, int stateNotification, Timestamp timeNotification){
 
         this.idQuestion=idQuestion ;
         this.typeNotification= typeNotification;
@@ -22,11 +23,11 @@ public class NotificationItem {
 
     }
 
-    public int getQuestionId() {
+    public String getQuestionId() {
         return idQuestion;
     }
 
-    public void setIdQuestion(int idQuestion) {
+    public void setIdQuestion(String idQuestion) {
         this.idQuestion = idQuestion;
     }
 
@@ -50,11 +51,11 @@ public class NotificationItem {
         this.stateNotification = stateNotification;
     }
 
-    public long getTimeNotification() {
+    public Timestamp getTimeNotification() {
         return timeNotification;
     }
 
-    public void setTimeNotification(long timeNotification) {
+    public void setTimeNotification(Timestamp timeNotification) {
         this.timeNotification = timeNotification;
     }
 }

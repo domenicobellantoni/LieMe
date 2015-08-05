@@ -68,7 +68,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
 
         holder.idQuestion.setText(String.valueOf(this.rows.get(position).getQuestionId()));
         holder.typeNotification.setText(String.valueOf(this.rows.get(position).getTypeNotification()));
-        holder.timeNotification.setText(String.valueOf(new Timestamp(this.rows.get(position).getTimeNotification())));
+        holder.timeNotification.setText(String.valueOf(this.rows.get(position).getTimeNotification()));
         if(typeNotification==0){
             holder.textNotification.setText(R.string.askQuestion);
             holder.imageNotification.setImageResource(R.mipmap.iconuseranonymous);

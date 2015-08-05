@@ -1,11 +1,12 @@
 package com.bellantoni.chetta.lieme.generalclasses;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 
 /**
  * Created by alessandro on 8/3/15.
  */
-public class Question implements Timestampable{
+public class Question implements Notification {
 
     private String id;
     private String sender_id;
@@ -13,6 +14,9 @@ public class Question implements Timestampable{
     private String message_read;
     private String message;
     private Timestamp timestamp;
+    private final int notificationType = 0;
+    private int notificationStatus = 0;
+
 
     public Question(String id, String sender_id, String receiver_id, String message_read, String message, Timestamp timestamp) {
         this.id = id;
@@ -48,7 +52,24 @@ public class Question implements Timestampable{
         return message;
     }
 
-    public Timestamp getTimestamp() {
+
+    @Override
+    public Timestamp getNotificationTimestamp() {
         return timestamp;
+    }
+
+    @Override
+    public int getNotificationType() {
+        return notificationType;
+    }
+
+    @Override
+    public int getNotificationStatus() {
+        return notificationStatus;
+    }
+
+    @Override
+    public void setNotificationStatus(int notificationStatus) {
+        this.notificationStatus = notificationStatus;
     }
 }
