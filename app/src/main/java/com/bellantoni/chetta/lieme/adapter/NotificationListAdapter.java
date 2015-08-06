@@ -61,6 +61,8 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
             holder = (ViewHolder) convertView.getTag();
         }
 
+        //if(this.rows.size()==0)
+        //    return view;
 
         int typeNotification = this.rows.get(position).getTypeNotification();
 

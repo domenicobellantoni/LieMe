@@ -16,15 +16,17 @@ public class Question implements Notification {
     private Timestamp timestamp;
     private final int notificationType = 0;
     private int notificationStatus = 0;
+    private String answer;
 
 
-    public Question(String id, String sender_id, String receiver_id, String message_read, String message, Timestamp timestamp) {
+    public Question(String id, String sender_id, String receiver_id, String message_read, String message, Timestamp timestamp, String answer) {
         this.id = id;
         this.sender_id = sender_id;
         this.receiver_id = receiver_id;
         this.message_read = message_read;
         this.message = message;
         this.timestamp = timestamp;
+        this.answer = answer;
     }
 
     @Override
@@ -71,5 +73,9 @@ public class Question implements Notification {
     @Override
     public void setNotificationStatus(int notificationStatus) {
         this.notificationStatus = notificationStatus;
+    }
+
+    public String getAnswer() {
+        return answer;
     }
 }

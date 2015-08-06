@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentManager;
@@ -22,6 +23,23 @@ import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +63,7 @@ public class drawnerActivity extends ActionBarActivity
     private List<String> titlesActionbar = new ArrayList<String>();
 
     private final String TAG = "DrawnerActivity";
+    private final String ANSWER_MANAGER_URL = "http://computersecurityproject.altervista.org/gcm_server_php/answerToQuestion.php?";
 
 
     private AskFragment askFragment;
@@ -431,7 +450,7 @@ public class drawnerActivity extends ActionBarActivity
 
     @Override
     public void yesQuestionPressed(int idQuestion){
-        //STORE THE ANSWER
+        new SendAnswerToServer().execute(Profile.getCurrentProfile().getId(), String.valueOf(idQuestion), "yes");
     }
 
     @Override
@@ -457,5 +476,43 @@ public class drawnerActivity extends ActionBarActivity
     }
 
 
+
+    private class SendAnswerToServer extends AsyncTask<String,String,String> {
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String userId = params[0];
+            String questionId = params[1];
+            String answer = params[2];
+
+            Log.i(TAG, "Answering: usr:" + userId + " qId:" + questionId + " ans:" + answer);
+            String msg = "";
+
+            HttpClient client = new DefaultHttpClient();
+            HttpGet get = new HttpGet();
+            try {
+                get.setURI(new URI(ANSWER_MANAGER_URL+"user_id="+userId+"&question_id="+questionId+"&answer="+answer));
+                HttpResponse resp = client.execute(get);
+
+            } catch (IOException | URISyntaxException e) {
+                msg = "Error :" + e.getMessage();
+                Log.i(TAG, "Error: " + msg);
+            }
+
+
+
+            return null;
+        }
+    }
 
 }

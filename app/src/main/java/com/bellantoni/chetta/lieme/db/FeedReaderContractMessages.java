@@ -17,6 +17,7 @@ public final class FeedReaderContractMessages {
                     FeedEntry.COLUMN_NAME_RECEIVER_ID + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_NAME_MESSAGE_READ + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_NAME_MESSAGE + TEXT_TYPE + COMMA_SEP +
+                    FeedEntry.COLUMN_NAME_ANSWER + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_NAME_TIMESTAMP + TIMESTAMP + " )";
 
     public static final String SQL_DELETE_ENTRIES =
@@ -34,6 +35,7 @@ public final class FeedReaderContractMessages {
         public static final String COLUMN_NAME_MESSAGE_READ = "message_read";
         public static final String COLUMN_NAME_MESSAGE = "message";
         public static final String COLUMN_NAME_TIMESTAMP = "timestamp";
+        public static final String COLUMN_NAME_ANSWER = "answer";
     }
 
 }

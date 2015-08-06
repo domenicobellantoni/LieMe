@@ -215,7 +215,8 @@ public class UpdateMessages {
                             FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE_READ,
                             FeedReaderContractMessages.FeedEntry.COLUMN_NAME_RECEIVER_ID,
                             FeedReaderContractMessages.FeedEntry.COLUMN_NAME_SENDER_ID,
-                            FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP
+                            FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP,
+                            FeedReaderContractMessages.FeedEntry.COLUMN_NAME_ANSWER
                     };
 
                     SQLiteDatabase dbReader = mDbHelper.getReadableDatabase();
@@ -241,6 +242,7 @@ public class UpdateMessages {
                         values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE_READ, message.getString("message_read"));
                         values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_RECEIVER_ID, message.getString("receiver_id"));
                         values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP, message.getString("timestamp"));
+                        values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_ANSWER, message.getString("answer"));
                         long newRowId = dbWriter.insert(FeedReaderContractMessages.FeedEntry.TABLE_NAME,null,values);
                     }
 

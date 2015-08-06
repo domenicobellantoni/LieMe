@@ -20,7 +20,9 @@ import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
 import com.bellantoni.chetta.lieme.generalclasses.Notification;
 import com.bellantoni.chetta.lieme.generalclasses.NotificationItem;
 import com.bellantoni.chetta.lieme.generalclasses.Question;
+import com.bellantoni.chetta.lieme.network.UpdateMessages;
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -128,10 +130,18 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
     public void onCreate(Bundle savedBundle){
         super.onCreate(savedBundle);
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+        mDbHelper = new FeedReaderDbHelperMessages(getActivity().getApplicationContext());
+
+        UpdateMessages updateMessages = new UpdateMessages(mDbHelper);
+        updateMessages.update(Profile.getCurrentProfile().getId());
+
         this.rows = new ArrayList<NotificationItem>();
+        for (int i = 0; i < 8; i++) {
+            NotificationItem row = new NotificationItem(String.valueOf(idQuestions[i]), typeNotifications[i], stateNotification[i], new Timestamp(timeNotifications[i]));
+            this.rows.add(row);
+        }
         this.allMessages = new ArrayList<>();
         setRetainInstance(true);
-
     }
 
     @Override
@@ -151,14 +161,6 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
             ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Notifications");
 
             new RetrieveMessagesFromLocalDataBase().execute(null, null, null);
-
-
-
-            for (int i = 0; i < 8; i++) {
-                NotificationItem row = new NotificationItem(String.valueOf(idQuestions[i]), typeNotifications[i], stateNotification[i], new Timestamp(timeNotifications[i]));
-                this.rows.add(row);
-
-            }
 
 
             adapter = new NotificationListAdapter(getActivity(), this.rows);
@@ -271,7 +273,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
         protected Void doInBackground(Void... params) {
             messages = new ArrayList<>();
 
-            mDbHelper = new FeedReaderDbHelperMessages(getActivity().getApplicationContext());
+
 
             String[] projection = {
                     FeedReaderContractMessages.FeedEntry._ID,
@@ -279,6 +281,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
                     FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE_READ,
                     FeedReaderContractMessages.FeedEntry.COLUMN_NAME_RECEIVER_ID,
                     FeedReaderContractMessages.FeedEntry.COLUMN_NAME_SENDER_ID,
+                    FeedReaderContractMessages.FeedEntry.COLUMN_NAME_ANSWER,
                     FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP
             };
 
@@ -302,8 +305,9 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
                         String receiver_id = c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_RECEIVER_ID));
                         String message_read = c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE_READ));
                         String message = c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE));
+                        String answer = c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_ANSWER));
                         Timestamp timestamp = Timestamp.valueOf(c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP)));
-                        messages.add(new Question(id, sender_id, receiver_id, message_read, message, timestamp));
+                        messages.add(new Question(id, sender_id, receiver_id, message_read, message, timestamp, answer));
                     }while(c.moveToNext());
                 }
             }
