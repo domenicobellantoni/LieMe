@@ -2,6 +2,7 @@ package com.bellantoni.chetta.lieme;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -52,7 +53,7 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private final String TAG = "CONTACT_LIST_FRAGMENT";
+    private static final String TAG = "CONTACT_LIST_FRAGMENT";
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -72,27 +73,27 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ArrayAdapter mAdapter;
+    private static ArrayAdapter mAdapter;
 
     /**
     * Db access object
     * */
-    private FeedReaderDbHelper mDbHelper;
+    private static FeedReaderDbHelper mDbHelper;
 
     /**
      * contact list
      * */
-    private List<Contact> contacts;
+    public static List<Contact> contacts;
 
     /**
      *
      * async class that retrieve data from DB
      */
-    RetrieveContactsFromLocalDataBase retrieveContactsFromLocalDataBaseAsync;
+    private static RetrieveContactsFromLocalDataBase retrieveContactsFromLocalDataBaseAsync;
 
     // Define a projection that specifies which columns from the database
     // you will actually use after this query.
-    private String[] projection = {
+    private static String[] projection = {
             FeedReaderContract.FeedEntry._ID,
             FeedReaderContract.FeedEntry.COLUMN_NAME_NAME,
             FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID,
@@ -119,6 +120,7 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       /*
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
         mDbHelper = new FeedReaderDbHelper(getActivity().getApplicationContext());
         contacts = new ArrayList<Contact>();
@@ -127,13 +129,41 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
         /* Add test
         contacts.add(new Contact("ok","ok","ok","ok","ok"));
         */
-
+/*
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
         mAdapter = new ArrayAdapter<Contact>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, contacts);
+
+        */
+
+        downloadFriends(getActivity());
+    }
+
+    private static void init(Activity c){
+        FacebookSdk.sdkInitialize(c.getApplicationContext());
+        mDbHelper = new FeedReaderDbHelper(c.getApplicationContext());
+        contacts = new ArrayList<Contact>();
+        retrieveContactsFromLocalDataBaseAsync = new RetrieveContactsFromLocalDataBase();
+        //retrieveContactsFromLocalDataBase();
+        /* Add test
+        contacts.add(new Contact("ok","ok","ok","ok","ok"));
+        */
+        /*
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+*/
+        mAdapter = new ArrayAdapter<Contact>(c, android.R.layout.simple_list_item_1, android.R.id.text1, contacts);
+
+    }
+
+    public static void downloadFriends(Activity c){
+
+        init(c);
 
         retrieveContactsFromLocalDataBaseAsync.execute(null, null, null);
 
@@ -151,8 +181,6 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
                     }
                 }
         ).executeAsync();
-
-
     }
 
     @Override
@@ -170,7 +198,7 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
         return view;
     }
 
-    private void updateList(){
+    private static void updateList(){
         mAdapter.notifyDataSetChanged();
     }
 
@@ -233,7 +261,7 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
         public void onFragmentInteraction(String id);
     }
 
-    private void updateContactList(GraphResponse response){
+    private static void updateContactList(GraphResponse response){
 
         ArrayList<Contact> newContacts = new ArrayList<>();
         try {
@@ -339,7 +367,7 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
 
     }
 
-    private class RetrieveContactsFromLocalDataBase extends AsyncTask<Void, Void, Void>{
+    private static class RetrieveContactsFromLocalDataBase extends AsyncTask<Void, Void, Void>{
         private Cursor c;
 
         @Override
@@ -369,7 +397,7 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
         }
     }
 
-    private class RetrieveContactsFromLocalDataBaseAfterUpdate extends AsyncTask<Void, Void, Void>{
+    private static class RetrieveContactsFromLocalDataBaseAfterUpdate extends AsyncTask<Void, Void, Void>{
         private Cursor c;
 
         @Override
@@ -399,7 +427,7 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
         }
     }
 
-    private void fillTheContactListArray(Cursor c){
+    private static void fillTheContactListArray(Cursor c){
         // Clear the array
         contacts.clear();
 
@@ -417,5 +445,17 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
 
         updateList();
 
+    }
+
+    public static Contact findContactById(String id){
+        if(id.equals("server")){
+            return new Contact("0","Server","","");
+        }
+        for(Object o: contacts){
+            Contact c = (Contact)o;
+            if(c.getFacebook_id().equals(id))
+                return c;
+        }
+        return null;
     }
 }

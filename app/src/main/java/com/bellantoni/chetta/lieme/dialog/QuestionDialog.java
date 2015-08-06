@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bellantoni.chetta.lieme.ContactListFragment;
+import com.bellantoni.chetta.lieme.NotificationFragment;
 import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
+import com.bellantoni.chetta.lieme.generalclasses.Contact;
+import com.bellantoni.chetta.lieme.generalclasses.Question;
+import com.facebook.Profile;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -34,8 +40,12 @@ public class QuestionDialog extends DialogFragment /*implements View.OnClickList
     private Button yesButton, noButton;
     private ImageView profileImage;
     private TextView question;
-
-
+    private Question questionObj;
+    private Contact senderContact;
+    /**
+     * Tag used on log messages.
+     */
+    static final String TAG = "Question Dialog";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -45,9 +55,17 @@ public class QuestionDialog extends DialogFragment /*implements View.OnClickList
         profileImage = (ImageView)view.findViewById(R.id.imgProfileQuestionSender);
         question = (TextView)view.findViewById(R.id.questionToAnswer);
         setCancelable(false);
-        question.setText("here there should be the text of the question retrived using the id of the question, also the image on the left should be the image of" +
-                "the friend that sent the question, the id of the question is " + String.valueOf(getArguments().getInt("questionId")));
-        Picasso.with(getActivity().getApplicationContext()).load("http://i.imgur.com/DvpvklR.png").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(profileImage);
+        questionObj = NotificationFragment.findQuestionById(String.valueOf(getArguments().getInt("questionId")));
+        if(questionObj==null)
+        {
+            Log.i(TAG, "Error: question id not found");
+            return null;
+        }
+
+
+
+        question.setText(questionObj.getMessage());
+        Picasso.with(getActivity().getApplicationContext()).load("https://graph.facebook.com/" + questionObj.getSender_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(profileImage);
 
         noButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +85,18 @@ public class QuestionDialog extends DialogFragment /*implements View.OnClickList
             }
         });
 
-        getDialog().setTitle("Name and Surname asks you");
+
+        // TODO PRENDI NOME E COGNOME DAL DATABASE DEI CONTATTI
+        senderContact = ContactListFragment.findContactById(questionObj.getSender_id());
+        if(senderContact == null)
+        {
+            Log.i(TAG, "Error: sender id not found");
+            getDialog().setTitle("Sender name not found");
+        }else{
+            getDialog().setTitle(senderContact.getName());
+        }
+
+
         return view;
 
     }

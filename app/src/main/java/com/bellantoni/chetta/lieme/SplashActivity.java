@@ -77,6 +77,8 @@ public class SplashActivity extends Activity {
 
         //LoginManager.getInstance().logOut();
 
+
+
     }
 
 
@@ -154,4 +156,6 @@ public class SplashActivity extends Activity {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         return accessToken;
     }
+
+
 }

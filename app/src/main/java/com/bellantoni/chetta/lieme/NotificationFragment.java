@@ -40,6 +40,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
     private NotificationListAdapter adapter;
     private List<NotificationItem> rows;
     private FeedReaderDbHelperMessages mDbHelper;
+    public static ArrayList<Notification> allMessages;
     ListView list;
 
     int[] idQuestions={
@@ -128,7 +129,9 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
         super.onCreate(savedBundle);
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
         this.rows = new ArrayList<NotificationItem>();
+        this.allMessages = new ArrayList<>();
         setRetainInstance(true);
+
     }
 
     @Override
@@ -193,13 +196,11 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
     }
 
 
-    public void onScroll(AbsListView view,
-                         int firstVisible, int visibleCount, int totalCount) {
+    public void onScroll(AbsListView view,int firstVisible, int visibleCount, int totalCount) {
 
 
 
-        boolean loadMore =
-                firstVisible + visibleCount >= totalCount;
+        boolean loadMore = firstVisible + visibleCount >= totalCount;
 
         if(loadMore) {
 
@@ -249,7 +250,9 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
             // If notification is a Question
             if(n.getNotificationType() == 0)
             {
+
                 Question q = (Question) n;
+                this.allMessages.add(q);
                 NotificationItem row = new NotificationItem(q.getId(), q.getNotificationType(), q.getNotificationStatus(), q.getNotificationTimestamp());
                 this.rows.add(row);
                 Log.i(TAG, "Message retrieved from DB:" + q.getMessage());
@@ -313,6 +316,18 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
             super.onPostExecute(aVoid);
             updateList(messages);
         }
+    }
+
+    public static Question findQuestionById(String id){
+
+        for(Object n: allMessages){
+            Question q = (Question)n;
+            if(q.getId().equals(id)){
+                Log.i(TAG, String.valueOf(q.getMessage()));
+                return q;
+            }
+        }
+        return null;
     }
 
 

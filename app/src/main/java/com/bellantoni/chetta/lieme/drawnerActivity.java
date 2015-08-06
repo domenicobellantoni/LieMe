@@ -1,6 +1,7 @@
 package com.bellantoni.chetta.lieme;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -87,7 +88,7 @@ public class drawnerActivity extends ActionBarActivity
         this.photo1 = "https://graph.facebook.com/";
         this.photo2 = "/picture?height=105&width=105";
 
-
+        ContactListFragment.downloadFriends(this);
     }
 
 
