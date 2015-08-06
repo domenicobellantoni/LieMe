@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
 import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
 import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
 import com.bellantoni.chetta.lieme.network.NetworkController;
+import com.bellantoni.chetta.lieme.network.UpdateMessages;
 import com.facebook.Profile;
 
 
@@ -59,6 +61,12 @@ public class LoginActivity extends ActionBarActivity implements LoginFragment.Li
         intent.putExtra("surnamefromlogin", profile.getLastName());
         intent.putExtra("idfromlogin", profile.getId());
         //intent.putExtra("IMAGE", profile.getProfilePictureUri(40,40).toString());
+
+        FeedReaderDbHelperMessages mDbHelper = new FeedReaderDbHelperMessages(getApplicationContext());
+
+        UpdateMessages updateMessages = new UpdateMessages(mDbHelper);
+        updateMessages.update(Profile.getCurrentProfile().getId());
+
         startActivity(intent);
         finish();
 

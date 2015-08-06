@@ -455,7 +455,7 @@ public class drawnerActivity extends ActionBarActivity
 
     @Override
     public void noQuestionPressed(int idQuestion){
-        //STORE THE ANSWER
+        new SendAnswerToServer().execute(Profile.getCurrentProfile().getId(), String.valueOf(idQuestion), "no");
     }
 
 

@@ -81,10 +81,7 @@ public class SplashActivity extends Activity {
         //LoginManager.getInstance().logOut();
 
 
-        FeedReaderDbHelperMessages mDbHelper = new FeedReaderDbHelperMessages(getApplicationContext());
 
-        UpdateMessages updateMessages = new UpdateMessages(mDbHelper);
-        updateMessages.update(Profile.getCurrentProfile().getId());
 
 
     }
@@ -138,6 +135,11 @@ public class SplashActivity extends Activity {
             intent.putExtra("photo1", "https://graph.facebook.com/" );
             intent.putExtra("photo2","/picture?height=105&width=105");
             System.out.println("NOMEEEEEEE "+profile.getFirstName());
+
+            FeedReaderDbHelperMessages mDbHelper = new FeedReaderDbHelperMessages(getApplicationContext());
+
+            UpdateMessages updateMessages = new UpdateMessages(mDbHelper);
+            updateMessages.update(Profile.getCurrentProfile().getId());
 
             startActivity(intent);
             finish();
