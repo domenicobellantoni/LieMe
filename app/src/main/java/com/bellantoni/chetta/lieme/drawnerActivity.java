@@ -437,14 +437,11 @@ public class drawnerActivity extends ActionBarActivity
     @Override
     public void noQuestionPressed(int idQuestion){
         //STORE THE ANSWER
-
     }
 
 
     @Override
     public void goFriendProfileFromHome(String facebookId){
-
-
 
         Bundle bundle=new Bundle();
         bundle.putString("facebookIdFriend", facebookId);

@@ -86,7 +86,6 @@ public class QuestionDialog extends DialogFragment /*implements View.OnClickList
         });
 
 
-        // TODO PRENDI NOME E COGNOME DAL DATABASE DEI CONTATTI
         senderContact = ContactListFragment.findContactById(questionObj.getSender_id());
         if(senderContact == null)
         {
