@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
+import com.bellantoni.chetta.lieme.network.UpdateMessages;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
@@ -67,16 +69,22 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+
         setContentView(R.layout.activity_splash);
         if(savedInstanceState!=null){
             this.mStartTime = savedInstanceState.getLong(START_TIME_KEY);
 
         }
         mHandler = new UiHandler(this);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        //FacebookSdk.sdkInitialize(getApplicationContext());
 
         //LoginManager.getInstance().logOut();
 
+
+        FeedReaderDbHelperMessages mDbHelper = new FeedReaderDbHelperMessages(getApplicationContext());
+
+        UpdateMessages updateMessages = new UpdateMessages(mDbHelper);
+        updateMessages.update(Profile.getCurrentProfile().getId());
 
 
     }

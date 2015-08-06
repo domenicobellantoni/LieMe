@@ -130,10 +130,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
     public void onCreate(Bundle savedBundle){
         super.onCreate(savedBundle);
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
-        mDbHelper = new FeedReaderDbHelperMessages(getActivity().getApplicationContext());
 
-        UpdateMessages updateMessages = new UpdateMessages(mDbHelper);
-        updateMessages.update(Profile.getCurrentProfile().getId());
 
         this.rows = new ArrayList<NotificationItem>();
         for (int i = 0; i < 8; i++) {
