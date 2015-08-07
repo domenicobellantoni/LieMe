@@ -106,6 +106,11 @@ public class UpdateMessages {
 
     }
 
+    public void updateRowWithAnswer(String questionId, String answer){
+        Log.i(TAG, "Updating question: "+ questionId + " with: " + answer);
+        new UpdateQeustionWithAnswer().execute(questionId, answer);
+    }
+
     private class GetMessagesFromServer extends AsyncTask<String,String,String> {
         JSONArray messages;
 
@@ -250,6 +255,37 @@ public class UpdateMessages {
                     e.printStackTrace();
                 }
             }
+
+            return null;
+        }
+    }
+
+
+    private class UpdateQeustionWithAnswer extends AsyncTask<String,String,String> {
+
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String questionId = params[0];
+            String answer = params[1];
+
+            ContentValues values = new ContentValues();
+            values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_ANSWER, answer);
+            SQLiteDatabase dbWriter = mDbHelper.getWritableDatabase();
+            dbWriter.update(FeedReaderContractMessages.FeedEntry.TABLE_NAME, values,FeedReaderContractMessages.FeedEntry._ID +" = "+questionId, null);
 
             return null;
         }

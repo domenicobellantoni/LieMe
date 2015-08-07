@@ -116,24 +116,56 @@ public class GcmIntentService extends IntentService {
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,new Intent(this, drawnerActivity.class), 0);
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.logo_mini_dialog)
-                        .setContentTitle("LieMe")
-                        .setStyle(new NotificationCompat.BigTextStyle().bigText("New question"))
-                        .setContentText("New question");
-
-        Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(400);
-
-        mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-
-
         mDbHelper = new FeedReaderDbHelperMessages(getApplicationContext());
-
         UpdateMessages updateMessages = new UpdateMessages(mDbHelper);
-        updateMessages.update(user_id);
+
+        if(msg.getString("notificationType").equals("question"))
+        {
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.logo_mini_dialog)
+                            .setContentTitle("LieMe")
+                            .setStyle(new NotificationCompat.BigTextStyle().bigText("New question"))
+                            .setContentText("New question");
+
+            Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+            v.vibrate(400);
+
+            mBuilder.setContentIntent(contentIntent);
+            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+
+            updateMessages.update(user_id);
+        }
+        if(msg.getString("notificationType").equals("answer"))
+        {
+            Contact userAnswer = ContactListFragment.findContactById(msg.getString("friendId"));
+
+            Log.i(TAG, "Answer notification received from: "+ userAnswer.getName());
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.logo_mini_dialog)
+                            .setContentTitle("LieMe")
+                            .setStyle(new NotificationCompat.BigTextStyle().bigText("New answer"))
+                            .setContentText(userAnswer.getName() + " answered");
+
+            Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+
+
+            long[] pattern = {
+                    0,  // Start immediately
+                    100,
+                    100,
+                    100
+            };
+
+            v.vibrate(pattern, -1);
+
+            updateMessages.updateRowWithAnswer(msg.getString("questionId"),msg.getString("answer"));
+
+            mBuilder.setContentIntent(contentIntent);
+            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+
+        }
 
 
 

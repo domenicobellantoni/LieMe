@@ -29,8 +29,8 @@ public class QuestionDialog extends DialogFragment /*implements View.OnClickList
 
 
     public interface QuestionInterface{
-        void yesQuestionPressed(int idQuestion);
-        void noQuestionPressed(int idQuestion);
+        void yesQuestionPressed(int idQuestion,String senderId);
+        void noQuestionPressed(int idQuestion,String senderId);
     }
 
     private int idQuestion;
@@ -71,7 +71,7 @@ public class QuestionDialog extends DialogFragment /*implements View.OnClickList
             @Override
             public void onClick(View v) {
                 dismiss();
-                mQuestionInterface.noQuestionPressed(getArguments().getInt("questionId"));
+                mQuestionInterface.noQuestionPressed(getArguments().getInt("questionId"), questionObj.getSender_id());
 
 
             }
@@ -81,7 +81,7 @@ public class QuestionDialog extends DialogFragment /*implements View.OnClickList
             @Override
             public void onClick(View v) {
                 dismiss();
-                mQuestionInterface.yesQuestionPressed(getArguments().getInt("questionId"));
+                mQuestionInterface.yesQuestionPressed(getArguments().getInt("questionId"), questionObj.getSender_id());
             }
         });
 

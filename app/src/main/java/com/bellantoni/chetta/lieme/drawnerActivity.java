@@ -449,13 +449,13 @@ public class drawnerActivity extends ActionBarActivity
     }
 
     @Override
-    public void yesQuestionPressed(int idQuestion){
-        new SendAnswerToServer().execute(Profile.getCurrentProfile().getId(), String.valueOf(idQuestion), "yes");
+    public void yesQuestionPressed(int idQuestion, String senderId){
+        new SendAnswerToServer().execute(Profile.getCurrentProfile().getId(), String.valueOf(idQuestion), "yes", senderId);
     }
 
     @Override
-    public void noQuestionPressed(int idQuestion){
-        new SendAnswerToServer().execute(Profile.getCurrentProfile().getId(), String.valueOf(idQuestion), "no");
+    public void noQuestionPressed(int idQuestion, String senderId){
+        new SendAnswerToServer().execute(Profile.getCurrentProfile().getId(), String.valueOf(idQuestion), "no", senderId);
     }
 
 
@@ -494,6 +494,7 @@ public class drawnerActivity extends ActionBarActivity
             String userId = params[0];
             String questionId = params[1];
             String answer = params[2];
+            String senderId = params[3];
 
             Log.i(TAG, "Answering: usr:" + userId + " qId:" + questionId + " ans:" + answer);
             String msg = "";
@@ -501,7 +502,7 @@ public class drawnerActivity extends ActionBarActivity
             HttpClient client = new DefaultHttpClient();
             HttpGet get = new HttpGet();
             try {
-                get.setURI(new URI(ANSWER_MANAGER_URL+"user_id="+userId+"&question_id="+questionId+"&answer="+answer));
+                get.setURI(new URI(ANSWER_MANAGER_URL+"user_id="+userId+"&question_id="+questionId+"&answer="+answer+"&sender_id="+senderId));
                 HttpResponse resp = client.execute(get);
 
             } catch (IOException | URISyntaxException e) {

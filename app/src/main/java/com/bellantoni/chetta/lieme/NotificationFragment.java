@@ -250,16 +250,15 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
             // If notification is a Question
             if(n.getNotificationType() == 0)
             {
-
                 Question q = (Question) n;
+                if(!q.getReceiver_id().equals(Profile.getCurrentProfile().getId()))
+                    continue;
                 this.allMessages.add(q);
                 NotificationItem row = new NotificationItem(q.getId(), q.getNotificationType(), q.getNotificationStatus(), q.getNotificationTimestamp());
                 this.rows.add(row);
                 Log.i(TAG, "Message retrieved from DB:" + q.getMessage());
             }
-
         }
-
         adapter.notifyDataSetChanged();
     }
 
