@@ -1,6 +1,8 @@
 package com.bellantoni.chetta.lieme;
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -16,15 +18,20 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import com.bellantoni.chetta.lieme.adapter.NotificationListAdapter;
 import com.bellantoni.chetta.lieme.db.FeedReaderContractMessages;
+import com.bellantoni.chetta.lieme.db.FeedReaderContractNotification;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
+import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperNotification;
 import com.bellantoni.chetta.lieme.generalclasses.Notification;
+import com.bellantoni.chetta.lieme.generalclasses.NotificationImpl;
 import com.bellantoni.chetta.lieme.generalclasses.NotificationItem;
 import com.bellantoni.chetta.lieme.generalclasses.Question;
-import com.bellantoni.chetta.lieme.network.UpdateMessages;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 
-import java.sql.Time;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,8 +48,10 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
     private NotificationListAdapter adapter;
     private List<NotificationItem> rows;
-    private FeedReaderDbHelperMessages mDbHelper;
+    private FeedReaderDbHelperMessages mDbHelperMessages;
+    private static FeedReaderDbHelperNotification mDbHelperNotifications;
     public static ArrayList<Notification> allMessages;
+    public static ArrayList<Notification> allNotifications;
     ListView list;
 
     int[] idQuestions={
@@ -131,7 +140,8 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
         super.onCreate(savedBundle);
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
 
-        mDbHelper = new FeedReaderDbHelperMessages(getActivity().getApplicationContext());
+        mDbHelperMessages = new FeedReaderDbHelperMessages(getActivity().getApplicationContext());
+        mDbHelperNotifications = new FeedReaderDbHelperNotification(getActivity().getApplicationContext());
 
         this.rows = new ArrayList<NotificationItem>();
         for (int i = 0; i < 8; i++) {
@@ -139,6 +149,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
             this.rows.add(row);
         }
         this.allMessages = new ArrayList<>();
+        this.allNotifications = new ArrayList<>();
         setRetainInstance(true);
     }
 
@@ -159,7 +170,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
             ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Notifications");
 
             new RetrieveMessagesFromLocalDataBase().execute(null, null, null);
-
+            new RetrieveNotificationsFromLocalDataBase().execute(null,null,null);
 
             adapter = new NotificationListAdapter(getActivity(), this.rows);
             list = (ListView) firstAccessView.findViewById(R.id.listNotification);
@@ -198,6 +209,8 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
     public void onScroll(AbsListView view,int firstVisible, int visibleCount, int totalCount) {
 
+        if(this.adapter.getCount() >= this.rows.size())
+            return;
 
 
         boolean loadMore = firstVisible + visibleCount >= totalCount;
@@ -205,6 +218,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
         if(loadMore) {
 
             this.adapter.setCount(this.adapter.getCount()+1);
+            Log.i(TAG, "COUNT" +this.adapter.getCount() + " list " + this.rows.size());
 
 
             //rows.add(new NotificationItem(545154,0,1, new Date().getTime()));
@@ -242,7 +256,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
     }
 
-    private void updateList(ArrayList<Question> notifications){
+    private void updateList(ArrayList<Notification> notifications){
         this.rows.clear();
 
         for(Object o: notifications){
@@ -253,7 +267,16 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
                 Question q = (Question) n;
                 if(!q.getReceiver_id().equals(Profile.getCurrentProfile().getId()))
                     continue;
-                this.allMessages.add(q);
+
+                if(!questionPresent(q))
+                    this.allMessages.add(q);
+                else
+                    Log.i(TAG, q.getMessage() + " already in the question array");
+                if(!notificationPresent(n))
+                    this.allNotifications.add(n);
+                else
+                    Log.i(TAG, q.getMessage() + " already in the notification array");
+
                 NotificationItem row = new NotificationItem(q.getId(), q.getNotificationType(), q.getNotificationStatus(), q.getNotificationTimestamp());
                 this.rows.add(row);
                 Log.i(TAG, "Message retrieved from DB:" + q.getMessage());
@@ -262,9 +285,78 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
         adapter.notifyDataSetChanged();
     }
 
+    private void updateList(){
+        this.rows.clear();
+
+        for(Object o: allNotifications){
+            Notification n = (Notification)o;
+            // If notification is a Question
+            if(n.getNotificationType() == 0)
+            {
+                Question q = (Question) n;
+                if(!q.getReceiver_id().equals(Profile.getCurrentProfile().getId()))
+                    continue;
+
+                NotificationItem row = new NotificationItem(q.getId(), q.getNotificationType(), q.getNotificationStatus(), q.getNotificationTimestamp());
+                this.rows.add(row);
+                Log.i(TAG, "Message retrieved from DB:" + q.getMessage());
+            }
+
+            // If notification is an answer
+            if(n.getNotificationType() == 1)
+            {
+                NotificationImpl nImpl = (NotificationImpl) n;
+
+                NotificationItem row = new NotificationItem(nImpl.getId(), nImpl.getNotificationType(), nImpl.getNotificationStatus(), nImpl.getNotificationTimestamp());
+                this.rows.add(row);
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    private void updateNotificationArray(ArrayList<Notification> notifications){
+        for(Notification n: notifications){
+            if(!notificationPresent(n))
+            {
+                allNotifications.add(n);
+                Log.i(TAG, "Notification " + n.getId() + " added in the notification array");
+            }
+            else
+                Log.i(TAG, "Notification " + n.getId() + " already in the notification array");
+        }
+        updateList();
+    }
+
+    private void updateMessageArray(ArrayList<Notification> notifications){
+        for(Notification n: notifications){
+            Question q = (Question)n;
+
+            if(!notificationPresent(n)){
+                allNotifications.add(n);
+                Log.i(TAG, "Question " + q.getMessage() + " added in the notification array");
+            }
+            else{
+                Log.i(TAG, "Question " + q.getMessage() + " already in the notification array");
+            }
+
+
+            if(!questionPresent(q))
+            {
+                allMessages.add(q);
+                Log.i(TAG, "Question " + q.getMessage() + " added in the question array");
+            }
+            else{
+                Log.i(TAG, "Question " + q.getMessage() + " already in the question array");
+            }
+        }
+
+        updateList();
+    }
+
+
     private class RetrieveMessagesFromLocalDataBase extends AsyncTask<Void, Void, Void> {
         private Cursor c;
-        private ArrayList<Question> messages;
+        private ArrayList<Notification> messages;
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -282,7 +374,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
                     FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP
             };
 
-            SQLiteDatabase dbReader = mDbHelper.getReadableDatabase();
+            SQLiteDatabase dbReader = mDbHelperMessages.getReadableDatabase();
 
             c = dbReader.query(
                     FeedReaderContractMessages.FeedEntry.TABLE_NAME,  // The table to query
@@ -308,6 +400,56 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
                     }while(c.moveToNext());
                 }
             }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            updateMessageArray(messages);
+        }
+    }
+
+    private class RetrieveNotificationsFromLocalDataBase extends AsyncTask<Void, Void, Void> {
+        private Cursor c;
+        private ArrayList<Notification> notifications;
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            notifications = new ArrayList<>();
+
+            String[] projection = {
+                    FeedReaderContractNotification.FeedEntry._ID,
+                    FeedReaderContractNotification.FeedEntry.COLUMN_NAME_TYPE,
+                    FeedReaderContractNotification.FeedEntry.COLUMN_NAME_STATUS,
+                    FeedReaderContractNotification.FeedEntry.COLUMN_NAME_CONTENT,
+                    FeedReaderContractNotification.FeedEntry.COLUMN_NAME_TIMESTAMP
+            };
+
+            SQLiteDatabase dbReader = mDbHelperNotifications.getReadableDatabase();
+
+            c = dbReader.query(
+                    FeedReaderContractNotification.FeedEntry.TABLE_NAME,  // The table to query
+                    projection,                               // The columns to return
+                    null,                               // The columns for the WHERE clause
+                    null,                            // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    FeedReaderContractNotification.FeedEntry.COLUMN_NAME_TIMESTAMP+" DESC"                                 // The sort order
+            );
+
+            if(c != null){
+                if(c.moveToFirst()){
+                    do{
+                        String id = c.getString(c.getColumnIndexOrThrow(FeedReaderContractNotification.FeedEntry._ID));
+                        String type = c.getString(c.getColumnIndexOrThrow(FeedReaderContractNotification.FeedEntry.COLUMN_NAME_TYPE));
+                        String status = c.getString(c.getColumnIndexOrThrow(FeedReaderContractNotification.FeedEntry.COLUMN_NAME_STATUS));
+                        String content = c.getString(c.getColumnIndexOrThrow(FeedReaderContractNotification.FeedEntry.COLUMN_NAME_CONTENT));
+                        Timestamp timestamp = Timestamp.valueOf(c.getString(c.getColumnIndexOrThrow(FeedReaderContractNotification.FeedEntry.COLUMN_NAME_TIMESTAMP)));
+                        notifications.add(new NotificationImpl(timestamp, Integer.valueOf(type), Integer.valueOf(status), content, id));
+                    }while(c.moveToNext());
+                }
+            }
 
             return null;
         }
@@ -315,7 +457,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            updateList(messages);
+            updateNotificationArray(notifications);
         }
     }
 
@@ -331,8 +473,70 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
         return null;
     }
 
+    public static void addNotification(NotificationImpl n, Context c){
+        if(mDbHelperNotifications==null)
+            mDbHelperNotifications = new FeedReaderDbHelperNotification(c);
+        new InsertNotification().execute(String.valueOf(n.getNotificationType()), String.valueOf(n.getNotificationStatus()), n.getContent(), String.valueOf(n.getNotificationTimestamp()));
+    }
+
+    private boolean questionPresent(Question question){
+        for(Object n: allMessages){
+            Question q = (Question)n;
+            if(q.getId().equals(question.getId())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean notificationPresent(Notification notification){
+
+        for(Object n: allNotifications){
+            Notification nImpl = (Notification)n;
+
+            if(nImpl.getId().equals(notification.getId()) && nImpl.getNotificationType()==notification.getNotificationType()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static class InsertNotification extends AsyncTask<String,String,String> {
 
 
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+
+        }
+
+        @Override
+        protected String doInBackground(String ... params) {
+            String type = params[0];
+            String status = params[1];
+            String content = params[2];
+            String timestamp = params[3];
+
+            SQLiteDatabase dbWriter = mDbHelperNotifications.getWritableDatabase();
+
+            Log.i(TAG, "Inserting new notification to local DB");
+            ContentValues values = new ContentValues();
+            values.put(FeedReaderContractNotification.FeedEntry.COLUMN_NAME_TYPE, type);
+            values.put(FeedReaderContractNotification.FeedEntry.COLUMN_NAME_STATUS, status);
+            values.put(FeedReaderContractNotification.FeedEntry.COLUMN_NAME_CONTENT, content);
+            values.put(FeedReaderContractNotification.FeedEntry.COLUMN_NAME_TIMESTAMP, timestamp);
+
+            long newRowId = dbWriter.insert(FeedReaderContractNotification.FeedEntry.TABLE_NAME,null,values);
+
+            return null;
+        }
+    }
 }
 
 

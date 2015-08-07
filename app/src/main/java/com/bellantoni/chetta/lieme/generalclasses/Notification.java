@@ -13,4 +13,5 @@ public interface Notification {
     public int getNotificationType();
     public int getNotificationStatus();
     public void setNotificationStatus(int notificationStatus);
+    public String getId();
 }

@@ -14,6 +14,7 @@ import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.bellantoni.chetta.lieme.generalclasses.NotificationImpl;
 import com.bellantoni.chetta.lieme.network.UpdateMessages;
 import com.facebook.Profile;
 import com.bellantoni.chetta.lieme.db.FeedReaderContract;
@@ -139,8 +140,8 @@ public class GcmIntentService extends IntentService {
         if(msg.getString("notificationType").equals("answer"))
         {
             Contact userAnswer = ContactListFragment.findContactById(msg.getString("friendId"));
-
-            Log.i(TAG, "Answer notification received from: "+ userAnswer.getName());
+            Timestamp notificationTimestamp = Timestamp.valueOf(msg.getString("timestamp"));
+            Log.i(TAG, "Answer notification received from: "+ userAnswer.getName() + " timestamp: " + notificationTimestamp.toString());
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.drawable.logo_mini_dialog)
@@ -160,7 +161,10 @@ public class GcmIntentService extends IntentService {
 
             v.vibrate(pattern, -1);
 
-            updateMessages.updateRowWithAnswer(msg.getString("questionId"),msg.getString("answer"));
+            updateMessages.updateRowWithAnswer(msg.getString("questionId"), msg.getString("answer"));
+
+
+            NotificationFragment.addNotification(new NotificationImpl(notificationTimestamp, 1, 0, msg.getString("questionId"), ""), getApplication().getApplicationContext());
 
             mBuilder.setContentIntent(contentIntent);
             mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

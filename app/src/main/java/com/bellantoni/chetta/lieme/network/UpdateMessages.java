@@ -108,7 +108,7 @@ public class UpdateMessages {
 
     public void updateRowWithAnswer(String questionId, String answer){
         Log.i(TAG, "Updating question: "+ questionId + " with: " + answer);
-        new UpdateQeustionWithAnswer().execute(questionId, answer);
+        new UpdateQuestionWithAnswer().execute(questionId, answer);
     }
 
     private class GetMessagesFromServer extends AsyncTask<String,String,String> {
@@ -261,7 +261,7 @@ public class UpdateMessages {
     }
 
 
-    private class UpdateQeustionWithAnswer extends AsyncTask<String,String,String> {
+    private class UpdateQuestionWithAnswer extends AsyncTask<String,String,String> {
 
 
         @Override
