@@ -273,7 +273,7 @@ public class drawnerActivity extends ActionBarActivity
         this.actionBar.setTitle("Ask a Question");
 
 
-        if(this.askFragment==null) {
+        //if(this.askFragment==null) {
             this.askFragment = new AskFragment();
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             Log.i(TAG, bundle.toString());
@@ -284,16 +284,16 @@ public class drawnerActivity extends ActionBarActivity
                     .add(R.id.container, this.askFragment, "AskFragment").addToBackStack("AskFragment")
                     .commit();
 
-        }else{
+        /*}else{
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
-            this.askFragment.setArguments(bundle);
+            //this.askFragment.setArguments(bundle);
             FragmentManager fragmentManager = getSupportFragmentManager();
 
             fragmentManager.beginTransaction()
                     .replace(R.id.container, this.askFragment, "AskFragment").addToBackStack("AskFragment")
                     .commit();
 
-        }
+        }*/
     }
 
     //se c'è solo un fragment chiudo l'attività
