@@ -25,6 +25,7 @@ import com.bellantoni.chetta.lieme.generalclasses.Notification;
 import com.bellantoni.chetta.lieme.generalclasses.NotificationImpl;
 import com.bellantoni.chetta.lieme.generalclasses.NotificationItem;
 import com.bellantoni.chetta.lieme.generalclasses.Question;
+import com.bellantoni.chetta.lieme.generalclasses.TimestampComparator;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 
@@ -34,6 +35,7 @@ import org.json.JSONObject;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -287,6 +289,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
     private void updateList(){
         this.rows.clear();
+        Collections.sort(allNotifications, new TimestampComparator());
 
         for(Object o: allNotifications){
             Notification n = (Notification)o;
