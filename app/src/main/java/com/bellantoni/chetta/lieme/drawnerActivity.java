@@ -227,7 +227,7 @@ public class drawnerActivity extends ActionBarActivity
             this.profileFragment.setBitmap(this.profileFragment.getBitmap());
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, profileFragment, "ProfileFragment").addToBackStack("ProfileFragmemt")
+                    .replace(R.id.container, profileFragment, "ProfileFragment").addToBackStack("ProfileFragment")
                     .commit();
         }
 
@@ -303,6 +303,7 @@ public class drawnerActivity extends ActionBarActivity
             finish();
         }
         else {
+            System.out.println("DIMENSIONE " + titlesActionbar.size());
             this.actionBar.setTitle(titlesActionbar.get(titlesActionbar.size() - 1));
             this.titlesActionbar.remove(titlesActionbar.size() - 1);
             super.onBackPressed();
@@ -313,7 +314,7 @@ public class drawnerActivity extends ActionBarActivity
 
     private void goHome(){
 
-       if(this.homefragment==null){
+       //if(this.homefragment==null){
            this.homefragment = new HomeFragment();
            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
 
@@ -324,7 +325,7 @@ public class drawnerActivity extends ActionBarActivity
                    .commit();
 
 
-       }else{
+       /*}else{
            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
 
            FragmentManager fragmentManager = getSupportFragmentManager();
@@ -333,7 +334,7 @@ public class drawnerActivity extends ActionBarActivity
                    .add(R.id.container, this.homefragment, "HomeFragment").addToBackStack("HomeFragment")
                    .commit();
 
-       }
+       }*/
 
     }
 
@@ -389,12 +390,13 @@ public class drawnerActivity extends ActionBarActivity
         if(this.contactListFragment==null) {
             this.contactListFragment = new ContactListFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
-
+            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             fragmentManager.beginTransaction()
                     .add(R.id.container, this.contactListFragment,"ContactListFragment").addToBackStack("ContactListFragment")
                     .commit();
 
         }else{
+            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, this.contactListFragment, "ContactListFragment").addToBackStack("ContactListFragment")

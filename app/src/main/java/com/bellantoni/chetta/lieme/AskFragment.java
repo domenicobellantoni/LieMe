@@ -133,7 +133,7 @@ public class AskFragment extends android.support.v4.app.Fragment {
 
     public void sendMessage(){
         EditText mEdit   = (EditText)firstAccessView.findViewById(R.id.question);
-        MessageHandler messageHandler = new MessageHandler(receiverContact, getArguments().getString("facebook_id"), mEdit.getText().toString());
+        MessageHandler messageHandler = new MessageHandler(receiverContact, getArguments().getString("facebook_id"), mEdit.getText().toString(), getActivity().getApplicationContext());
         messageHandler.send();
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
         View view = getActivity().getCurrentFocus();
