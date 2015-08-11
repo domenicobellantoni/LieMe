@@ -23,7 +23,8 @@
         android:gravity="center"
         android:id="@+id/info_splash"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="15dp"/>
+        android:layout_marginBottom="15dp"
+        android:textColor="#ffffff"/>
 
 </FrameLayout>
 

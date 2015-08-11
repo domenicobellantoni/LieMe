@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
 
 
     String[] itemnameFrom ={
-            "Pippo Zaffaroni",
+            "Filippo Zaffaroni",
             "Claudio Giorgi",
             "Alessandra Giannini",
             "Teresa Amedeo",
@@ -64,11 +64,11 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
 
     };
     String[] questions={
-            "domand fhuhfskjdjksw",
-            "domanda dkhsifgilfgilfguyeguyeg",
-            "domanda sdgiyodgtwoedjwkldlywgdlwigdhlwkd",
-            "domanda hdsdghs",
-            "domanda sihdguydgweudgwjhgdjwhgdjshgdsgdhlsgdjs",
+            "Hai mai tradito la tua ragazza?",
+            "Hai mai rubato in un supermercato?",
+            "Ieri quando eri ubriaco, è vero che hai litigato con due ragazzi in discoteca?",
+            "Hai copiato all'esame di ieri?",
+            "Tua mamma sa che le rubi 10 euro dal portafogli ogni settimana?",
             "domanda iusgdilsyahgdlsjgdilys",
             "domanda sidhiofygejbdjkgdjskldgysjgdxb",
             "domanda lhdshdkjòsahdkasjdjqgdjshbjgd",

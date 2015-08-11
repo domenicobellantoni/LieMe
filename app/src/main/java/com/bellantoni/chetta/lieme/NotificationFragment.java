@@ -32,12 +32,14 @@ import com.facebook.Profile;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.ocpsoft.pretty.time.PrettyTime;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Domenico on 30/05/2015.
@@ -51,6 +53,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
     private NotificationListAdapter adapter;
     private List<NotificationItem> rows;
     private FeedReaderDbHelperMessages mDbHelperMessages;
+    private PrettyTime p;
     private static FeedReaderDbHelperNotification mDbHelperNotifications;
     public static ArrayList<Notification> allMessages;
     public static ArrayList<Notification> allNotifications;
@@ -90,15 +93,16 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
     };
 
-    long[] timeNotifications = {
-            new Date().getTime(),
-            new Date().getTime(),
-            new Date().getTime(),
-            new Date().getTime(),
-            new Date().getTime(),
-            new Date().getTime(),
-            new Date().getTime(),
-            new Date().getTime(),
+    Date[] timeNotifications = {
+            new Date(),
+            new Date(),
+            new Date(),
+            new Date(),
+            new Date(),
+            new Date(),
+            new Date(),
+            new Date()
+
     };
 
 
@@ -140,14 +144,18 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
     @Override
     public void onCreate(Bundle savedBundle){
         super.onCreate(savedBundle);
+        p =  new PrettyTime(new Locale("en"));
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
 
         mDbHelperMessages = new FeedReaderDbHelperMessages(getActivity().getApplicationContext());
         mDbHelperNotifications = new FeedReaderDbHelperNotification(getActivity().getApplicationContext());
 
+
+
+
         this.rows = new ArrayList<NotificationItem>();
         for (int i = 0; i < 8; i++) {
-            NotificationItem row = new NotificationItem(String.valueOf(idQuestions[i]), typeNotifications[i], stateNotification[i], new Timestamp(timeNotifications[i]));
+            NotificationItem row = new NotificationItem(String.valueOf(idQuestions[i]), typeNotifications[i], stateNotification[i], p.format(timeNotifications[i]));
             this.rows.add(row);
         }
         this.allMessages = new ArrayList<>();
@@ -279,7 +287,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
                 else
                     Log.i(TAG, q.getMessage() + " already in the notification array");
 
-                NotificationItem row = new NotificationItem(q.getId(), q.getNotificationType(), q.getNotificationStatus(), q.getNotificationTimestamp());
+                NotificationItem row = new NotificationItem(q.getId(), q.getNotificationType(), q.getNotificationStatus(), p.format(new Date(q.getNotificationTimestamp().getTime())));
                 this.rows.add(row);
                 Log.i(TAG, "Message retrieved from DB:" + q.getMessage());
             }
@@ -300,7 +308,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
                 if(!q.getReceiver_id().equals(Profile.getCurrentProfile().getId()))
                     continue;
 
-                NotificationItem row = new NotificationItem(q.getId(), q.getNotificationType(), q.getNotificationStatus(), q.getNotificationTimestamp());
+                NotificationItem row = new NotificationItem(q.getId(), q.getNotificationType(), q.getNotificationStatus(), p.format(new Date(q.getNotificationTimestamp().getTime())));
                 this.rows.add(row);
                 Log.i(TAG, "Message retrieved from DB:" + q.getMessage());
             }
@@ -310,7 +318,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
             {
                 NotificationImpl nImpl = (NotificationImpl) n;
 
-                NotificationItem row = new NotificationItem(nImpl.getId(), nImpl.getNotificationType(), nImpl.getNotificationStatus(), nImpl.getNotificationTimestamp());
+                NotificationItem row = new NotificationItem(nImpl.getId(), nImpl.getNotificationType(), nImpl.getNotificationStatus(), p.format(new Date(nImpl.getNotificationTimestamp().getTime())));
                 this.rows.add(row);
             }
         }

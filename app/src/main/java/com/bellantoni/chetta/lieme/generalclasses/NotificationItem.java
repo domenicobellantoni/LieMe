@@ -11,9 +11,9 @@ public class NotificationItem {
     private String idQuestion;
     private int typeNotification;
     private int stateNotification;
-    private Timestamp timeNotification;
+    private String timeNotification;
 
-    public NotificationItem(String idQuestion, int typeNotification, int stateNotification, Timestamp timeNotification){
+    public NotificationItem(String idQuestion, int typeNotification, int stateNotification, String timeNotification){
 
         this.idQuestion=idQuestion ;
         this.typeNotification= typeNotification;
@@ -51,11 +51,11 @@ public class NotificationItem {
         this.stateNotification = stateNotification;
     }
 
-    public Timestamp getTimeNotification() {
+    public String getTimeNotification() {
         return timeNotification;
     }
 
-    public void setTimeNotification(Timestamp timeNotification) {
+    public void setTimeNotification(String timeNotification) {
         this.timeNotification = timeNotification;
     }
 }
