@@ -1,8 +1,10 @@
 package com.bellantoni.chetta.lieme;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.bellantoni.chetta.lieme.adapter.ListInFriendFragmentAdapter;
+import com.bellantoni.chetta.lieme.generalclasses.ItemHome;
 import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
 import com.facebook.FacebookSdk;
 
@@ -23,12 +26,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 
 /**
  * Created by Domenico on 30/05/2015.
  */
-public class FriendProfileFragment extends Fragment implements AbsListView.OnScrollListener {
+public class FriendProfileFragment extends Fragment implements AbsListView.OnScrollListener ,SwipeRefreshLayout.OnRefreshListener {
 
     private String facebookId;
     private ImageButton imageButtonBack;
@@ -36,6 +40,7 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
     private ImageView friendProfileImage;
     private ListInFriendFragmentAdapter adapter;
     private List<RowItemProfile> rows;
+    private SwipeRefreshLayout swipeLayout;
     private PrettyTime p;
 
     ListView list;
@@ -157,6 +162,12 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
         View firstAccessView;
         if(savedBundle==null) {
             firstAccessView = inflater.inflate(R.layout.friend_profile_fragment_layout, null);
+            swipeLayout = (SwipeRefreshLayout) firstAccessView.findViewById(R.id.swipe_refresh_layout);
+            swipeLayout.setOnRefreshListener(this);
+            swipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                    android.R.color.holo_green_light,
+                    android.R.color.holo_orange_light,
+                    android.R.color.holo_red_light);
 
 
             ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle(getArguments().getString("facebookIdFriend"));
@@ -212,27 +223,18 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
 
         if(loadMore) {
             //scaricare sempre in async task  e far vedere spiner
-            this.adapter.setCount(this.adapter.getCount()+1);
 
-            //QUI DA FARE UNA QUERY ALLA VOLTA HO PROVATO A CARICARE TIPO 8 ELEMENTI ALLA VOLTA MA CRASHA, SPERO CHE LA QUERY SIA
-            //VELOCE, AL MASSIMO POSSIAMO PROVARE 2/3 ALLA VOLTA
-            rows.add(new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon, true, p.format(new Date())));
-            //this.adapter.addAll(this.rows);
-            /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-                    // TODO Auto-generated method stub
-                    //String Slecteditem = adapter.getItem(position).getFacebookId();
-                    //Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
-                    mFriendProfileFragmentInteface.goFriendProfileFromFriend(adapter.getItem(position).getFacebookId());
-
-                }
-            });*/
+            Random random = new Random();
+            int number = random.nextInt(2)+1;
+            this.adapter.setCount(this.adapter.getCount()+number);
 
 
-            System.out.println("CONTATORE "+ this.adapter.getCount());
+            for(int i=0; i<number; i++) {
+                rows.add(new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon, true, p.format(new Date())));
+            }
+
+
+            //System.out.println("CONTATORE "+ this.adapter.getCount());
             adapter.notifyDataSetChanged();
         }
     }
@@ -246,7 +248,42 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
     }
 
 
+    @Override
+    public void onRefresh() {
+        fetchMovies();
+    }
 
+    private void fetchMovies() {
+        swipeLayout.setRefreshing(true);
+
+        new UpdateListTask().execute(null, null, null);
+        this.adapter.notifyDataSetChanged();
+
+
+    }
+
+    private class UpdateListTask extends AsyncTask<Void,Void,Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            //da scaricare
+            Random random = new Random();
+            int number = random.nextInt(3)+1;
+            for(int i=0; i<number; i++){
+                RowItemProfile row = new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon, true, p.format(new Date()));
+                FriendProfileFragment.this.rows.add(0,row);
+            }
+
+
+            return null;
+        }
+
+        protected void onPostExecute(Void result){
+           FriendProfileFragment.this.swipeLayout.setRefreshing(false);
+
+        }
+    }
 
 }
 

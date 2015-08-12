@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 
 import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
+import com.bellantoni.chetta.lieme.generalclasses.ItemHome;
 import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
 import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
 import com.facebook.FacebookSdk;
@@ -48,8 +50,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
-public class ProfileFragment extends Fragment implements AbsListView.OnScrollListener {
+public class ProfileFragment extends Fragment implements AbsListView.OnScrollListener,SwipeRefreshLayout.OnRefreshListener {
 
     private TextView nameSurname;
     private String nameSurnameString;
@@ -62,6 +65,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
     private CustomListAdapter adapter;
     private PrettyTime p ;
     private List<RowItemProfile> rows;
+    private SwipeRefreshLayout swipeLayout;
 
 
 
@@ -231,6 +235,14 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
         View firstAccessView;
         if(savedBundle==null) {
             firstAccessView = inflater.inflate(R.layout.fragment_profile, null);
+            swipeLayout = (SwipeRefreshLayout) firstAccessView.findViewById(R.id.swipe_refresh_layout);
+            swipeLayout.setOnRefreshListener(this);
+            swipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                    android.R.color.holo_green_light,
+                    android.R.color.holo_orange_light,
+                    android.R.color.holo_red_light);
+
+
             this.profileImage = (ImageView) firstAccessView.findViewById(R.id.imageProfile);
 
             RoundImage roundedImage = new RoundImage(BitmapFactory.decodeResource(getResources(), R.mipmap.iconuseranonymous));
@@ -305,32 +317,33 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
 
 
+
     public void onScroll(AbsListView view,
                          int firstVisible, int visibleCount, int totalCount) {
-        //System.out.println("QUESTO "+adapter.getItem(firstVisible).getId());
 
 
         boolean loadMore =
                 firstVisible + visibleCount >= totalCount;
 
         if(loadMore) {
+            Random random = new Random();
+            int number = random.nextInt(2)+1;
             //scaricare sempre in async task  e far vedere spiner
-            this.adapter.setCount(this.adapter.getCount()+1);
+            this.adapter.setCount(this.adapter.getCount()+number);
 
-            //QUI DA FARE UNA QUERY ALLA VOLTA HO PROVATO A CARICARE TIPO 8 ELEMENTI ALLA VOLTA MA CRASHA, SPERO CHE LA QUERY SIA
-            //VELOCE, AL MASSIMO POSSIAMO PROVARE 2/3 ALLA VOLTA
-            rows.add(new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon, true, p.format(new Date())));
+            //QUI DA FARE UNA QUERY
+            for(int i=0; i<number; i++) {
+                rows.add(new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon, true, p.format(new Date())));
+            }
 
 
-
-            System.out.println("CONTATORE "+ this.adapter.getCount());
             adapter.notifyDataSetChanged();
         }
     }
 
     public void onScrollStateChanged(AbsListView v, int s) {
 
-            //System.out.println("CONTATORE "+ this.adapter.getCount());
+
             adapter.notifyDataSetChanged();
 
 
@@ -470,6 +483,44 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             }
             Log.i(TAG, msg);
             return null;
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+
+        fetchMovies();
+    }
+
+    private void fetchMovies() {
+        swipeLayout.setRefreshing(true);
+
+        new UpdateListTask().execute(null, null, null);
+        this.adapter.notifyDataSetChanged();
+
+
+    }
+
+    private class UpdateListTask extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            //da scaricare
+            Random random = new Random();
+            int number = random.nextInt(3)+1;
+            for(int i=0; i<number; i++){
+                RowItemProfile row = new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon, true, p.format(new Date()));
+                ProfileFragment.this.rows.add(0,row);
+            }
+
+
+            return null;
+        }
+
+        protected void onPostExecute(Void result){
+           ProfileFragment.this.swipeLayout.setRefreshing(false);
+
         }
     }
 

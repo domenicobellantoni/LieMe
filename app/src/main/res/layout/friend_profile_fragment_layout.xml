@@ -14,19 +14,25 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-
-        <ListView
-
-            android:id="@+id/listQuestionFriendProfile"
-            android:scrollbars="none"
+        <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:footerDividersEnabled="false"
-            android:headerDividersEnabled="false"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
+            android:layout_height="wrap_content">
 
-            />
+                <ListView
+
+                    android:id="@+id/listQuestionFriendProfile"
+                    android:scrollbars="none"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:footerDividersEnabled="false"
+                    android:headerDividersEnabled="false"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+
+                    />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
 
     </LinearLayout>

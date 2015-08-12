@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 /**
  * Created by Domenico on 28/07/2015.
@@ -130,20 +131,10 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
 
 
 
-   /* public interface HomeFragmentInterface{
-        public void goFriendProfileFromHome(String facebookId);
-    }
-
-    private HomeFragmentInterface mHomeFragmentInterface;*/
-
     @Override
     public void onAttach(Activity activity){
         super.onAttach(activity);
         this.p = new PrettyTime(new Locale("en"));
-        /*if(activity instanceof HomeFragmentInterface){
-            mHomeFragmentInterface = (HomeFragmentInterface)activity;
-
-        }*/
 
     }
 
@@ -187,17 +178,6 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
             list.setAdapter(adapter);
 
             list.setOnScrollListener(this);
-            /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-
-                    mHomeFragmentInterface.goFriendProfileFromHome(adapter.getItem(position).getIdTo());
-
-                }
-            });*/
-
 
         }else{
             firstAccessView = getView();
@@ -232,23 +212,14 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
                 firstVisible + visibleCount >= totalCount;
 
         if(loadMore) {
+            Random random = new Random();
+            int number = random.nextInt(2)+1;
             //scaricare sempre in async task
-            this.adapter.setCount(this.adapter.getCount()+1);
+            this.adapter.setCount(this.adapter.getCount()+number);
 
-            rows.add(new ItemHome("Ieri abbiamo sentito arrivare la polizia in casa tua, è vero che hanno arrestato tuo figlio?", "Giancarlo Filippetti", "Giordano Romano","id fb form","id fb to", R.id.icon, true, p.format(new Date())));
-            //this.adapter.addAll(this.rows);
-            /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-
-                    mHomeFragmentInterface.goFriendProfileFromHome(adapter.getItem(position).getIdTo());
-
-                }
-            });*/
-
-
+            for(int i=0; i<number; i++){
+                rows.add(new ItemHome("Ieri abbiamo sentito arrivare la polizia in casa tua, è vero che hanno arrestato tuo figlio?", "Giancarlo Filippetti", "Giordano Romano","id fb form","id fb to", R.id.icon, true, p.format(new Date())));
+            }
 
             adapter.notifyDataSetChanged();
         }
@@ -264,22 +235,14 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
 
         @Override
         protected Void doInBackground(Void... params) {
-            /*for(int i=0; i<10000; i++){
-                System.out.print("PROVA PER PERDER TEMPO");
 
-            }*/
-            ItemHome row = new ItemHome("Ieri abbiamo sentito arrivare la polizia in casa tua, è vero che hanno arrestato tuo figlio?", "Rodolfo Giano", "Filippo Cavallotti", "54ds754ds","87987dfd", 547887, true, p.format(new Date()));
-            HomeFragment.this.rows.add(0,row);
-            /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-
-                    mHomeFragmentInterface.goFriendProfileFromHome(adapter.getItem(position).getIdTo());
-
-                }
-            });*/
+            //da scaricare
+            Random random = new Random();
+            int number = random.nextInt(3)+1;
+            for(int i=0; i<number; i++){
+                ItemHome row = new ItemHome("Ieri abbiamo sentito arrivare la polizia in casa tua, è vero che hanno arrestato tuo figlio?", "Rodolfo Giano", "Filippo Cavallotti", "54ds754ds","87987dfd", 547887, true, p.format(new Date()));
+                HomeFragment.this.rows.add(0,row);
+            }
 
 
             return null;
