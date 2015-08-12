@@ -13,8 +13,9 @@ public class ItemHome {
     private String idTo;
     private boolean resultQuestion;
     private int idImg;
+    private String time;
 
-    public ItemHome(String question,String nameFrom, String nameTo, String idFrom, String idTo, int idImg, boolean resultQuestion){
+    public ItemHome(String question,String nameFrom, String nameTo, String idFrom, String idTo, int idImg, boolean resultQuestion, String time){
         this.question=question;
         this.nameFrom= nameFrom;
         this.nameTo=nameTo;
@@ -22,6 +23,7 @@ public class ItemHome {
         this.idTo=idTo;
         this.idImg=idImg;
         this.resultQuestion=resultQuestion;
+        this.time = time;
 
     }
 
@@ -80,5 +82,13 @@ public class ItemHome {
 
     public void setIdImg(int idImg) {
         this.idImg = idImg;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

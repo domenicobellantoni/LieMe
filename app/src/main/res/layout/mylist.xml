@@ -15,7 +15,10 @@
         android:id="@+id/imgList"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:padding="5dp" />
+        android:padding="5dp"
+        android:background="@drawable/abc_list_selector_holo_dark"
+        android:focusable="true"
+        />
 
         <ImageView
             android:id="@+id/imgResponse"
@@ -38,7 +41,9 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
             android:padding="2dp"
-            android:textColor="#33CC33" />
+            android:textColor="#33CC33"
+            android:background="@drawable/abc_list_selector_holo_dark"
+            android:focusable="true"/>
 
         <TextView
             android:id="@+id/question"
@@ -48,6 +53,19 @@
             android:ellipsize="end"
             android:maxLines="20"
             android:layout_marginLeft="12dp"/>
+
+        <TextView
+            android:id="@+id/dateQuestionProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:padding="2dp"
+            android:textColor="#33b5e5"
+            android:focusable="false"
+            />
 
         <TextView
             android:layout_width="fill_parent"

@@ -17,7 +17,8 @@
             android:headerDividersEnabled="false"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:background="#ffffff" />
+            android:background="#ffffff"
+            android:clickable="false"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

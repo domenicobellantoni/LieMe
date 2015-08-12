@@ -39,9 +39,13 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.ocpsoft.pretty.time.PrettyTime;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ProfileFragment extends Fragment implements AbsListView.OnScrollListener {
 
@@ -54,6 +58,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
     private String id;
     private ImageButton FAB;
     private CustomListAdapter adapter;
+    private PrettyTime p ;
 
 
 
@@ -118,6 +123,17 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             false,
     };
 
+    Date[] timeStamp = {
+            new Date(),
+            new Date(),
+            new Date(),
+            new Date(),
+            new Date(),
+            new Date(),
+            new Date(),
+            new Date()
+    } ;
+
     // GCM
     String regid;
     GoogleCloudMessaging gcm;
@@ -134,7 +150,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
     static final String TAG = "LieMe";
 
     public interface ProfileFragmentInterface{
-        public void goFriendProfile(String facebookId);
+        //public void goFriendProfile(String facebookId);
         public void goContactListFragment();
 
     }
@@ -196,6 +212,9 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
     @Override
     public void onCreate(Bundle savedBundle){
         super.onCreate(savedBundle);
+
+        this.p = new PrettyTime(new Locale("en"));
+
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
         this.rows = new ArrayList<RowItemProfile>();
         setRetainInstance(true);
@@ -240,7 +259,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             //la lista andrà creata in un async task e nel frattempo mostrato uno spin
             for (int i = 0; i < 8; i++) {
 
-                RowItemProfile row = new RowItemProfile(questions[i], itemname[i], idfb[i], imgid[i], resultsQuestion[i]);
+                RowItemProfile row = new RowItemProfile(questions[i], itemname[i], idfb[i], imgid[i], resultsQuestion[i], p.format(timeStamp[i]));
                 this.rows.add(row);
 
             }
@@ -253,7 +272,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
             list.setOnScrollListener(this);
 
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
@@ -264,7 +283,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
                     mProfileFragmentInteface.goFriendProfile(adapter.getItem(position).getFacebookId());
 
                 }
-            });
+            });*/
 
 
         }else{
@@ -320,9 +339,9 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
             //QUI DA FARE UNA QUERY ALLA VOLTA HO PROVATO A CARICARE TIPO 8 ELEMENTI ALLA VOLTA MA CRASHA, SPERO CHE LA QUERY SIA
             //VELOCE, AL MASSIMO POSSIAMO PROVARE 2/3 ALLA VOLTA
-            rows.add(new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon, true));
+            rows.add(new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon, true, p.format(new Date())));
             //this.adapter.addAll(this.rows);
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
@@ -333,7 +352,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
                     mProfileFragmentInteface.goFriendProfile(adapter.getItem(position).getFacebookId());
 
                 }
-            });
+            });*/
 
 
             System.out.println("CONTATORE "+ this.adapter.getCount());

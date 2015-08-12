@@ -19,6 +19,9 @@ import android.view.WindowManager;
 import com.bellantoni.chetta.lieme.dialog.DialogQuestionAnswered;
 import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
 import com.bellantoni.chetta.lieme.dialog.QuestionDialog;
+import com.bellantoni.chetta.lieme.listener.OnClickListenerFriendProfile;
+import com.bellantoni.chetta.lieme.listener.OnClickListenerHomeTo;
+import com.bellantoni.chetta.lieme.listener.OnClickListenerProfile;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -45,7 +48,7 @@ import java.util.List;
 
 
 public class drawnerActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface, QuestionDialog.QuestionInterface, FriendProfileFragment.FriendProfileFragmentInterface, ContactListFragment.ContactListFragmentInterface, ContactListFragment.OnFragmentInteractionListener, NotificationFragment.NotificationInterface, HomeFragment.HomeFragmentInterface {
+        implements OnClickListenerFriendProfile.OnClickFriendProfileInterface, OnClickListenerProfile.OnClickProfileInterface, OnClickListenerHomeTo.OnClickHomeInterface, NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface, QuestionDialog.QuestionInterface, /*FriendProfileFragment.FriendProfileFragmentInterface,*/ ContactListFragment.ContactListFragmentInterface, ContactListFragment.OnFragmentInteractionListener, NotificationFragment.NotificationInterface/*, HomeFragment.HomeFragmentInterface */{
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private String surname;
@@ -338,7 +341,7 @@ public class drawnerActivity extends ActionBarActivity
 
     }
 
-    @Override
+    /*@Override
     public void goFriendProfile(String facebookId){
 
 
@@ -354,9 +357,9 @@ public class drawnerActivity extends ActionBarActivity
                     .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
                     .commit();
 
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void goFriendProfileFromFriend(String facebookId){
 
 
@@ -372,6 +375,20 @@ public class drawnerActivity extends ActionBarActivity
                 .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
                 .commit();
 
+    }*/
+
+    @Override
+    public void goFriendProfileFromFriendProfile(String facebookId){
+        Bundle bundle=new Bundle();
+        bundle.putString("facebookIdFriend", facebookId);
+
+        this.friendProfileFragment = new FriendProfileFragment();
+        this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
+        this.friendProfileFragment.setArguments(bundle);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
+                .commit();
     }
 
     @Override
@@ -461,6 +478,22 @@ public class drawnerActivity extends ActionBarActivity
     }
 
 
+    /*@Override
+    public void goFriendProfileFromHome(String facebookId){
+
+        Bundle bundle=new Bundle();
+        bundle.putString("facebookIdFriend", facebookId);
+
+        this.friendProfileFragment = new FriendProfileFragment();
+        this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
+        this.friendProfileFragment.setArguments(bundle);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
+                .commit();
+
+    }*/
+
     @Override
     public void goFriendProfileFromHome(String facebookId){
 
@@ -477,6 +510,21 @@ public class drawnerActivity extends ActionBarActivity
 
     }
 
+    @Override
+    public void goFriendProfileFromProfile(String facebookId) {
+
+        Bundle bundle=new Bundle();
+        bundle.putString("facebookIdFriend", facebookId);
+
+        this.friendProfileFragment = new FriendProfileFragment();
+        this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
+        this.friendProfileFragment.setArguments(bundle);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
+                .commit();
+
+    }
 
 
     private class SendAnswerToServer extends AsyncTask<String,String,String> {

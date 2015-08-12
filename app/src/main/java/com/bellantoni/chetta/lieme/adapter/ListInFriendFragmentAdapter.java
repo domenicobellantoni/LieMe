@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
+import com.bellantoni.chetta.lieme.listener.OnClickListenerFriendProfile;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -52,6 +53,7 @@ public class ListInFriendFragmentAdapter extends ArrayAdapter<RowItemProfile> {
             holder.idfacebook = (TextView) view.findViewById(R.id.facebookIdFriend);
             holder. imageView = (ImageView) view.findViewById(R.id.imgListFriend);
             holder.imgResponse = (ImageView) view.findViewById(R.id.imgResponseFriend);
+            holder.timeStamp = (TextView) view.findViewById(R.id.dateQuestionProfileFriend);
 
 
             // The tag can be any Object, this just happens to be the ViewHolder
@@ -69,12 +71,18 @@ public class ListInFriendFragmentAdapter extends ArrayAdapter<RowItemProfile> {
         holder.txtTitle.setTextColor(Color.BLACK);
         holder.txtTitle.setText(this.rows.get(position).getNameSurname());
 
+        holder.timeStamp.setText(this.rows.get(position).getTime());
+
         //l'immagine ovviamente la scarico dall'id
         Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").transform(new CircleTransform()).fit().centerCrop().into(holder.imageView);
         //holder.extratxt.setTypeface(tf);
         holder.extratxt.setText(this.rows.get(position).getQuestion());
 
         holder.idfacebook.setText(this.rows.get(position).getFacebookId());
+
+        holder.txtTitle.setOnClickListener(new OnClickListenerFriendProfile(holder.idfacebook.getText().toString(), this.context));
+        holder.imageView.setOnClickListener(new OnClickListenerFriendProfile(holder.idfacebook.getText().toString(), this.context));
+
         if(this.rows.get(position).getResultQuestion()==true){
            holder.imgResponse.setImageResource(R.drawable.heart_green);
 
@@ -107,6 +115,7 @@ public class ListInFriendFragmentAdapter extends ArrayAdapter<RowItemProfile> {
         ImageView imageView;
         TextView idfacebook;
         ImageView imgResponse;
+        TextView timeStamp;
         int position;
     }
 }

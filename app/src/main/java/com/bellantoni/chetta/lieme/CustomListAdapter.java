@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
+import com.bellantoni.chetta.lieme.listener.OnClickListenerProfile;
 import com.squareup.picasso.Picasso;
 import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
 import java.util.List;
@@ -57,6 +58,7 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
             holder.idfacebook = (TextView) view.findViewById(R.id.facebookId);
             holder. imageView = (ImageView) view.findViewById(R.id.imgList);
             holder.imgResponse = (ImageView) view.findViewById(R.id.imgResponse);
+            holder.timestamp = (TextView) view.findViewById(R.id.dateQuestionProfile);
 
 
             // The tag can be any Object, this just happens to be the ViewHolder
@@ -85,6 +87,11 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
         holder.extratxt.setText(this.rows.get(position).getQuestion());
 
         holder.idfacebook.setText(this.rows.get(position).getFacebookId());
+
+        holder.timestamp.setText(this.rows.get(position).getTime());
+
+        holder.txtTitle.setOnClickListener(new OnClickListenerProfile(holder.idfacebook.getText().toString(), this.context));
+        holder.imageView.setOnClickListener(new OnClickListenerProfile(holder.idfacebook.getText().toString(), this.context));
 
         if(this.rows.get(position).getResultQuestion()==true){
             holder.imgResponse.setImageResource(R.drawable.heart_green);
@@ -127,6 +134,7 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
         ImageView imageView;
         TextView idfacebook;
         ImageView imgResponse;
+        TextView timestamp;
         int position;
     }
 }

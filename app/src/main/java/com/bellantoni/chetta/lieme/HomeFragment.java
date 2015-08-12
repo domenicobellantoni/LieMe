@@ -16,8 +16,13 @@ import android.widget.ListView;
 import com.bellantoni.chetta.lieme.adapter.ListInHomeAdapter;
 import com.bellantoni.chetta.lieme.generalclasses.ItemHome;
 import com.facebook.FacebookSdk;
+
+import org.ocpsoft.pretty.time.PrettyTime;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Domenico on 28/07/2015.
@@ -28,6 +33,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
     private List<ItemHome> rows;
     private SwipeRefreshLayout swipeLayout;
     private ListInHomeAdapter adapter;
+    private PrettyTime p ;
 
     String[] itemnameTo ={
             "Federico Badini",
@@ -109,20 +115,35 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
     };
 
 
+    Date[] time = {
+            new Date(),
+            new Date(),
+            new Date(),
+            new Date(),
+            new Date(),
+            new Date(),
+            new Date(),
+            new Date(),
 
-    public interface HomeFragmentInterface{
+
+    };
+
+
+
+   /* public interface HomeFragmentInterface{
         public void goFriendProfileFromHome(String facebookId);
     }
 
-    private HomeFragmentInterface mHomeFragmentInterface;
+    private HomeFragmentInterface mHomeFragmentInterface;*/
 
     @Override
     public void onAttach(Activity activity){
         super.onAttach(activity);
-        if(activity instanceof HomeFragmentInterface){
+        this.p = new PrettyTime(new Locale("en"));
+        /*if(activity instanceof HomeFragmentInterface){
             mHomeFragmentInterface = (HomeFragmentInterface)activity;
 
-        }
+        }*/
 
     }
 
@@ -156,7 +177,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
 
             for (int i = 0; i < 8; i++) {
 
-                ItemHome row = new ItemHome(questions[i], itemnameFrom[i], itemnameTo[i], idfbFrom[i],idfbTo[i], imgid[i], resultsQuestion[i]);
+                ItemHome row = new ItemHome(questions[i], itemnameFrom[i], itemnameTo[i], idfbFrom[i],idfbTo[i], imgid[i], resultsQuestion[i], p.format(time[i]));
                 this.rows.add(row);
 
             }
@@ -166,7 +187,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
             list.setAdapter(adapter);
 
             list.setOnScrollListener(this);
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
@@ -175,7 +196,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
                     mHomeFragmentInterface.goFriendProfileFromHome(adapter.getItem(position).getIdTo());
 
                 }
-            });
+            });*/
 
 
         }else{
@@ -214,9 +235,9 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
             //scaricare sempre in async task
             this.adapter.setCount(this.adapter.getCount()+1);
 
-            rows.add(new ItemHome("question question question", "Pippofrom", "pippoTO","id fb form","id fb to", R.id.icon, true));
+            rows.add(new ItemHome("Ieri abbiamo sentito arrivare la polizia in casa tua, è vero che hanno arrestato tuo figlio?", "Giancarlo Filippetti", "Giordano Romano","id fb form","id fb to", R.id.icon, true, p.format(new Date())));
             //this.adapter.addAll(this.rows);
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
@@ -225,7 +246,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
                     mHomeFragmentInterface.goFriendProfileFromHome(adapter.getItem(position).getIdTo());
 
                 }
-            });
+            });*/
 
 
 
@@ -247,9 +268,9 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
                 System.out.print("PROVA PER PERDER TEMPO");
 
             }*/
-            ItemHome row = new ItemHome("domanda aggiunta eh ciao", "Ettusi Gianpaolo", "Babbo di Minchia", "54ds754ds","87987dfd", 547887, true);
+            ItemHome row = new ItemHome("Ieri abbiamo sentito arrivare la polizia in casa tua, è vero che hanno arrestato tuo figlio?", "Rodolfo Giano", "Filippo Cavallotti", "54ds754ds","87987dfd", 547887, true, p.format(new Date()));
             HomeFragment.this.rows.add(0,row);
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
@@ -258,7 +279,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
                     mHomeFragmentInterface.goFriendProfileFromHome(adapter.getItem(position).getIdTo());
 
                 }
-            });
+            });*/
 
 
             return null;

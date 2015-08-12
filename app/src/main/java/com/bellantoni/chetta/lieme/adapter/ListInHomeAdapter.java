@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.generalclasses.ItemHome;
+import com.bellantoni.chetta.lieme.listener.OnClickListenerHomeTo;
 import com.squareup.picasso.Picasso;
 
 
@@ -38,6 +39,8 @@ public class ListInHomeAdapter extends ArrayAdapter<ItemHome> {
     }
 
 
+
+
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder holder;
@@ -52,12 +55,17 @@ public class ListInHomeAdapter extends ArrayAdapter<ItemHome> {
 
             holder = new ViewHolder();
             holder.nameFrom = (TextView) view.findViewById(R.id.nameFrom);
+
+
+
             holder.nameTo = (TextView) view.findViewById(R.id.nameTo);
+
 
             holder.question = (TextView) view.findViewById(R.id.questionFriendHome);
             holder.idfacebookTo = (TextView) view.findViewById(R.id.facebookIdFriendHome);
             holder. imageView = (ImageView) view.findViewById(R.id.imageFbHome);
             holder.imgResponse = (ImageView) view.findViewById(R.id.imgResponseFriendHome);
+            holder.timeStamp = (TextView) view.findViewById(R.id.dateQuestionProfileHome);
 
 
             // The tag can be any Object, this just happens to be the ViewHolder
@@ -72,11 +80,15 @@ public class ListInHomeAdapter extends ArrayAdapter<ItemHome> {
             holder = (ViewHolder) convertView.getTag();
         }
 
+        holder.nameTo.setTextColor(Color.BLACK);
+
 
         holder.nameFrom.setText(this.rows.get(position).getNameFrom());
 
 
         holder.nameTo.setText(this.rows.get(position).getNameTo());
+
+        holder.timeStamp.setText(this.rows.get(position).getTime());
 
         //l'immagine ovviamente la scarico dall'id
         Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").transform(new CircleTransform()).fit().centerCrop().into(holder.imageView);
@@ -84,6 +96,10 @@ public class ListInHomeAdapter extends ArrayAdapter<ItemHome> {
         holder.question.setText(this.rows.get(position).getQuestion());
 
         holder.idfacebookTo.setText(this.rows.get(position).getIdTo());
+
+        holder.nameTo.setOnClickListener(new OnClickListenerHomeTo(holder.idfacebookTo.getText().toString(), this.context));
+        holder.imageView.setOnClickListener(new OnClickListenerHomeTo(holder.idfacebookTo.getText().toString(),this.context));
+
         if(this.rows.get(position).isResultQuestion()==true){
             holder.imgResponse.setImageResource(R.drawable.heart_green);
 
@@ -112,6 +128,8 @@ public class ListInHomeAdapter extends ArrayAdapter<ItemHome> {
 
 
 
+
+
     static class ViewHolder {
         TextView nameFrom;
         TextView nameTo;
@@ -119,6 +137,7 @@ public class ListInHomeAdapter extends ArrayAdapter<ItemHome> {
         ImageView imageView;
         TextView idfacebookTo;
         ImageView imgResponse;
+        TextView timeStamp;
         int position;
     }
 }

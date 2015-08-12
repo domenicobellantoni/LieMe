@@ -17,8 +17,12 @@ import com.bellantoni.chetta.lieme.adapter.ListInFriendFragmentAdapter;
 import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
 import com.facebook.FacebookSdk;
 
+import org.ocpsoft.pretty.time.PrettyTime;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -32,6 +36,7 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
     private ImageView friendProfileImage;
     private ListInFriendFragmentAdapter adapter;
     private List<RowItemProfile> rows;
+    private PrettyTime p;
 
     ListView list;
 
@@ -89,23 +94,35 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
             false,
     };
 
+    Date[] timeStamp ={
 
-    public interface FriendProfileFragmentInterface{
+        new Date(),
+        new Date(),
+        new Date(),
+        new Date(),
+        new Date(),
+        new Date(),
+        new Date(),
+        new Date()
+
+    };
+
+
+   /* public interface FriendProfileFragmentInterface{
 
         public void goFriendProfileFromFriend(String facebookId);
 
     }
 
-    private FriendProfileFragmentInterface mFriendProfileFragmentInteface;
-
+    private FriendProfileFragmentInterface mFriendProfileFragmentInteface;*/
 
     @Override
     public void onAttach(Activity activity){
         super.onAttach(activity);
-        if(activity instanceof FriendProfileFragmentInterface){
+       /* if(activity instanceof FriendProfileFragmentInterface){
             mFriendProfileFragmentInteface = (FriendProfileFragmentInterface)activity;
 
-        }
+        }*/
     }
 
     public FriendProfileFragment(){
@@ -121,6 +138,7 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
     @Override
     public void onCreate(Bundle savedBundle){
         super.onCreate(savedBundle);
+        p = new PrettyTime(new Locale("en"));
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
         this.rows = new ArrayList<RowItemProfile>();
         setRetainInstance(true);
@@ -147,7 +165,7 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
 
             for (int i = 0; i < 8; i++) {
 
-                RowItemProfile row = new RowItemProfile(questions[i], itemname[i], idfb[i], imgid[i], resultsQuestion[i]);
+                RowItemProfile row = new RowItemProfile(questions[i], itemname[i], idfb[i], imgid[i], resultsQuestion[i], p.format(timeStamp[i]));
                 this.rows.add(row);
 
             }
@@ -159,7 +177,7 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
             list.setAdapter(adapter);
 
             list.setOnScrollListener(this);
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
@@ -170,7 +188,7 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
                     mFriendProfileFragmentInteface.goFriendProfileFromFriend(adapter.getItem(position).getFacebookId());
 
                 }
-            });
+            });*/
 
 
 
@@ -198,9 +216,9 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
 
             //QUI DA FARE UNA QUERY ALLA VOLTA HO PROVATO A CARICARE TIPO 8 ELEMENTI ALLA VOLTA MA CRASHA, SPERO CHE LA QUERY SIA
             //VELOCE, AL MASSIMO POSSIAMO PROVARE 2/3 ALLA VOLTA
-            rows.add(new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon, true));
+            rows.add(new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon, true, p.format(new Date())));
             //this.adapter.addAll(this.rows);
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
@@ -211,7 +229,7 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
                     mFriendProfileFragmentInteface.goFriendProfileFromFriend(adapter.getItem(position).getFacebookId());
 
                 }
-            });
+            });*/
 
 
             System.out.println("CONTATORE "+ this.adapter.getCount());
