@@ -3,6 +3,7 @@ package com.bellantoni.chetta.lieme.dialog;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -34,6 +35,7 @@ public class NetworkDialog extends DialogFragment {
                     switch (which) {
                         case Dialog.BUTTON_NEUTRAL:
                             mNetworkInfoInterface.okInfoInterface();
+                            dismiss();
                             break;
 
                         default:

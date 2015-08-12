@@ -29,7 +29,7 @@ public class LoginFragment extends Fragment {
     private Profile facebookProfile;
 
     public interface ListenerInterface{
-        void goProfile(Profile profile);
+       void goProfile(Profile profile);
        void errorConnection();
     }
 

@@ -23,6 +23,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
 import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
@@ -59,10 +61,6 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
     private ImageButton FAB;
     private CustomListAdapter adapter;
     private PrettyTime p ;
-
-
-
-
     private List<RowItemProfile> rows;
 
 
@@ -234,12 +232,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
         if(savedBundle==null) {
             firstAccessView = inflater.inflate(R.layout.fragment_profile, null);
             this.profileImage = (ImageView) firstAccessView.findViewById(R.id.imageProfile);
-            //this.nameSurname = (TextView) firstAccessView.findViewById(R.id.nameSurname);
-            //this.nameSurname.setTypeface(Typeface.createFromAsset(getActivity().getAssets(),"fonts/OpenSans-Light.ttf"));
-            //this.nameSurnameString = getArguments().getString("name") + " " + getArguments().getString("surname");
-            //this.nameSurname.setText(nameSurnameString);
-            //DownloaderProfileImage downloaderProfileImage = new DownloaderProfileImage();
-            //downloaderProfileImage.execute(getArguments().getString("photo1") + getArguments().get("id") + getArguments().getString("photo2"));
+
             RoundImage roundedImage = new RoundImage(BitmapFactory.decodeResource(getResources(), R.mipmap.iconuseranonymous));
             Picasso.with((Activity) getActivity()).load("https://graph.facebook.com/" + Profile.getCurrentProfile().getId() + "/picture?height=115&width=115")
                     .placeholder(roundedImage)
@@ -264,26 +257,13 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
             }
 
-
-            //final CustomListAdapter adapter=new CustomListAdapter(getActivity(), itemname, imgid, questions,idfb);
             adapter = new CustomListAdapter(getActivity(), this.rows);
             list = (ListView) firstAccessView.findViewById(R.id.list);
             list.setAdapter(adapter);
 
             list.setOnScrollListener(this);
 
-            /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-                    // TODO Auto-generated method stub
-                    //String Slecteditem = itemname[+position] + idfb[+position];
-                    //Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
-                    mProfileFragmentInteface.goFriendProfile(adapter.getItem(position).getFacebookId());
-
-                }
-            });*/
 
 
         }else{
@@ -340,19 +320,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             //QUI DA FARE UNA QUERY ALLA VOLTA HO PROVATO A CARICARE TIPO 8 ELEMENTI ALLA VOLTA MA CRASHA, SPERO CHE LA QUERY SIA
             //VELOCE, AL MASSIMO POSSIAMO PROVARE 2/3 ALLA VOLTA
             rows.add(new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon, true, p.format(new Date())));
-            //this.adapter.addAll(this.rows);
-            /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-                    // TODO Auto-generated method stub
-                    //String Slecteditem = adapter.getItem(position).getFacebookId();
-                    //Toast.makeText(getActivity().getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();
-                    mProfileFragmentInteface.goFriendProfile(adapter.getItem(position).getFacebookId());
-
-                }
-            });*/
 
 
             System.out.println("CONTATORE "+ this.adapter.getCount());
@@ -367,53 +335,6 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
 
     }
-
-
-
-
-    /*private class DownloaderProfileImage extends AsyncTask<String,String,Bitmap> {
-
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-            roundedImage = new RoundImage(BitmapFactory.decodeResource(getResources(), R.mipmap.iconuseranonymous));
-            profileImage.setImageDrawable(roundedImage);
-
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            if (bitmap != null){
-                roundedImage = new RoundImage(bitmap);
-                profileImage.setImageDrawable(roundedImage);
-            }
-
-        }
-
-
-        @Override
-        protected Bitmap doInBackground(String... linkphoto) {
-
-            URL imageURL = null;
-
-            try {
-                imageURL = new URL(linkphoto[0]);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-            try {
-                bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
-                return bitmap;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-        }
-    }*/
 
     // GCM
     private boolean checkPlayServices() {
@@ -551,11 +472,5 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             return null;
         }
     }
-
-
-
-
-
-
 
 }

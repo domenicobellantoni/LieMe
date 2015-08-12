@@ -1,31 +1,29 @@
 package com.bellantoni.chetta.lieme;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
+import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
+import com.bellantoni.chetta.lieme.network.NetworkController;
 import com.bellantoni.chetta.lieme.network.UpdateMessages;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
-import com.facebook.login.LoginManager;
-
 import java.lang.ref.WeakReference;
 
-
-public class SplashActivity extends Activity {
+public class SplashActivity extends ActionBarActivity implements NetworkDialog.NetworkInfoInteface {
 
     private static final long MIN_WAIT_INTERVAL = 1500L;
 
-    private static final long MAX_WAIT_INTERVAL =3000L;
+    private static final long MAX_WAIT_INTERVAL = 3000L;
 
-    private static final int GO_AHEAD_WHAT =1;
+    private static final int GO_AHEAD_WHAT = 1;
 
     private long mStartTime = -1L;
 
@@ -71,6 +69,7 @@ public class SplashActivity extends Activity {
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         setContentView(R.layout.activity_splash);
+        getSupportActionBar().hide();
         if(savedInstanceState!=null){
             this.mStartTime = savedInstanceState.getLong(START_TIME_KEY);
 
@@ -80,10 +79,6 @@ public class SplashActivity extends Activity {
 
         //LoginManager.getInstance().logOut();
 
-
-
-
-
     }
 
 
@@ -91,6 +86,7 @@ public class SplashActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_splash, menu);
+
         return true;
     }
 
@@ -112,6 +108,7 @@ public class SplashActivity extends Activity {
     @Override
     protected void onStart(){
         super.onStart();
+
         if(mStartTime==-1L) {
             mStartTime = SystemClock.uptimeMillis();
         }
@@ -120,31 +117,39 @@ public class SplashActivity extends Activity {
     }
 
     private void goAhead(){
-        AccessToken accessToken = checkSession();
-        if(accessToken==null) {
-            final Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            finish();
+
+        if(NetworkController.isOnline(getApplicationContext())==true){
+
+            AccessToken accessToken = checkSession();
+            if(accessToken==null) {
+                final Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }else{
+                final Intent intent = new Intent(this, drawnerActivity.class);
+
+                Profile profile = Profile.getCurrentProfile();
+                intent.putExtra("namefromsplash", profile.getFirstName());
+                intent.putExtra("surnamefromsplash", profile.getLastName());
+                intent.putExtra("idfromsplash", profile.getId());
+                intent.putExtra("photo1", "https://graph.facebook.com/" );
+                intent.putExtra("photo2","/picture?height=105&width=105");
+                System.out.println("NOMEEEEEEE "+profile.getFirstName());
+
+                FeedReaderDbHelperMessages mDbHelper = new FeedReaderDbHelperMessages(getApplicationContext());
+
+                UpdateMessages updateMessages = new UpdateMessages(mDbHelper);
+                updateMessages.update(Profile.getCurrentProfile().getId());
+
+                startActivity(intent);
+                finish();
+            }
+
         }else{
-            final Intent intent = new Intent(this, drawnerActivity.class);
-
-            Profile profile = Profile.getCurrentProfile();
-            intent.putExtra("namefromsplash", profile.getFirstName());
-            intent.putExtra("surnamefromsplash", profile.getLastName());
-            intent.putExtra("idfromsplash", profile.getId());
-            intent.putExtra("photo1", "https://graph.facebook.com/" );
-            intent.putExtra("photo2","/picture?height=105&width=105");
-            System.out.println("NOMEEEEEEE "+profile.getFirstName());
-
-            FeedReaderDbHelperMessages mDbHelper = new FeedReaderDbHelperMessages(getApplicationContext());
-
-            UpdateMessages updateMessages = new UpdateMessages(mDbHelper);
-            updateMessages.update(Profile.getCurrentProfile().getId());
-
-            startActivity(intent);
-            finish();
-
+            NetworkDialog networkDialog = new NetworkDialog();
+            networkDialog.show(getSupportFragmentManager(),"NETWORK_DIALOG");
         }
+
     }
 
     @Override
@@ -167,5 +172,9 @@ public class SplashActivity extends Activity {
         return accessToken;
     }
 
+    @Override
+    public void okInfoInterface() {
+        goAhead();
+    }
 
 }

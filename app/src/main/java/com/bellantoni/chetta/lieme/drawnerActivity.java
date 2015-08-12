@@ -18,10 +18,12 @@ import android.view.WindowManager;
 
 import com.bellantoni.chetta.lieme.dialog.DialogQuestionAnswered;
 import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
+import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
 import com.bellantoni.chetta.lieme.dialog.QuestionDialog;
 import com.bellantoni.chetta.lieme.listener.OnClickListenerFriendProfile;
 import com.bellantoni.chetta.lieme.listener.OnClickListenerHomeTo;
 import com.bellantoni.chetta.lieme.listener.OnClickListenerProfile;
+import com.bellantoni.chetta.lieme.network.NetworkController;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -48,7 +50,7 @@ import java.util.List;
 
 
 public class drawnerActivity extends ActionBarActivity
-        implements OnClickListenerFriendProfile.OnClickFriendProfileInterface, OnClickListenerProfile.OnClickProfileInterface, OnClickListenerHomeTo.OnClickHomeInterface, NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface, QuestionDialog.QuestionInterface, /*FriendProfileFragment.FriendProfileFragmentInterface,*/ ContactListFragment.ContactListFragmentInterface, ContactListFragment.OnFragmentInteractionListener, NotificationFragment.NotificationInterface/*, HomeFragment.HomeFragmentInterface */{
+        implements NetworkDialog.NetworkInfoInteface, OnClickListenerFriendProfile.OnClickFriendProfileInterface, OnClickListenerProfile.OnClickProfileInterface, OnClickListenerHomeTo.OnClickHomeInterface, NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface, QuestionDialog.QuestionInterface, /*FriendProfileFragment.FriendProfileFragmentInterface,*/ ContactListFragment.ContactListFragmentInterface, ContactListFragment.OnFragmentInteractionListener, NotificationFragment.NotificationInterface/*, HomeFragment.HomeFragmentInterface */{
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private String surname;
@@ -64,6 +66,8 @@ public class drawnerActivity extends ActionBarActivity
     private DialogQuestionAnswered dialogQuestionAnswered;
     private HomeFragment homefragment;
     private List<String> titlesActionbar = new ArrayList<String>();
+    private int lastOperation;
+    private String lastFacebookId;
 
     private final String TAG = "DrawnerActivity";
     private final String ANSWER_MANAGER_URL = "http://computersecurityproject.altervista.org/gcm_server_php/answerToQuestion.php?";
@@ -81,6 +85,7 @@ public class drawnerActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawner);
 
+        this.lastOperation = 0;
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -119,24 +124,48 @@ public class drawnerActivity extends ActionBarActivity
 
         switch (position){
             case 0:
-                goProfile();
+                if(NetworkController.isOnline(getApplicationContext())==true) {
+                    goProfile();
+                }else{
+                    this.lastOperation=0;
+                    NetworkDialog networkDialog = new NetworkDialog();
+                    networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
+                }
+
                 break;
             case 1:
-                goHome();
+                if(NetworkController.isOnline(getApplicationContext())==true) {
+                    goHome();
+                }else{
+                    this.lastOperation=1;
+                    NetworkDialog networkDialog = new NetworkDialog();
+                    networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
+                }
                 break;
             case 2:
-                goContactListFragment();
+                if(NetworkController.isOnline(getApplicationContext())==true) {
+                    goContactListFragment();
+                }else{
+                    this.lastOperation = 2;
+                    NetworkDialog networkDialog = new NetworkDialog();
+                    networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
+                }
                 // goAskQuestion(null);
                 break;
             case 3:
-                goNotifications();
+                if(NetworkController.isOnline(getApplicationContext())==true) {
+                    goNotifications();
+                }else{
+                    this.lastOperation = 3;
+                    NetworkDialog networkDialog = new NetworkDialog();
+                    networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
+                }
                 break;
             case 4:
                 logout();
                 break;
 
         }
-
 
     }
 
@@ -191,7 +220,7 @@ public class drawnerActivity extends ActionBarActivity
 
       ///se un istanza del profilo è già stata creata imposto e basta
       //ho creato tutti i metodi necessari di set e get nel profile fragment
-        //per la rotazione guadrare il manufest tag conf in questa attività
+      //per la rotazione guadrare il manufest tag conf in questa attività
     private void goProfile(){
 
 
@@ -236,36 +265,7 @@ public class drawnerActivity extends ActionBarActivity
 
 
     }
-/*
-    @Override
-    public void goaskQuestionFragment(){
-        goAskQuestion();
-    }
 
-    private void goAskQuestion(){
-        // The ask fragment will be called always after the selection of the receiver
-        Bundle bundle = new Bundle();
-        bundle.putString("edttext", "From Activity");
-
-        this.actionBar.show();
-
-        if(this.askFragment==null) {
-            this.askFragment = new AskFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, this.askFragment,"AskFragment")
-                    .commit();
-
-        }else{
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, this.askFragment, "AskFragment")
-                    .commit();
-
-        }
-    }
-*/
     private void goAskQuestion( String receiver_id){
         // The ask fragment will be called always after the selection of the receiver
         Bundle bundle = new Bundle();
@@ -341,54 +341,27 @@ public class drawnerActivity extends ActionBarActivity
 
     }
 
-    /*@Override
-    public void goFriendProfile(String facebookId){
 
+    @Override
+    public void goFriendProfileFromFriendProfile(String facebookId){
 
-
-            Bundle bundle=new Bundle();
+        if(NetworkController.isOnline(getApplicationContext())==true) {
+            Bundle bundle = new Bundle();
             bundle.putString("facebookIdFriend", facebookId);
 
             this.friendProfileFragment = new FriendProfileFragment();
-        this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
+            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             this.friendProfileFragment.setArguments(bundle);
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
                     .commit();
-
-    }*/
-
-    /*@Override
-    public void goFriendProfileFromFriend(String facebookId){
-
-
-
-        Bundle bundle=new Bundle();
-        bundle.putString("facebookIdFriend", facebookId);
-
-        this.friendProfileFragment = new FriendProfileFragment();
-        this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
-        this.friendProfileFragment.setArguments(bundle);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
-                .commit();
-
-    }*/
-
-    @Override
-    public void goFriendProfileFromFriendProfile(String facebookId){
-        Bundle bundle=new Bundle();
-        bundle.putString("facebookIdFriend", facebookId);
-
-        this.friendProfileFragment = new FriendProfileFragment();
-        this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
-        this.friendProfileFragment.setArguments(bundle);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
-                .commit();
+        }else{
+            this.lastOperation = 7;
+            this.lastFacebookId = facebookId;
+            NetworkDialog networkDialog = new NetworkDialog();
+            networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
+        }
     }
 
     @Override
@@ -398,7 +371,14 @@ public class drawnerActivity extends ActionBarActivity
 
     @Override
     public void goContactListFragment() {
-        contactListFragment();
+        if(NetworkController.isOnline(getApplicationContext())==true){
+            contactListFragment();
+        }else{
+            this.lastOperation = 2;
+            NetworkDialog networkDialog = new NetworkDialog();
+            networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
+        }
+
     }
 
     private void contactListFragment(){
@@ -423,8 +403,6 @@ public class drawnerActivity extends ActionBarActivity
     }
 
     private void goNotifications(){
-
-
 
         if(this.notificationFragment==null){
             this.notificationFragment = new NotificationFragment();
@@ -478,51 +456,72 @@ public class drawnerActivity extends ActionBarActivity
     }
 
 
-    /*@Override
-    public void goFriendProfileFromHome(String facebookId){
-
-        Bundle bundle=new Bundle();
-        bundle.putString("facebookIdFriend", facebookId);
-
-        this.friendProfileFragment = new FriendProfileFragment();
-        this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
-        this.friendProfileFragment.setArguments(bundle);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
-                .commit();
-
-    }*/
-
     @Override
     public void goFriendProfileFromHome(String facebookId){
 
-        Bundle bundle=new Bundle();
-        bundle.putString("facebookIdFriend", facebookId);
 
-        this.friendProfileFragment = new FriendProfileFragment();
-        this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
-        this.friendProfileFragment.setArguments(bundle);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
-                .commit();
+        if(NetworkController.isOnline(getApplicationContext())==true) {
+            Bundle bundle = new Bundle();
+            bundle.putString("facebookIdFriend", facebookId);
+
+            this.friendProfileFragment = new FriendProfileFragment();
+            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
+            this.friendProfileFragment.setArguments(bundle);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
+                    .commit();
+        }else{
+            this.lastOperation = 6;
+            this.lastFacebookId = facebookId;
+            NetworkDialog networkDialog = new NetworkDialog();
+            networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
+
+        }
 
     }
 
     @Override
     public void goFriendProfileFromProfile(String facebookId) {
 
-        Bundle bundle=new Bundle();
-        bundle.putString("facebookIdFriend", facebookId);
+        if(NetworkController.isOnline(getApplicationContext())==true) {
 
-        this.friendProfileFragment = new FriendProfileFragment();
-        this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
-        this.friendProfileFragment.setArguments(bundle);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
-                .commit();
+            Bundle bundle = new Bundle();
+            bundle.putString("facebookIdFriend", facebookId);
+
+            this.friendProfileFragment = new FriendProfileFragment();
+            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
+            this.friendProfileFragment.setArguments(bundle);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
+                    .commit();
+        }else{
+            this.lastOperation = 5;
+            this.lastFacebookId = facebookId;
+            NetworkDialog networkDialog = new NetworkDialog();
+            networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
+        }
+
+    }
+
+    @Override
+    public void okInfoInterface() {
+        switch (this.lastOperation){
+            case(5):
+                this.goFriendProfileFromProfile(this.lastFacebookId);
+                break;
+            case(6):
+                this.goFriendProfileFromHome(this.lastFacebookId);
+                break;
+            case(7):
+                this.goFriendProfileFromFriendProfile(this.lastFacebookId);
+                break;
+            default:
+                this.onNavigationDrawerItemSelected(this.lastOperation);
+                break;
+        }
+
 
     }
 
@@ -559,8 +558,6 @@ public class drawnerActivity extends ActionBarActivity
                 msg = "Error :" + e.getMessage();
                 Log.i(TAG, "Error: " + msg);
             }
-
-
 
             return null;
         }
