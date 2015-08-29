@@ -511,7 +511,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
         @Override
         protected Void doInBackground(Void... params) {
-
+            Log.i(TAG, "SCROLLSCROLLSCROLLSCROLLSCROLLSCROLL");
             //da scaricare
             Random random = new Random();
             int number = random.nextInt(3)+1;
@@ -604,16 +604,12 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
                 if(q.getAnswer().equals("no"))
                     res = false;
                 Contact senderContact = ContactListFragment.findContactById(q.getSender_id());
-                ImageView profileImage ;
-                Picasso.with(getActivity().getApplicationContext()).load("https://graph.facebook.com/" + q.getSender_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(profileImage);
+                //ImageView profileImage ;
+                //Picasso.with(getActivity().getApplicationContext()).load("https://graph.facebook.com/" + q.getSender_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(profileImage);
                 RowItemProfile row = new RowItemProfile(q.getMessage(), senderContact.getName(), q.getSender_id(), R.drawable.ic_profile, res, p.format(q.getNotificationTimestamp()));
                 this.rows.add(0,row);
             }
         }
-
-
-
-
 
         this.adapter.notifyDataSetChanged();
     }
