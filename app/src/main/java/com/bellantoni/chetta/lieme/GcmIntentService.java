@@ -14,8 +14,10 @@ import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperNotification;
 import com.bellantoni.chetta.lieme.generalclasses.NotificationImpl;
 import com.bellantoni.chetta.lieme.network.UpdateMessages;
+import com.bellantoni.chetta.lieme.network.UpdateNotifications;
 import com.facebook.Profile;
 import com.bellantoni.chetta.lieme.db.FeedReaderContract;
 import com.bellantoni.chetta.lieme.db.FeedReaderContractMessages;
@@ -54,6 +56,7 @@ public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
+    FeedReaderDbHelperMessages mDbHelper;
     /**
      * Tag used on log messages.
      */
@@ -61,8 +64,7 @@ public class GcmIntentService extends IntentService {
     /**
      * Db access object
      * */
-    private FeedReaderDbHelperMessages mDbHelper;
-    private final String MESSAGE_MANAGER_URL = "http://computersecurityproject.altervista.org/gcm_server_php/message_manager.php?user_id=";
+
     public GcmIntentService() {
         super("GcmIntentService");
     }
@@ -162,10 +164,11 @@ public class GcmIntentService extends IntentService {
 
             v.vibrate(pattern, -1);
 
-            updateMessages.updateRowWithAnswer(msg.getString("questionId"), msg.getString("answer"));
-
-
-            NotificationFragment.addNotification(new NotificationImpl(notificationTimestamp, 1, 0, msg.getString("questionId"), ""), getApplication().getApplicationContext());
+            //updateMessages.updateRowWithAnswer(msg.getString("questionId"), msg.getString("answer"));
+            FeedReaderDbHelperNotification mDbHelperNotifications = new FeedReaderDbHelperNotification(getApplicationContext());
+            UpdateNotifications updateNotifications = new UpdateNotifications(mDbHelperNotifications);
+            updateNotifications.update(user_id);
+            //NotificationFragment.addNotification(new NotificationImpl(notificationTimestamp, 1, 0, msg.getString("questionId"), ""), getApplication().getApplicationContext());
 
             mBuilder.setContentIntent(contentIntent);
             mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

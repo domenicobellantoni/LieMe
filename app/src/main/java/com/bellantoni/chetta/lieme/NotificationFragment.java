@@ -169,6 +169,10 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
     }
 
+    private void update(){
+        new RetrieveMessagesFromLocalDataBase().execute(null, null, null);
+        new RetrieveNotificationsFromLocalDataBase().execute(null,null,null);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedBundle) {
@@ -179,8 +183,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
             ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Notifications");
 
-            new RetrieveMessagesFromLocalDataBase().execute(null, null, null);
-            new RetrieveNotificationsFromLocalDataBase().execute(null,null,null);
+            update();
 
             adapter = new NotificationListAdapter(getActivity(), this.rows);
             list = (ListView) firstAccessView.findViewById(R.id.listNotification);

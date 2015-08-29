@@ -32,5 +32,4 @@ public final class FeedReaderContractNotification {
         public static final String COLUMN_NAME_CONTENT = "content";
         public static final String COLUMN_NAME_TIMESTAMP = "timestamp";
     }
-
 }
