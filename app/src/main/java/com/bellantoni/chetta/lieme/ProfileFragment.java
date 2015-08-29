@@ -31,6 +31,7 @@ import com.bellantoni.chetta.lieme.db.FeedReaderContractMessages;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
 import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
+import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.bellantoni.chetta.lieme.generalclasses.ItemHome;
 import com.bellantoni.chetta.lieme.generalclasses.Notification;
 import com.bellantoni.chetta.lieme.generalclasses.Question;
@@ -75,7 +76,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
     private PrettyTime p ;
     private List<RowItemProfile> rows;
     private SwipeRefreshLayout swipeLayout;
-
+    private int maximumNumberOfQuestionShownFirstTime = 10;
 
 
     ListView list;
@@ -279,7 +280,6 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
                 RowItemProfile row = new RowItemProfile(questions[i], itemname[i], idfb[i], imgid[i], resultsQuestion[i], p.format(timeStamp[i]));
                 this.rows.add(row);
-
             }
 
             adapter = new CustomListAdapter(getActivity(), this.rows);
@@ -323,8 +323,6 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
 
-
-
         return firstAccessView;
     }
 
@@ -349,17 +347,12 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
                 rows.add(new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon, true, p.format(new Date())));
             }
 
-
             adapter.notifyDataSetChanged();
         }
     }
 
     public void onScrollStateChanged(AbsListView v, int s) {
-
-
             adapter.notifyDataSetChanged();
-
-
     }
 
     // GCM
@@ -596,8 +589,33 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
     private void updateMessageArray(ArrayList<Notification> messages){
         Collections.sort(messages, new TimestampComparator());
-        Question q = (Question)messages.get(0);
-        Log.i("MESSAGGIO PRIMO: ", q.getMessage() + " RISPOSTA: " + q.getAnswer());
+        //Question q = (Question)messages.get(0);
+        //Log.i("MESSAGGIO PRIMO: ", q.getMessage() + " RISPOSTA: " + q.getAnswer());
+
+        this.rows.clear();
+
+        for(int i = 0; i < maximumNumberOfQuestionShownFirstTime && i < messages.size(); i++)
+        {
+            Question q = (Question)messages.get(i);
+            if(!q.getAnswer().equals("undefined"))
+            {
+
+                boolean res = true;
+                if(q.getAnswer().equals("no"))
+                    res = false;
+                Contact senderContact = ContactListFragment.findContactById(q.getSender_id());
+                ImageView profileImage ;
+                Picasso.with(getActivity().getApplicationContext()).load("https://graph.facebook.com/" + q.getSender_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(profileImage);
+                RowItemProfile row = new RowItemProfile(q.getMessage(), senderContact.getName(), q.getSender_id(), R.drawable.ic_profile, res, p.format(q.getNotificationTimestamp()));
+                this.rows.add(0,row);
+            }
+        }
+
+
+
+
+
+        this.adapter.notifyDataSetChanged();
     }
 }
 

@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.WindowManager;
 
+import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
 import com.bellantoni.chetta.lieme.dialog.DialogQuestionAnswered;
 import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
 import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
@@ -24,6 +25,7 @@ import com.bellantoni.chetta.lieme.listener.OnClickListenerFriendProfile;
 import com.bellantoni.chetta.lieme.listener.OnClickListenerHomeTo;
 import com.bellantoni.chetta.lieme.listener.OnClickListenerProfile;
 import com.bellantoni.chetta.lieme.network.NetworkController;
+import com.bellantoni.chetta.lieme.network.UpdateMessages;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -448,11 +450,19 @@ public class drawnerActivity extends ActionBarActivity
     @Override
     public void yesQuestionPressed(int idQuestion, String senderId){
         new SendAnswerToServer().execute(Profile.getCurrentProfile().getId(), String.valueOf(idQuestion), "yes", senderId);
+        FeedReaderDbHelperMessages mDbHelperMessages = new FeedReaderDbHelperMessages(getApplicationContext());
+
+        UpdateMessages updateMessages = new UpdateMessages(mDbHelperMessages);
+        updateMessages.updateRowWithAnswer(String.valueOf(idQuestion), "yes");
     }
 
     @Override
     public void noQuestionPressed(int idQuestion, String senderId){
         new SendAnswerToServer().execute(Profile.getCurrentProfile().getId(), String.valueOf(idQuestion), "no", senderId);
+        FeedReaderDbHelperMessages mDbHelperMessages = new FeedReaderDbHelperMessages(getApplicationContext());
+
+        UpdateMessages updateMessages = new UpdateMessages(mDbHelperMessages);
+        updateMessages.updateRowWithAnswer(String.valueOf(idQuestion), "no");
     }
 
 
