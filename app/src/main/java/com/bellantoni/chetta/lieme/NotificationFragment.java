@@ -26,6 +26,7 @@ import com.bellantoni.chetta.lieme.generalclasses.NotificationImpl;
 import com.bellantoni.chetta.lieme.generalclasses.NotificationItem;
 import com.bellantoni.chetta.lieme.generalclasses.Question;
 import com.bellantoni.chetta.lieme.generalclasses.TimestampComparator;
+import com.bellantoni.chetta.lieme.network.UpdateNotifications;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 
@@ -57,6 +58,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
     private static FeedReaderDbHelperNotification mDbHelperNotifications;
     public static ArrayList<Notification> allMessages;
     public static ArrayList<Notification> allNotifications;
+    private UpdateNotifications updateNotifications;
     ListView list;
 
     int[] idQuestions={
@@ -150,7 +152,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
         mDbHelperMessages = new FeedReaderDbHelperMessages(getActivity().getApplicationContext());
         mDbHelperNotifications = new FeedReaderDbHelperNotification(getActivity().getApplicationContext());
 
-
+        updateNotifications = new UpdateNotifications(mDbHelperNotifications, mDbHelperMessages);
 
 
         this.rows = new ArrayList<NotificationItem>();
@@ -170,6 +172,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
     }
 
     private void update(){
+
         new RetrieveMessagesFromLocalDataBase().execute(null, null, null);
         new RetrieveNotificationsFromLocalDataBase().execute(null,null,null);
     }

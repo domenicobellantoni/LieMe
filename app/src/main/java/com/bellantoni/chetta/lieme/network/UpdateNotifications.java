@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.bellantoni.chetta.lieme.db.FeedReaderContractMessages;
 import com.bellantoni.chetta.lieme.db.FeedReaderContractNotification;
+import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperNotification;
 
 import org.apache.http.HttpResponse;
@@ -35,10 +36,12 @@ public class UpdateNotifications {
 
     static final String TAG = "UpdateNotifications";
     private FeedReaderDbHelperNotification mDbHelper;
+    private FeedReaderDbHelperMessages mDbHelperMessages;
     private final String NOTIFICATION_MANAGER_URL = "http://computersecurityproject.altervista.org/gcm_server_php/notification_manager.php?user_id=";
 
-    public UpdateNotifications(FeedReaderDbHelperNotification mDbHelper) {
+    public UpdateNotifications(FeedReaderDbHelperNotification mDbHelper, FeedReaderDbHelperMessages mDbHelperMessages) {
         this.mDbHelper = mDbHelper;
+        this.mDbHelperMessages = mDbHelperMessages;
     }
 
     public void update(String user_id){
@@ -185,6 +188,10 @@ public class UpdateNotifications {
                         values.put(FeedReaderContractNotification.FeedEntry.COLUMN_NAME_CONTENT, notification.getString("content"));
                         values.put(FeedReaderContractNotification.FeedEntry.COLUMN_NAME_TIMESTAMP, notification.getString("timestamp"));
                         long newRowId = dbWriter.insert(FeedReaderContractNotification.FeedEntry.TABLE_NAME,null,values);
+                        // Update the question with the answer
+                        JSONObject json = new JSONObject(notification.getString("content"));
+                        UpdateMessages updateMessages = new UpdateMessages(mDbHelperMessages);
+                        updateMessages.updateRowWithAnswer(json.getString("id"), json.getString("answer"));
                     }
 
                 } catch (JSONException e) {

@@ -9,9 +9,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
+import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperNotification;
 import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
 import com.bellantoni.chetta.lieme.network.NetworkController;
 import com.bellantoni.chetta.lieme.network.UpdateMessages;
+import com.bellantoni.chetta.lieme.network.UpdateNotifications;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
@@ -140,6 +142,11 @@ public class SplashActivity extends ActionBarActivity implements NetworkDialog.N
 
                 UpdateMessages updateMessages = new UpdateMessages(mDbHelper);
                 updateMessages.update(Profile.getCurrentProfile().getId());
+
+                FeedReaderDbHelperNotification mDbHelperNotification = new FeedReaderDbHelperNotification(getApplicationContext());
+
+                UpdateNotifications updateNotifications = new UpdateNotifications(mDbHelperNotification, mDbHelper);
+                updateNotifications.update(Profile.getCurrentProfile().getId());
 
                 startActivity(intent);
                 finish();

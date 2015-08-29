@@ -166,7 +166,7 @@ public class GcmIntentService extends IntentService {
 
             //updateMessages.updateRowWithAnswer(msg.getString("questionId"), msg.getString("answer"));
             FeedReaderDbHelperNotification mDbHelperNotifications = new FeedReaderDbHelperNotification(getApplicationContext());
-            UpdateNotifications updateNotifications = new UpdateNotifications(mDbHelperNotifications);
+            UpdateNotifications updateNotifications = new UpdateNotifications(mDbHelperNotifications, mDbHelper);
             updateNotifications.update(user_id);
             //NotificationFragment.addNotification(new NotificationImpl(notificationTimestamp, 1, 0, msg.getString("questionId"), ""), getApplication().getApplicationContext());
 
