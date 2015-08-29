@@ -2,6 +2,8 @@ package com.bellantoni.chetta.lieme;
 
 
 import android.app.Activity;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,12 +16,23 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.bellantoni.chetta.lieme.adapter.ListInHomeAdapter;
+import com.bellantoni.chetta.lieme.db.FeedReaderContractMessages;
+import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
+import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.bellantoni.chetta.lieme.generalclasses.ItemHome;
+import com.bellantoni.chetta.lieme.generalclasses.Notification;
+import com.bellantoni.chetta.lieme.generalclasses.Question;
+import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
+import com.bellantoni.chetta.lieme.generalclasses.TimestampComparator;
+import com.bellantoni.chetta.lieme.network.UpdateMessages;
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 
 import org.ocpsoft.pretty.time.PrettyTime;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -35,6 +48,9 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
     private SwipeRefreshLayout swipeLayout;
     private ListInHomeAdapter adapter;
     private PrettyTime p ;
+    private int maximumNumberOfQuestionShownFirstTime = 20;
+    private ArrayList<Notification> messages = new ArrayList<>();
+    private FeedReaderDbHelperMessages mDbHelperMessages;
 
     String[] itemnameTo ={
             "Federico Badini",
@@ -135,7 +151,6 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
     public void onAttach(Activity activity){
         super.onAttach(activity);
         this.p = new PrettyTime(new Locale("en"));
-
     }
 
     public HomeFragment(){
@@ -144,10 +159,13 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
 
     @Override
     public void onCreate(Bundle savedBundle){
+        mDbHelperMessages = new FeedReaderDbHelperMessages(getActivity().getApplicationContext());
+        new RetrieveMessagesFromLocalDataBase().execute(null,null,null);
         super.onCreate(savedBundle);
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
         this.rows = new ArrayList<ItemHome>();
         setRetainInstance(true);
+
     }
 
     @Override
@@ -196,7 +214,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
 
     private void fetchMovies() {
         swipeLayout.setRefreshing(true);
-
+        UpdateMessages updateMessages = new UpdateMessages(mDbHelperMessages);
         new UpdateListTask().execute(null, null, null);
         this.adapter.notifyDataSetChanged();
 
@@ -213,13 +231,39 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
 
         if(loadMore) {
             Random random = new Random();
-            int number = random.nextInt(2)+1;
+            /*int number = random.nextInt(2)+1;
             //scaricare sempre in async task
             this.adapter.setCount(this.adapter.getCount()+number);
 
             for(int i=0; i<number; i++){
                 rows.add(new ItemHome("Ieri abbiamo sentito arrivare la polizia in casa tua, è vero che hanno arrestato tuo figlio?", "Giancarlo Filippetti", "Giordano Romano","id fb form","id fb to", R.id.icon, true, p.format(new Date())));
+            }*/
+
+            int count = 0;
+            //QUI DA FARE UNA QUERY
+            for(int i=this.rows.size()-1; i<this.messages.size(); i++) {
+                Question q = (Question)messages.get(i);
+                if(!q.getAnswer().equals("undefined"))
+                {
+                    boolean res = true;
+                    if(q.getAnswer().equals("no"))
+                        res = false;
+                    Contact senderContact = ContactListFragment.findContactById(q.getSender_id());
+                    Contact receiverContact = ContactListFragment.findContactById(q.getReceiver_id());
+                    if(receiverContact==null)
+                        receiverContact = new Contact("","Name not found","","");
+                    if(senderContact==null)
+                        senderContact = new Contact("","Name not found","","");
+                    //ImageView profileImage ;
+                    //Picasso.with(getActivity().getApplicationContext()).load("https://graph.facebook.com/" + q.getSender_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(profileImage);
+                    ItemHome row = new ItemHome(q.getMessage(), senderContact.getName(), receiverContact.getName(), q.getSender_id(), q.getReceiver_id(), R.drawable.ic_profile, res, p.format(q.getNotificationTimestamp()));
+                    this.rows.add(row);
+                    count++;
+                }
+                if(count>3)
+                    break;
             }
+            this.adapter.setCount(this.adapter.getCount()+count);
 
             adapter.notifyDataSetChanged();
         }
@@ -235,16 +279,16 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
 
         @Override
         protected Void doInBackground(Void... params) {
-
+/*
             //da scaricare
             Random random = new Random();
             int number = random.nextInt(3)+1;
             for(int i=0; i<number; i++){
                 ItemHome row = new ItemHome("Ieri abbiamo sentito arrivare la polizia in casa tua, è vero che hanno arrestato tuo figlio?", "Rodolfo Giano", "Filippo Cavallotti", "54ds754ds","87987dfd", 547887, true, p.format(new Date()));
                 HomeFragment.this.rows.add(0,row);
-            }
+            }*/
 
-
+            new RetrieveMessagesFromLocalDataBase().execute(null,null,null);
             return null;
         }
 
@@ -254,5 +298,91 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
         }
     }
 
+    private class RetrieveMessagesFromLocalDataBase extends AsyncTask<Void, Void, Void> {
+        private Cursor c;
+        private ArrayList<Notification> messages;
 
+        @Override
+        protected Void doInBackground(Void... params) {
+            messages = new ArrayList<>();
+
+            String[] projection = {
+                    FeedReaderContractMessages.FeedEntry._ID,
+                    FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE,
+                    FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE_READ,
+                    FeedReaderContractMessages.FeedEntry.COLUMN_NAME_RECEIVER_ID,
+                    FeedReaderContractMessages.FeedEntry.COLUMN_NAME_SENDER_ID,
+                    FeedReaderContractMessages.FeedEntry.COLUMN_NAME_ANSWER,
+                    FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP
+            };
+
+            SQLiteDatabase dbReader = mDbHelperMessages.getReadableDatabase();
+
+            c = dbReader.query(
+                    FeedReaderContractMessages.FeedEntry.TABLE_NAME,  // The table to query
+                    projection,                               // The columns to return
+                    null,                               // The columns for the WHERE clause
+                    null,                            // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP+" DESC"                                 // The sort order
+            );
+
+            if(c != null){
+                if(c.moveToFirst()){
+                    do{
+                        String id = c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry._ID));
+                        String sender_id = c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_SENDER_ID));
+                        String receiver_id = c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_RECEIVER_ID));
+                        String message_read = c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE_READ));
+                        String message = c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE));
+                        String answer = c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_ANSWER));
+                        Timestamp timestamp = Timestamp.valueOf(c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP)));
+                        messages.add(new Question(id, sender_id, receiver_id, message_read, message, timestamp, answer));
+                    }while(c.moveToNext());
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            updateMessageArray(messages);
+        }
+    }
+
+
+    private void updateMessageArray(ArrayList<Notification> messages){
+        Collections.sort(messages, new TimestampComparator());
+        // Question q = (Question)messages.get(0);
+        // Log.i("MESSAGGIO PRIMO: ", q.getMessage() + " RISPOSTA: " + q.getAnswer());
+        this.messages = messages;
+        this.rows.clear();
+
+        for(int i = 0; i < maximumNumberOfQuestionShownFirstTime && i < messages.size(); i++)
+        {
+            Question q = (Question)messages.get(i);
+            if(!q.getAnswer().equals("undefined"))
+            {
+                boolean res = true;
+                if(q.getAnswer().equals("no"))
+                    res = false;
+                Contact senderContact = ContactListFragment.findContactById(q.getSender_id());
+                Contact receiverContact = ContactListFragment.findContactById(q.getReceiver_id());
+                if(receiverContact==null)
+                    receiverContact = new Contact("","Name not found","","");
+                if(senderContact==null)
+                    senderContact = new Contact("","Name not found","","");
+                //ImageView profileImage ;
+                //Picasso.with(getActivity().getApplicationContext()).load("https://graph.facebook.com/" + q.getSender_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(profileImage);
+                //ItemHome("Ieri abbiamo sentito arrivare la polizia in casa tua, è vero che hanno arrestato tuo figlio?", "Rodolfo Giano", "Filippo Cavallotti", "54ds754ds","87987dfd", 547887, true, p.format(new Date()));
+                ItemHome row = new ItemHome(q.getMessage(), senderContact.getName(), receiverContact.getName(), q.getSender_id(), q.getReceiver_id(), R.drawable.ic_profile, res, p.format(q.getNotificationTimestamp()));
+                this.rows.add(row);
+            }
+        }
+
+        this.adapter.setCount(this.rows.size());
+        this.adapter.notifyDataSetChanged();
+    }
 }

@@ -28,6 +28,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.facebook.Profile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -448,6 +449,10 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
     }
 
     public static Contact findContactById(String id){
+        if(id.equals(Profile.getCurrentProfile().getId()))
+        {
+            return new Contact("0",Profile.getCurrentProfile().getFirstName(),"","");
+        }
         if(id.equals("server")){
             return new Contact("0","Server","","");
         }
