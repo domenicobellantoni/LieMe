@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -25,11 +27,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bellantoni.chetta.lieme.db.FeedReaderContractMessages;
+import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
 import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.generalclasses.ItemHome;
+import com.bellantoni.chetta.lieme.generalclasses.Notification;
+import com.bellantoni.chetta.lieme.generalclasses.Question;
 import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
 import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
+import com.bellantoni.chetta.lieme.generalclasses.TimestampComparator;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -46,7 +53,9 @@ import org.apache.http.message.BasicNameValuePair;
 import org.ocpsoft.pretty.time.PrettyTime;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -139,6 +148,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
     // GCM
     String regid;
     GoogleCloudMessaging gcm;
+    private FeedReaderDbHelperMessages mDbHelperMessages;
     public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
@@ -213,6 +223,9 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
     @Override
     public void onCreate(Bundle savedBundle){
+
+        mDbHelperMessages = new FeedReaderDbHelperMessages(getActivity().getApplicationContext());
+        new RetrieveMessagesFromLocalDataBase().execute(null,null,null);
         super.onCreate(savedBundle);
 
         this.p = new PrettyTime(new Locale("en"));
@@ -524,4 +537,67 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
         }
     }
 
+    private class RetrieveMessagesFromLocalDataBase extends AsyncTask<Void, Void, Void> {
+        private Cursor c;
+        private ArrayList<Notification> messages;
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            messages = new ArrayList<>();
+
+            String[] projection = {
+                    FeedReaderContractMessages.FeedEntry._ID,
+                    FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE,
+                    FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE_READ,
+                    FeedReaderContractMessages.FeedEntry.COLUMN_NAME_RECEIVER_ID,
+                    FeedReaderContractMessages.FeedEntry.COLUMN_NAME_SENDER_ID,
+                    FeedReaderContractMessages.FeedEntry.COLUMN_NAME_ANSWER,
+                    FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP
+            };
+
+            SQLiteDatabase dbReader = mDbHelperMessages.getReadableDatabase();
+
+            c = dbReader.query(
+                    FeedReaderContractMessages.FeedEntry.TABLE_NAME,  // The table to query
+                    projection,                               // The columns to return
+                    FeedReaderContractMessages.FeedEntry.COLUMN_NAME_RECEIVER_ID + "=?",                               // The columns for the WHERE clause
+                    new String[]{String.valueOf(Profile.getCurrentProfile().getId())},                            // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP+" DESC"                                 // The sort order
+            );
+
+            if(c != null){
+                if(c.moveToFirst()){
+                    do{
+                        String id = c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry._ID));
+                        String sender_id = c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_SENDER_ID));
+                        String receiver_id = c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_RECEIVER_ID));
+                        String message_read = c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE_READ));
+                        String message = c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE));
+                        String answer = c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_ANSWER));
+                        Timestamp timestamp = Timestamp.valueOf(c.getString(c.getColumnIndexOrThrow(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP)));
+                        messages.add(new Question(id, sender_id, receiver_id, message_read, message, timestamp, answer));
+                    }while(c.moveToNext());
+                }
+            }
+            return null;
+
+
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            updateMessageArray(messages);
+        }
+    }
+
+
+    private void updateMessageArray(ArrayList<Notification> messages){
+        Collections.sort(messages, new TimestampComparator());
+        Question q = (Question)messages.get(0);
+        Log.i("MESSAGGIO PRIMO: ", q.getMessage() + " RISPOSTA: " + q.getAnswer());
+    }
 }
+
