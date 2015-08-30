@@ -215,6 +215,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
     private void fetchMovies() {
         swipeLayout.setRefreshing(true);
         UpdateMessages updateMessages = new UpdateMessages(mDbHelperMessages);
+        updateMessages.update(Profile.getCurrentProfile().getId());
         new UpdateListTask().execute(null, null, null);
         this.adapter.notifyDataSetChanged();
 
