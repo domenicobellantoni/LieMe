@@ -39,7 +39,7 @@
     //strings per notifiche
 
     <string name="askQuestion">A friend of yours would like to ask you something</string>
-    <string name="answerQuestion">Answered your question</string>
+    <string name="answerQuestion">answered your question</string>
     <string name="newFriend">Is now on LieMe</string>
     
     

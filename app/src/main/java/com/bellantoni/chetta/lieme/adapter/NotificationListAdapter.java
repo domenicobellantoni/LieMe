@@ -8,9 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bellantoni.chetta.lieme.ContactListFragment;
+import com.bellantoni.chetta.lieme.NotificationFragment;
 import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
+import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.bellantoni.chetta.lieme.generalclasses.NotificationItem;
+import com.bellantoni.chetta.lieme.generalclasses.Question;
 import com.squareup.picasso.Picasso;
 
 import java.sql.Timestamp;
@@ -77,8 +82,10 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
        }
         if(typeNotification==1){
             //nome da recuperare da con id notifica, quindi id utente quindi dome
-            holder.textNotification.setText(R.string.answerQuestion);
-            Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").transform(new CircleTransform()).fit().centerCrop().into(holder.imageNotification);
+            Question questionObj = NotificationFragment.findQuestionById(String.valueOf(this.rows.get(position).getAnsweredQuestionId()));
+            Contact user = ContactListFragment.findContactById(questionObj.getReceiver_id());
+            holder.textNotification.setText(user.getName() + " answered your question");
+            Picasso.with(context).load("https://graph.facebook.com/" + questionObj.getReceiver_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(holder.imageNotification);
         }
         if(typeNotification==2){
             //nome e immagine da recuperare

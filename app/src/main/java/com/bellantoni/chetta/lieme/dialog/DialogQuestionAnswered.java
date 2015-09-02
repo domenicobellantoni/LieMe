@@ -11,9 +11,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bellantoni.chetta.lieme.ContactListFragment;
 import com.bellantoni.chetta.lieme.NotificationFragment;
 import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
+import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.bellantoni.chetta.lieme.generalclasses.Question;
 import com.squareup.picasso.Picasso;
 
@@ -45,14 +47,13 @@ public class DialogQuestionAnswered extends DialogFragment {
             }
         });
         Question questionObj = NotificationFragment.findQuestionById(String.valueOf(getArguments().getInt("questionId")));
-        System.out.println("XXX" + String.valueOf(getArguments().getInt("questionId")));
+        //System.out.println("XXX" + String.valueOf(getArguments().getInt("questionId")));
         //immagine la ricavo dall'id della domanda, l'id della domanda lo ricavo come getArguments().getInt("questionId");
-        Picasso.with(getActivity().getApplicationContext()).load("http://i.imgur.com/DvpvklR.png").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(imageViewProdileFriend);
+        Picasso.with(getActivity().getApplicationContext()).load("https://graph.facebook.com/" + questionObj.getReceiver_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(imageViewProdileFriend);
+
         //il riultato della domanda lo ricavo dall'id perchè faccio la query al db, per ora lo simulo con il numero casuale 0,1
 
-        Random rand = new Random();
-        int n = rand.nextInt(2);
-        if(n==0){
+        if(questionObj.getAnswer().equals("no")){
             this.resultAnswer.setImageResource(R.drawable.big_heart_red);
 
         }else{
