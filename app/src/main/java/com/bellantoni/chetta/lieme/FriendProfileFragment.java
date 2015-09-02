@@ -189,8 +189,9 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
 
             this.friendId = getArguments().getString("facebookIdFriend");
 
-            Contact friendContact = ContactListFragment.findContactById(String.valueOf(facebookId));
-            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle(facebookId);
+            Contact friendContact = ContactListFragment.findContactById(String.valueOf(this.friendId));
+
+            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle(friendContact.getName());
             new RetrieveMessagesFromLocalDataBase().execute(this.friendId,null,null);
 
 
