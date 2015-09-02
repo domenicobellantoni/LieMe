@@ -81,6 +81,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
             holder.imageNotification.setImageResource(R.mipmap.iconuseranonymous);
        }
         if(typeNotification==1){
+
             //nome da recuperare da con id notifica, quindi id utente quindi dome
             Question questionObj = NotificationFragment.findQuestionById(String.valueOf(this.rows.get(position).getAnsweredQuestionId()));
             Contact user = ContactListFragment.findContactById(questionObj.getReceiver_id());
