@@ -475,16 +475,20 @@ public class drawnerActivity extends ActionBarActivity
 
 
         if(NetworkController.isOnline(getApplicationContext())==true) {
-            Bundle bundle = new Bundle();
-            bundle.putString("facebookIdFriend", facebookId);
+            if(Profile.getCurrentProfile().getId().equalsIgnoreCase(facebookId)){
+                goProfile();
+            }else {
+                Bundle bundle = new Bundle();
+                bundle.putString("facebookIdFriend", facebookId);
 
-            this.friendProfileFragment = new FriendProfileFragment();
-            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
-            this.friendProfileFragment.setArguments(bundle);
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
-                    .commit();
+                this.friendProfileFragment = new FriendProfileFragment();
+                this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
+                this.friendProfileFragment.setArguments(bundle);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
+                        .commit();
+            }
         }else{
             this.lastOperation = 6;
             this.lastFacebookId = facebookId;
