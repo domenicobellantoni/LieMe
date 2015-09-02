@@ -45,6 +45,7 @@ public class DialogQuestionAnswered extends DialogFragment {
             }
         });
         Question questionObj = NotificationFragment.findQuestionById(String.valueOf(getArguments().getInt("questionId")));
+        System.out.println(String.valueOf(getArguments().getInt("questionId")));
         System.out.println("XXX" + String.valueOf(getArguments().getInt("questionId")));
         //immagine la ricavo dall'id della domanda, l'id della domanda lo ricavo come getArguments().getInt("questionId");
         Picasso.with(getActivity().getApplicationContext()).load("http://i.imgur.com/DvpvklR.png").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(imageViewProdileFriend);

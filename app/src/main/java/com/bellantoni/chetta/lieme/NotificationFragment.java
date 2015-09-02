@@ -211,8 +211,6 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
                 }
             });
 
-
-
         }else{
             firstAccessView = getView();
 
