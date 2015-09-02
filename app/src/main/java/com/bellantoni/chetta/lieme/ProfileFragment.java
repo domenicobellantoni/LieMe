@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -29,10 +28,8 @@ import android.widget.TextView;
 
 import com.bellantoni.chetta.lieme.db.FeedReaderContractMessages;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
-import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
-import com.bellantoni.chetta.lieme.generalclasses.ItemHome;
 import com.bellantoni.chetta.lieme.generalclasses.Notification;
 import com.bellantoni.chetta.lieme.generalclasses.Question;
 import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
@@ -335,7 +332,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
             int count = 0;
             //QUI DA FARE UNA QUERY
-            for(int i=this.rows.size()-1; i<this.messages.size(); i++) {
+            for(int i=this.rows.size()-1; i<this.messages.size()-1; i++) {
                 Question q = (Question)messages.get(i);
                 if(!q.getAnswer().equals("undefined"))
                 {

@@ -8,9 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
-import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
 import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
-import com.bellantoni.chetta.lieme.network.NetworkController;
 import com.bellantoni.chetta.lieme.network.UpdateMessages;
 import com.facebook.Profile;
 
@@ -42,7 +40,6 @@ public class LoginActivity extends ActionBarActivity implements LoginFragment.Li
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
-
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 

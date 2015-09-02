@@ -3,54 +3,23 @@ package com.bellantoni.chetta.lieme;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperNotification;
-import com.bellantoni.chetta.lieme.generalclasses.NotificationImpl;
 import com.bellantoni.chetta.lieme.network.UpdateMessages;
 import com.bellantoni.chetta.lieme.network.UpdateNotifications;
 import com.facebook.Profile;
-import com.bellantoni.chetta.lieme.db.FeedReaderContract;
-import com.bellantoni.chetta.lieme.db.FeedReaderContractMessages;
-import com.bellantoni.chetta.lieme.db.FeedReaderDbHelper;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.facebook.FacebookSdk;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
