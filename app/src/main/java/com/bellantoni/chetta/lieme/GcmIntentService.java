@@ -82,7 +82,7 @@ public class GcmIntentService extends IntentService {
     private void sendNotification(Bundle msg) {
         FacebookSdk.sdkInitialize(getApplicationContext());
         Profile userProfile = Profile.getCurrentProfile();
-        String user_id= userProfile.getId();
+        String user_id = userProfile.getId();
 
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);

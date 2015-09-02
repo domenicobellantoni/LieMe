@@ -33,6 +33,8 @@ public class SearchActivity extends ActionBarActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_activity_layout);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("F59200")));
+
 
 
         Intent intent = getIntent();
