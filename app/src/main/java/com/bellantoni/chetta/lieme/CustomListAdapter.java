@@ -1,6 +1,8 @@
 package com.bellantoni.chetta.lieme;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -11,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
+import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
 import com.bellantoni.chetta.lieme.listener.OnClickListenerProfile;
+import com.facebook.Profile;
 import com.squareup.picasso.Picasso;
 import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
 import java.util.List;
@@ -81,7 +85,10 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
         holder.txtTitle.setText(this.rows.get(position).getNameSurname());
         //holder.imageView.setImageResource(R.mipmap.iconuseranonymous);
         Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").transform(new CircleTransform()).fit().centerCrop().into(holder.imageView);
-
+        RoundImage roundedImage = new RoundImage(BitmapFactory.decodeResource(context.getResources(), R.mipmap.iconuseranonymous));
+        Picasso.with(context).load("https://graph.facebook.com/" + this.rows.get(position).getFacebookId() + "/picture?height=115&width=115")
+                .placeholder(roundedImage)
+                .transform(new CircleTransform()).fit().centerCrop().into(holder.imageView);
         //holder.extratxt.setTypeface(tf);
 
         holder.extratxt.setText(this.rows.get(position).getQuestion());

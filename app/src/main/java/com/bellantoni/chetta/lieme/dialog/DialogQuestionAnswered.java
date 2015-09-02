@@ -10,8 +10,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bellantoni.chetta.lieme.NotificationFragment;
 import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
+import com.bellantoni.chetta.lieme.generalclasses.Question;
 import com.squareup.picasso.Picasso;
 
 import java.util.Random;
@@ -41,7 +43,7 @@ public class DialogQuestionAnswered extends DialogFragment {
                 dismiss();
             }
         });
-
+        Question questionObj = NotificationFragment.findQuestionById(String.valueOf(getArguments().getInt("questionId")));
 
         //immagine la ricavo dall'id della domanda, l'id della domanda lo ricavo come getArguments().getInt("questionId");
         Picasso.with(getActivity().getApplicationContext()).load("http://i.imgur.com/DvpvklR.png").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(imageViewProdileFriend);

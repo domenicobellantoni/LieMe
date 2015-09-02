@@ -1,6 +1,7 @@
 package com.bellantoni.chetta.lieme.adapter;
 
 import android.app.Activity;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.generalclasses.ItemHome;
+import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
 import com.bellantoni.chetta.lieme.listener.OnClickListenerHomeTo;
 import com.squareup.picasso.Picasso;
 
@@ -91,7 +93,11 @@ public class ListInHomeAdapter extends ArrayAdapter<ItemHome> {
         holder.timeStamp.setText(this.rows.get(position).getTime());
 
         //l'immagine ovviamente la scarico dall'id
-        Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").transform(new CircleTransform()).fit().centerCrop().into(holder.imageView);
+        //Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").transform(new CircleTransform()).fit().centerCrop().into(holder.imageView);
+        RoundImage roundedImage = new RoundImage(BitmapFactory.decodeResource(context.getResources(), R.mipmap.iconuseranonymous));
+        Picasso.with(context).load("https://graph.facebook.com/" + this.rows.get(position).getIdTo() + "/picture?height=115&width=115")
+                .placeholder(roundedImage)
+                .transform(new CircleTransform()).fit().centerCrop().into(holder.imageView);
         //holder.extratxt.setTypeface(tf);
         holder.question.setText(this.rows.get(position).getQuestion());
 

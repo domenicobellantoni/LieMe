@@ -451,7 +451,7 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
     public static Contact findContactById(String id){
         if(id.equals(Profile.getCurrentProfile().getId()))
         {
-            return new Contact("0",Profile.getCurrentProfile().getFirstName(),"","");
+            return new Contact("0",Profile.getCurrentProfile().getFirstName()+" "+Profile.getCurrentProfile().getLastName(),"","");
         }
         if(id.equals("server")){
             return new Contact("0","Server","","");
