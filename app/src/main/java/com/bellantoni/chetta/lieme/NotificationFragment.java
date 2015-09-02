@@ -26,6 +26,7 @@ import com.bellantoni.chetta.lieme.generalclasses.NotificationImpl;
 import com.bellantoni.chetta.lieme.generalclasses.NotificationItem;
 import com.bellantoni.chetta.lieme.generalclasses.Question;
 import com.bellantoni.chetta.lieme.generalclasses.TimestampComparator;
+import com.bellantoni.chetta.lieme.network.UpdateMessages;
 import com.bellantoni.chetta.lieme.network.UpdateNotifications;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
@@ -203,7 +204,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
                         mNotificationInteface.readQuestion(adapter.getItem(position).getQuestionId());
                     }
                     if(adapter.getItem(position).getTypeNotification()==1){
-                        mNotificationInteface.readAnswer(adapter.getItem(position).getQuestionId());
+                        mNotificationInteface.readAnswer(adapter.getItem(position).getAnsweredQuestionId());
 
                     }
 
@@ -251,7 +252,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
                         mNotificationInteface.readQuestion(adapter.getItem(position).getQuestionId());
                     }
                     if(adapter.getItem(position).getTypeNotification()==1){
-                        mNotificationInteface.readAnswer(adapter.getItem(position).getQuestionId());
+                        mNotificationInteface.readAnswer(adapter.getItem(position).getAnsweredQuestionId());
 
                     }
 
@@ -325,6 +326,16 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
                 NotificationImpl nImpl = (NotificationImpl) n;
 
                 NotificationItem row = new NotificationItem(nImpl.getId(), nImpl.getNotificationType(), nImpl.getNotificationStatus(), p.format(new Date(nImpl.getNotificationTimestamp().getTime())));
+
+                String content = nImpl.getContent();
+                JSONObject json = null;
+                try {
+                    json = new JSONObject(content);
+                    row.setAnsweredQuestionId(json.getString("id"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
                 this.rows.add(row);
             }
         }
@@ -482,12 +493,13 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
         for(Object n: allMessages){
             Question q = (Question)n;
+            Log.i(TAG, "YYY" + q.getId());
             if(q.getId().equals(id)){
                 Log.i(TAG, String.valueOf(q.getMessage()));
                 return q;
             }
         }
-        return null;
+        return new Question("nessuno", "nessuno","nessuno","nessuno","nessuno",null,"nessuno");
     }
 
     public static void addNotification(NotificationImpl n, Context c){

@@ -12,6 +12,7 @@ public class NotificationItem {
     private int typeNotification;
     private int stateNotification;
     private String timeNotification;
+    private String answeredQuestionId;
 
     public NotificationItem(String idQuestion, int typeNotification, int stateNotification, String timeNotification){
 
@@ -19,6 +20,7 @@ public class NotificationItem {
         this.typeNotification= typeNotification;
         this.stateNotification = stateNotification;
         this.timeNotification = timeNotification;
+
 
 
     }
@@ -57,5 +59,13 @@ public class NotificationItem {
 
     public void setTimeNotification(String timeNotification) {
         this.timeNotification = timeNotification;
+    }
+
+    public void setAnsweredQuestionId(String answeredQuestionId){
+        this.answeredQuestionId = answeredQuestionId;
+    }
+
+    public String getAnsweredQuestionId(){
+        return this.answeredQuestionId;
     }
 }

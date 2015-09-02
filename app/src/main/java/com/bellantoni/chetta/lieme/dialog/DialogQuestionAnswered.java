@@ -2,6 +2,7 @@ package com.bellantoni.chetta.lieme.dialog;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ public class DialogQuestionAnswered extends DialogFragment {
             }
         });
         Question questionObj = NotificationFragment.findQuestionById(String.valueOf(getArguments().getInt("questionId")));
-
+        System.out.println("XXX" + String.valueOf(getArguments().getInt("questionId")));
         //immagine la ricavo dall'id della domanda, l'id della domanda lo ricavo come getArguments().getInt("questionId");
         Picasso.with(getActivity().getApplicationContext()).load("http://i.imgur.com/DvpvklR.png").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(imageViewProdileFriend);
         //il riultato della domanda lo ricavo dall'id perchè faccio la query al db, per ora lo simulo con il numero casuale 0,1
@@ -60,7 +61,7 @@ public class DialogQuestionAnswered extends DialogFragment {
 
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        this.question.setText("Here there should be the question made by me. The text is retrieved using the question id.");
+        this.question.setText(questionObj.getMessage());
 
 
         return view;
