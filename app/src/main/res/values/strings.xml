@@ -63,6 +63,10 @@
         <item>@drawable/ic_logout</item>
     </string-array>
 
+    <string name="action_search"></string>
+
+    <string name="search_hint">Search</string>
+    <string name="search_title">Search</string>
 
 
 

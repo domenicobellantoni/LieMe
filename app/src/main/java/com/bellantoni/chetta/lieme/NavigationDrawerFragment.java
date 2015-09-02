@@ -1,5 +1,6 @@
 package com.bellantoni.chetta.lieme;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
@@ -24,7 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
-import com.bellantoni.chetta.lieme.generalclasses.DrawerAdapter;
+import com.bellantoni.chetta.lieme.adapter.DrawerAdapter;
 import com.bellantoni.chetta.lieme.generalclasses.DrawerElement;
 import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
 import com.facebook.FacebookSdk;
@@ -353,8 +354,11 @@ public class NavigationDrawerFragment extends Fragment {
             return true;
         }
 
-        if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
+        if (item.getItemId() == R.id.action_search) {
+            //Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
+            final Intent intent = new Intent(getActivity(), SearchActivity.class);
+            startActivity(intent);
+            //finish();
             return true;
         }
 
