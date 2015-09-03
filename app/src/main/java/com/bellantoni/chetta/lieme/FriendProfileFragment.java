@@ -227,18 +227,14 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
         }else{
             firstAccessView = getView();
         }
-
-
-
         return firstAccessView;
     }
+
     private void fetchMovies() {
         swipeLayout.setRefreshing(true);
         UpdateMessages updateMessages = new UpdateMessages(mDbHelperMessages);
         new RetrieveMessagesFromLocalDataBase().execute(this.friendId,null,null);
         this.adapter.notifyDataSetChanged();
-
-
     }
 
     public void onScroll(AbsListView view,
@@ -294,20 +290,13 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
     }
 
     public void onScrollStateChanged(AbsListView v, int s) {
-
-        //System.out.println("CONTATORE "+ this.adapter.getCount());
         adapter.notifyDataSetChanged();
-
-
     }
-
 
     @Override
     public void onRefresh() {
         fetchMovies();
     }
-
-
 
     private class UpdateListTask extends AsyncTask<Void,Void,Void> {
 
@@ -331,6 +320,7 @@ public class FriendProfileFragment extends Fragment implements AbsListView.OnScr
 
         }
     }
+
     private class RetrieveMessagesFromLocalDataBase extends AsyncTask<String, Void, Void> {
         private Cursor c;
         private ArrayList<Notification> messages;

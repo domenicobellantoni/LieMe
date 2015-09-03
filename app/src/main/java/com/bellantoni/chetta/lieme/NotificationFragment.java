@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,7 +47,7 @@ import java.util.Locale;
 /**
  * Created by Domenico on 30/05/2015.
  */
-public class NotificationFragment extends Fragment implements AbsListView.OnScrollListener {
+public class NotificationFragment extends Fragment implements AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener  {
     /**
      * Tag used on log messages.
      */
@@ -60,6 +61,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
     public static ArrayList<Notification> allMessages;
     public static ArrayList<Notification> allNotifications;
     private UpdateNotifications updateNotifications;
+    private SwipeRefreshLayout swipeLayout;
     ListView list;
 
     int[] idQuestions={
@@ -184,6 +186,12 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
         View firstAccessView;
         if(savedBundle==null) {
             firstAccessView = inflater.inflate(R.layout.notification_fragment_layout, null);
+            swipeLayout = (SwipeRefreshLayout) firstAccessView.findViewById(R.id.swipe_refresh_layout);
+            swipeLayout.setOnRefreshListener(this);
+            swipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                    android.R.color.holo_green_light,
+                    android.R.color.holo_orange_light,
+                    android.R.color.holo_red_light);
 
             ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Notifications");
 
@@ -215,10 +223,18 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
             firstAccessView = getView();
 
         }
-
-
-
         return firstAccessView;
+    }
+
+    private void fetchMovies() {
+        swipeLayout.setRefreshing(true);
+        //QUI DA FARE LA QUERY
+        this.adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRefresh() {
+        fetchMovies();
     }
 
 

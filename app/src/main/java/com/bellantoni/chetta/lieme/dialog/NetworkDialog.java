@@ -54,7 +54,7 @@ public class NetworkDialog extends DialogFragment {
         // Here we create and return the AlertDialog using a Builder
         AlertDialog.Builder builder =  new AlertDialog.Builder(getActivity()).setIcon(R.drawable.ic_network)
                 .setTitle(R.string.check_connection).setNeutralButton(R.string.retry,mOnclickListener);
-
+        this.setCancelable(false);
         return builder.create();
     }
 }

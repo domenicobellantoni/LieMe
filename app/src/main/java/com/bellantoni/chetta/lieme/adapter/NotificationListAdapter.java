@@ -85,19 +85,10 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
             //nome da recuperare da con id notifica, quindi id utente quindi dome
             Question questionObj = NotificationFragment.findQuestionById(String.valueOf(this.rows.get(position).getAnsweredQuestionId()));
             Contact user = ContactListFragment.findContactById(questionObj.getReceiver_id());
-            holder.textNotification.setText(user.getName() + " answered your question");
+            holder.textNotification.setText(/*user.getName() +*/ " answered your question");
 
             Picasso.with(context).load("https://graph.facebook.com/" + questionObj.getReceiver_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(holder.imageNotification);
         }
-        if(typeNotification==2){
-            //nome e immagine da recuperare
-            holder.textNotification.setText(R.string.newFriend);
-            Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").transform(new CircleTransform()).fit().centerCrop().into(holder.imageNotification);
-
-
-        }
-
-
         return view;
     }
 

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperNotification;
 import com.bellantoni.chetta.lieme.network.UpdateMessages;
 import com.bellantoni.chetta.lieme.network.UpdateNotifications;
@@ -18,7 +17,6 @@ import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.facebook.FacebookSdk;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-
 import java.sql.Timestamp;
 
 public class GcmIntentService extends IntentService {
@@ -68,10 +66,7 @@ public class GcmIntentService extends IntentService {
                 Log.i(TAG, "Received: " + extras.toString());
 
             }
-
-
         }
-
         // Release the wake lock provided by the WakefulBroadcastReceiver.
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
@@ -87,7 +82,9 @@ public class GcmIntentService extends IntentService {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,new Intent(this, drawnerActivity.class), 0);
+        Intent newIntent = new Intent(this, drawnerActivity.class);
+        newIntent.setAction("OPEN_NOTIFICATION");
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,newIntent, 0);
 
         mDbHelper = new FeedReaderDbHelperMessages(getApplicationContext());
         UpdateMessages updateMessages = new UpdateMessages(mDbHelper);
@@ -123,7 +120,6 @@ public class GcmIntentService extends IntentService {
 
             Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
 
-
             long[] pattern = {
                     0,  // Start immediately
                     100,
@@ -138,15 +134,8 @@ public class GcmIntentService extends IntentService {
             UpdateNotifications updateNotifications = new UpdateNotifications(mDbHelperNotifications, mDbHelper);
             updateNotifications.update(user_id);
             //NotificationFragment.addNotification(new NotificationImpl(notificationTimestamp, 1, 0, msg.getString("questionId"), ""), getApplication().getApplicationContext());
-
             mBuilder.setContentIntent(contentIntent);
             mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-
         }
-
-
-
     }
-
-
 }
