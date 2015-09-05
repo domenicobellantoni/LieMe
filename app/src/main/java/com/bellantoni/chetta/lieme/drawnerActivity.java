@@ -1,7 +1,7 @@
 package com.bellantoni.chetta.lieme;
 
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.WindowManager;
 import android.widget.Toast;
-
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
 import com.bellantoni.chetta.lieme.dialog.DialogQuestionAnswered;
 import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
@@ -31,22 +30,11 @@ import com.bellantoni.chetta.lieme.network.UpdateMessages;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -54,7 +42,7 @@ import java.util.List;
 
 
 public class drawnerActivity extends ActionBarActivity
-        implements NetworkDialog.NetworkInfoInteface, OnClickListenerFriendProfile.OnClickFriendProfileInterface, OnClickListenerProfile.OnClickProfileInterface, OnClickListenerHomeTo.OnClickHomeInterface, NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface, QuestionDialog.QuestionInterface, /*FriendProfileFragment.FriendProfileFragmentInterface,*/ ContactListFragment.ContactListFragmentInterface, ContactListFragment.OnFragmentInteractionListener, NotificationFragment.NotificationInterface/*, HomeFragment.HomeFragmentInterface */{
+        implements SearchFragment.SearchFragmentInterface, NetworkDialog.NetworkInfoInteface, OnClickListenerFriendProfile.OnClickFriendProfileInterface, OnClickListenerProfile.OnClickProfileInterface, OnClickListenerHomeTo.OnClickHomeInterface, NavigationDrawerFragment.NavigationDrawerCallbacks, ProfileFragment.ProfileFragmentInterface, LogoutDialog.LogoutInterface, QuestionDialog.QuestionInterface, /*FriendProfileFragment.FriendProfileFragmentInterface,*/ ContactListFragment.ContactListFragmentInterface, ContactListFragment.OnFragmentInteractionListener, NotificationFragment.NotificationInterface/*, HomeFragment.HomeFragmentInterface */{
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private String surname;
@@ -72,6 +60,7 @@ public class drawnerActivity extends ActionBarActivity
     private List<String> titlesActionbar = new ArrayList<String>();
     private int lastOperation;
     private String lastFacebookId;
+    private SearchFragment searchFragment;
 
     private final String TAG = "DrawnerActivity";
     private final String ANSWER_MANAGER_URL = "http://computersecurityproject.altervista.org/gcm_server_php/answerToQuestion.php?";
@@ -602,5 +591,44 @@ public class drawnerActivity extends ActionBarActivity
             return null;
         }
     }
+
+    @Override
+    public void goSearchFragment() {
+        /*if (NetworkController.isOnline(getApplicationContext()) == true) {
+
+                this.searchFragment = new SearchFragment();
+                this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .add(R.id.container, searchFragment, "SearchFragment").addToBackStack("SearchFragment")
+                        .commit();
+        } else {
+            NetworkDialog networkDialog = new NetworkDialog();
+            networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
+
+        }*/
+
+        if (NetworkController.isOnline(getApplicationContext()) == true) {
+
+                this.searchFragment = new SearchFragment();
+                this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .add(R.id.container, searchFragment, "SearchFragment").addToBackStack("SearchFragment")
+                        .commit();
+
+        } else {
+            NetworkDialog networkDialog = new NetworkDialog();
+            networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
+        }
+    }
+
+    @Override
+    public void goFreindProfileFromSearch(String facebookId){
+        goFriendProfileFromHome(facebookId);
+    }
+
+
 
 }

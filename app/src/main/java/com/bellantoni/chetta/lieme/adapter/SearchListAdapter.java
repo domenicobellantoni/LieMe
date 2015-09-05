@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
-import com.bellantoni.chetta.lieme.generalclasses.NotificationItem;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -33,7 +32,7 @@ public class SearchListAdapter extends ArrayAdapter<Contact>{
         super(context, R.layout.list_contacts, rows);
         this.context = context;
         this.rows = rows;
-
+        this.count = this.rows.size();
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -51,14 +50,17 @@ public class SearchListAdapter extends ArrayAdapter<Contact>{
 
             view.setTag(holder);
         }else{
+
             view=convertView;
             holder = (ViewHolder) convertView.getTag();
 
-            holder.nameSurnameContact.setTextColor(Color.BLACK);
-            holder.idContact.setText(this.rows.get(position).getFacebook_id());
-            Picasso.with(context).load("https://graph.facebook.com/" + this.rows.get(position).getFacebook_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(holder.imageContact);
-
         }
+
+
+        holder.nameSurnameContact.setTextColor(Color.BLACK);
+        holder.nameSurnameContact.setText(this.rows.get(position).getName());
+        holder.idContact.setText(this.rows.get(position).getFacebook_id());
+        Picasso.with(context).load("https://graph.facebook.com/" + this.rows.get(position).getFacebook_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(holder.imageContact);
 
         return view;
     }

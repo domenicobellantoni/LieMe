@@ -356,9 +356,10 @@ public class NavigationDrawerFragment extends Fragment {
 
         if (item.getItemId() == R.id.action_search) {
             //Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
-            final Intent intent = new Intent(getActivity(), SearchActivity.class);
-            startActivity(intent);
+            //final Intent intent = new Intent(getActivity(), SearchActivity.class);
+            //startActivity(intent);
             //finish();
+            mCallbacks.goSearchFragment();
             return true;
         }
 
@@ -390,6 +391,7 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+        void goSearchFragment();
     }
 
 
