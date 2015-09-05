@@ -61,7 +61,7 @@ public class drawnerActivity extends ActionBarActivity
     private int lastOperation;
     private String lastFacebookId;
     private SearchFragment searchFragment;
-
+    public static String myFacebookId;
     private final String TAG = "DrawnerActivity";
     private final String ANSWER_MANAGER_URL = "http://computersecurityproject.altervista.org/gcm_server_php/answerToQuestion.php?";
 
@@ -75,6 +75,7 @@ public class drawnerActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
 
         FacebookSdk.sdkInitialize(getApplicationContext());
+        myFacebookId = "";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawner);
 

@@ -33,6 +33,7 @@ public class GcmIntentService extends IntentService {
      * */
 
     public GcmIntentService() {
+
         super("GcmIntentService");
     }
 
@@ -75,9 +76,11 @@ public class GcmIntentService extends IntentService {
     // This is just one simple example of what you might choose to do with
     // a GCM message.
     private void sendNotification(Bundle msg) {
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        Profile userProfile = Profile.getCurrentProfile();
-        String user_id = userProfile.getId();
+
+        //FacebookSdk.sdkInitialize(getApplicationContext());
+        //Profile userProfile = Profile.getCurrentProfile();
+        //String user_id = userProfile.getId();
+        String user_id = drawnerActivity.myFacebookId;
 
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);

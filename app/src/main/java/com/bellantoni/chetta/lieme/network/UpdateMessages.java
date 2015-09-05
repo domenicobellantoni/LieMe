@@ -45,6 +45,8 @@ public class UpdateMessages {
 
     public void update(String user_id){
 
+
+
         GetMessagesFromServer getMessagesFromServer = new GetMessagesFromServer();
         getMessagesFromServer.execute(user_id);
     }
