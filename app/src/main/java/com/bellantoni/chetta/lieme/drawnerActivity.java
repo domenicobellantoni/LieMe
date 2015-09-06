@@ -251,7 +251,7 @@ public class drawnerActivity extends ActionBarActivity
 
 
 
-        //if(this.profileFragment==null) {
+        if(this.profileFragment==null) {
             Profile profile = Profile.getCurrentProfile();
             this.name = profile.getFirstName();
             this.surname = profile.getLastName();
@@ -270,9 +270,9 @@ public class drawnerActivity extends ActionBarActivity
             profileFragment.setArguments(bundle);
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .add(R.id.container, profileFragment, "ProfileFragment").addToBackStack("ProfileFragment")
+                    .replace(R.id.container, profileFragment, "ProfileFragment").addToBackStack("ProfileFragment")
                     .commit();
-        /*}else{
+        }else{
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             this.profileFragment.setNameSurnameString(this.profileFragment.getNameSurnameString());
             this.profileFragment.setBitmap(this.profileFragment.getBitmap());
@@ -280,7 +280,7 @@ public class drawnerActivity extends ActionBarActivity
             fragmentManager.beginTransaction()
                     .replace(R.id.container, profileFragment, "ProfileFragment").addToBackStack("ProfileFragment")
                     .commit();
-        }*/
+        }
 
 
     }
@@ -295,7 +295,7 @@ public class drawnerActivity extends ActionBarActivity
         this.actionBar.setTitle("Ask a Question");
 
 
-        //if(this.askFragment==null) {
+        if(this.askFragment==null) {
             this.askFragment = new AskFragment();
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             Log.i(TAG, bundle.toString());
@@ -306,7 +306,7 @@ public class drawnerActivity extends ActionBarActivity
                     .add(R.id.container, this.askFragment, "AskFragment").addToBackStack("AskFragment")
                     .commit();
 
-        /*}else{
+        }else{
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             //this.askFragment.setArguments(bundle);
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -315,7 +315,7 @@ public class drawnerActivity extends ActionBarActivity
                     .replace(R.id.container, this.askFragment, "AskFragment").addToBackStack("AskFragment")
                     .commit();
 
-        }*/
+        }
     }
 
     //se c'è solo un fragment chiudo l'attività
@@ -336,7 +336,7 @@ public class drawnerActivity extends ActionBarActivity
 
     private void goHome(){
 
-       //if(this.homefragment==null){
+       if(this.homefragment==null){
            this.homefragment = new HomeFragment();
            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
 
@@ -347,7 +347,7 @@ public class drawnerActivity extends ActionBarActivity
                    .commit();
 
 
-       /*}else{
+       }else{
            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
 
            FragmentManager fragmentManager = getSupportFragmentManager();
@@ -356,7 +356,7 @@ public class drawnerActivity extends ActionBarActivity
                    .add(R.id.container, this.homefragment, "HomeFragment").addToBackStack("HomeFragment")
                    .commit();
 
-       }*/
+       }
 
     }
 
@@ -409,7 +409,7 @@ public class drawnerActivity extends ActionBarActivity
     private void contactListFragment(){
         this.actionBar.show();
 
-        //if(this.contactListFragment==null) {
+        if(this.contactListFragment==null) {
             this.contactListFragment = new ContactListFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
@@ -417,19 +417,19 @@ public class drawnerActivity extends ActionBarActivity
                     .add(R.id.container, this.contactListFragment,"ContactListFragment").addToBackStack("ContactListFragment")
                     .commit();
 
-        /*}else{
+        }else{
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, this.contactListFragment, "ContactListFragment").addToBackStack("ContactListFragment")
                     .commit();
 
-        }*/
+        }
     }
 
     private void goNotifications(){
 
-        //if(this.notificationFragment==null){
+        if(this.notificationFragment==null){
             this.notificationFragment = new NotificationFragment();
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -437,13 +437,13 @@ public class drawnerActivity extends ActionBarActivity
                     .replace(R.id.container, this.notificationFragment,"NotificationFragment").addToBackStack("NotificationFragment")
                     .commit();
 
-        /*}else{
+        }else{
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, this.notificationFragment, "NotificationFragment").addToBackStack("NotificationFragment")
                     .commit();
-        }*/
+        }
 
     }
 

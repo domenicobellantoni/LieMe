@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import com.bellantoni.chetta.lieme.adapter.ListInHomeAdapter;
 import com.bellantoni.chetta.lieme.db.FeedReaderContractMessages;
@@ -22,21 +21,17 @@ import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.bellantoni.chetta.lieme.generalclasses.ItemHome;
 import com.bellantoni.chetta.lieme.generalclasses.Notification;
 import com.bellantoni.chetta.lieme.generalclasses.Question;
-import com.bellantoni.chetta.lieme.generalclasses.RowItemProfile;
 import com.bellantoni.chetta.lieme.generalclasses.TimestampComparator;
 import com.bellantoni.chetta.lieme.network.UpdateMessages;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
-
 import org.ocpsoft.pretty.time.PrettyTime;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 /**
  * Created by Domenico on 28/07/2015.
@@ -231,17 +226,9 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
                 firstVisible + visibleCount >= totalCount;
 
         if(loadMore) {
-            Random random = new Random();
-            /*int number = random.nextInt(2)+1;
-            //scaricare sempre in async task
-            this.adapter.setCount(this.adapter.getCount()+number);
-
-            for(int i=0; i<number; i++){
-                rows.add(new ItemHome("Ieri abbiamo sentito arrivare la polizia in casa tua, è vero che hanno arrestato tuo figlio?", "Giancarlo Filippetti", "Giordano Romano","id fb form","id fb to", R.id.icon, true, p.format(new Date())));
-            }*/
 
             int count = 0;
-            //QUI DA FARE UNA QUERY
+
             for(int i=this.rows.size()-1; i<this.messages.size(); i++) {
                 Question q = (Question)messages.get(i);
                 if(!q.getAnswer().equals("undefined"))
@@ -280,14 +267,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
 
         @Override
         protected Void doInBackground(Void... params) {
-/*
-            //da scaricare
-            Random random = new Random();
-            int number = random.nextInt(3)+1;
-            for(int i=0; i<number; i++){
-                ItemHome row = new ItemHome("Ieri abbiamo sentito arrivare la polizia in casa tua, è vero che hanno arrestato tuo figlio?", "Rodolfo Giano", "Filippo Cavallotti", "54ds754ds","87987dfd", 547887, true, p.format(new Date()));
-                HomeFragment.this.rows.add(0,row);
-            }*/
+
 
             new RetrieveMessagesFromLocalDataBase().execute(null,null,null);
             return null;
@@ -356,8 +336,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
 
     private void updateMessageArray(ArrayList<Notification> messages){
         Collections.sort(messages, new TimestampComparator());
-        // Question q = (Question)messages.get(0);
-        // Log.i("MESSAGGIO PRIMO: ", q.getMessage() + " RISPOSTA: " + q.getAnswer());
+
         this.messages = messages;
         this.rows.clear();
 
@@ -375,9 +354,6 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
                     receiverContact = new Contact("","Name not found","","");
                 if(senderContact==null)
                     senderContact = new Contact("","Name not found","","");
-                //ImageView profileImage ;
-                //Picasso.with(getActivity().getApplicationContext()).load("https://graph.facebook.com/" + q.getSender_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(profileImage);
-                //ItemHome("Ieri abbiamo sentito arrivare la polizia in casa tua, è vero che hanno arrestato tuo figlio?", "Rodolfo Giano", "Filippo Cavallotti", "54ds754ds","87987dfd", 547887, true, p.format(new Date()));
                 ItemHome row = new ItemHome(q.getMessage(), senderContact.getName(), receiverContact.getName(), q.getSender_id(), q.getReceiver_id(), R.drawable.ic_profile, res, p.format(q.getNotificationTimestamp()));
                 this.rows.add(row);
             }
