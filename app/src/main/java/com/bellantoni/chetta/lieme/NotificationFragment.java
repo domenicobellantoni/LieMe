@@ -602,6 +602,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
                 Log.i(TAG, String.valueOf(q.getMessage()));
             }
         }
+
     }
 }
 
