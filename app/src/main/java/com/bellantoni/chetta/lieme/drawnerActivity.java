@@ -251,7 +251,7 @@ public class drawnerActivity extends ActionBarActivity
 
 
 
-        if(this.profileFragment==null) {
+        //if(this.profileFragment==null) {
             Profile profile = Profile.getCurrentProfile();
             this.name = profile.getFirstName();
             this.surname = profile.getLastName();
@@ -272,7 +272,7 @@ public class drawnerActivity extends ActionBarActivity
             fragmentManager.beginTransaction()
                     .add(R.id.container, profileFragment, "ProfileFragment").addToBackStack("ProfileFragment")
                     .commit();
-        }else{
+        /*}else{
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             this.profileFragment.setNameSurnameString(this.profileFragment.getNameSurnameString());
             this.profileFragment.setBitmap(this.profileFragment.getBitmap());
@@ -280,7 +280,7 @@ public class drawnerActivity extends ActionBarActivity
             fragmentManager.beginTransaction()
                     .replace(R.id.container, profileFragment, "ProfileFragment").addToBackStack("ProfileFragment")
                     .commit();
-        }
+        }*/
 
 
     }
