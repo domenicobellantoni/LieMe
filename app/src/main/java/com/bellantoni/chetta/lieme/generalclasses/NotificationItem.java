@@ -21,8 +21,6 @@ public class NotificationItem {
         this.stateNotification = stateNotification;
         this.timeNotification = timeNotification;
 
-
-
     }
 
     public String getQuestionId() {

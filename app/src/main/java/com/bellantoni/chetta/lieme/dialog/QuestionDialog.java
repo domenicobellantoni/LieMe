@@ -109,7 +109,6 @@ public class QuestionDialog extends DialogFragment /*implements View.OnClickList
         super.onAttach(activity);
         if(activity instanceof QuestionInterface) {
             mQuestionInterface = (QuestionInterface) activity;
-
         }
     }
 

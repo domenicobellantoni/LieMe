@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.generalclasses.DrawerElement;
-
 import java.util.List;
 
 /**
@@ -49,11 +48,37 @@ public class DrawerAdapter extends ArrayAdapter<DrawerElement> {
         imageView = (ImageView) view.findViewById(R.id.imgDrawerSection);
         imageView.setImageResource(this.list.get(position).getIdImg());
         numberNotifications = (ImageView) view.findViewById(R.id.numberNotifications);
-        if(position==3) {
-            numberNotifications.setImageResource(R.drawable.ic_icon_6);
-        }
 
 
+        //setNumberNotification(findUnreadNotification());
         return view;
     }
+
+
+    /*private int findUnreadNotification(){
+        List<Notification> notifications = NotificationFragment.getAllNotifications();
+        int counter = 0;
+        for(int i=0; i<notifications.size(); i++){
+            if(notifications.get(i).getNotificationStatus()==1)
+                counter++;
+        }
+        return counter;
+    }*/
+
+    /*private void setNumberNotification(int counter){
+        switch (counter){
+            case 1:
+                numberNotifications.setImageResource(R.drawable.ic_icon_1);
+            case 2:
+                numberNotifications.setImageResource(R.drawable.ic_icon_2);
+            case 3:
+                numberNotifications.setImageResource(R.drawable.ic_icon_3);
+            case 4:
+                numberNotifications.setImageResource(R.drawable.ic_icon_4);
+            case 5:
+                numberNotifications.setImageResource(R.drawable.ic_icon_5);
+            default:
+                numberNotifications.setImageResource(R.drawable.ic_icon_6);
+        }
+    }*/
 }
