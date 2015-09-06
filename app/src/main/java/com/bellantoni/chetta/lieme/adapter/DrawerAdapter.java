@@ -8,8 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bellantoni.chetta.lieme.NotificationFragment;
 import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.generalclasses.DrawerElement;
+import com.bellantoni.chetta.lieme.generalclasses.Notification;
+
 import java.util.List;
 
 /**
@@ -63,9 +67,9 @@ public class DrawerAdapter extends ArrayAdapter<DrawerElement> {
                 counter++;
         }
         return counter;
-    }*/
+    }
 
-    /*private void setNumberNotification(int counter){
+    private void setNumberNotification(int counter){
         switch (counter){
             case 1:
                 numberNotifications.setImageResource(R.drawable.ic_icon_1);

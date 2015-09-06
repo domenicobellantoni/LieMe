@@ -7,9 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.bellantoni.chetta.lieme.ContactListFragment;
 import com.bellantoni.chetta.lieme.NotificationFragment;
 import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
@@ -17,8 +16,6 @@ import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.bellantoni.chetta.lieme.generalclasses.NotificationItem;
 import com.bellantoni.chetta.lieme.generalclasses.Question;
 import com.squareup.picasso.Picasso;
-
-import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -34,12 +31,9 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
     private int count = 1;
 
     public NotificationListAdapter(Activity context, List<NotificationItem> firstRows ) {
-
         super(context, R.layout.list_notifications, firstRows);
         this.context = context;
         this.rows = firstRows;
-
-
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -57,6 +51,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
             holder.typeNotification = (TextView) view.findViewById(R.id.typeNotification);
             holder.imageNotification = (ImageView) view.findViewById(R.id.imageNotification);
             holder.timeNotification = (TextView) view.findViewById(R.id.timeNotification);
+            holder.layout = (LinearLayout) view.findViewById(R.id.itemNotification);
 
             view.setTag(holder);
 
@@ -72,7 +67,6 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
         int typeNotification = this.rows.get(position).getTypeNotification();
 
         holder.textNotification.setTextColor(Color.BLACK);
-
         holder.idQuestion.setText(String.valueOf(this.rows.get(position).getQuestionId()));
         holder.typeNotification.setText(String.valueOf(this.rows.get(position).getTypeNotification()));
         holder.timeNotification.setText(String.valueOf(this.rows.get(position).getTimeNotification()));
@@ -81,12 +75,14 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
             holder.imageNotification.setImageResource(R.mipmap.iconuseranonymous);
        }
         if(typeNotification==1){
-
             //nome da recuperare da con id notifica, quindi id utente quindi dome
             Question questionObj = NotificationFragment.findQuestionById(String.valueOf(this.rows.get(position).getAnsweredQuestionId()));
-            Contact user = ContactListFragment.findContactById(questionObj.getReceiver_id());
+            //Contact user = ContactListFragment.findContactById(questionObj.getReceiver_id());
             holder.textNotification.setText("Answered your question");
-
+            /*if(questionObj.getMessage_read().equalsIgnoreCase("0")){
+                holder.layout.setBackgroundColor(Color.parseColor("#000000"));
+            }
+            System.out.println("STATO MESSAGGIO"+questionObj.getMessage_read());*/
             Picasso.with(context).load("https://graph.facebook.com/" + questionObj.getReceiver_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(holder.imageNotification);
         }
         return view;
@@ -95,7 +91,6 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
     @Override
     public NotificationItem getItem(int position){
         return this.rows.get(position);
-
     }
 
     @Override
@@ -107,7 +102,6 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
         this.count = count;
     }
 
-
     static class ViewHolder {
 
         ImageView imageNotification;
@@ -115,7 +109,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
         TextView idQuestion;
         TextView typeNotification;
         TextView timeNotification;
+        LinearLayout layout;
         int position;
-
     }
 }

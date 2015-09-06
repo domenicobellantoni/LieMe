@@ -190,6 +190,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
         View firstAccessView;
         if(savedBundle==null) {
             firstAccessView = inflater.inflate(R.layout.notification_fragment_layout, null);
+
             swipeLayout = (SwipeRefreshLayout) firstAccessView.findViewById(R.id.swipe_refresh_layout);
             swipeLayout.setOnRefreshListener(this);
             swipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -604,6 +605,10 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
         }
 
     }
+
+    /*public static ArrayList<Notification> getAllNotifications(){
+        return allNotifications;
+    }*/
 }
 
 
