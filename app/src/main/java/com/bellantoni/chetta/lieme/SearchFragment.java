@@ -1,6 +1,9 @@
 package com.bellantoni.chetta.lieme;
 
 import android.app.Activity;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -18,6 +21,8 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 import com.bellantoni.chetta.lieme.adapter.SearchListAdapter;
+import com.bellantoni.chetta.lieme.db.FeedReaderContract;
+import com.bellantoni.chetta.lieme.db.FeedReaderDbHelper;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.facebook.FacebookSdk;
 import java.util.ArrayList;
@@ -36,7 +41,20 @@ public class SearchFragment extends Fragment /*implements AbsListView.OnScrollLi
     private ListView list;
     private EditText editableText;
     private SearchView searchView;
-
+    /**
+     * Db access object
+     * */
+    private static FeedReaderDbHelper mDbHelper;
+    /**
+     * contact list
+     * */
+    public static List<Contact> contacts;
+    private static String[] projection = {
+            FeedReaderContract.FeedEntry._ID,
+            FeedReaderContract.FeedEntry.COLUMN_NAME_NAME,
+            FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID,
+            FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP
+    };
 
 
     String idContact[] ={
@@ -115,6 +133,8 @@ public class SearchFragment extends Fragment /*implements AbsListView.OnScrollLi
     @Override
     public void onCreate(Bundle savedBundle){
         super.onCreate(savedBundle);
+        mDbHelper = new FeedReaderDbHelper(getActivity().getApplicationContext());
+        contacts = new ArrayList<>();
         this.rows = new ArrayList<Contact>();
         setRetainInstance(true);
     }
@@ -128,7 +148,7 @@ public class SearchFragment extends Fragment /*implements AbsListView.OnScrollLi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedBundle) {
-
+        new RetrieveContactsFromLocalDataBase().execute(null, null, null);
         View firstAccessView;
         if(savedBundle==null) {
             firstAccessView = inflater.inflate(R.layout.search_fragment_layout, null);
@@ -137,12 +157,13 @@ public class SearchFragment extends Fragment /*implements AbsListView.OnScrollLi
 
             ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Search Friend");
             //AL POSTO DI QUESTO FOR DEVO PRENDERMI TUTTI I CONTATTI
+            /*
             for(int i=0; i<8; i++){
                 Contact c = new Contact(idContact[i], nameSurname[i], facebookId[i], timeStamp[i]);
                 this.rows.add(c);
 
             }
-
+*/
             adapter = new SearchListAdapter(getActivity(), this.rows);
             list = (ListView) firstAccessView.findViewById(R.id.listSearch);
             list.setAdapter(adapter);
@@ -155,8 +176,8 @@ public class SearchFragment extends Fragment /*implements AbsListView.OnScrollLi
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
                     //TOGLIERE IL TOAST E AGGIUNGERE LA RGA COMMENTATA DOPO
-                    Toast.makeText(getActivity().getApplicationContext(), "item selected", Toast.LENGTH_SHORT).show();
-                    //mSearchFragmentInterface.goFreindProfileFromSearch(rows.get(position).getFacebook_id());
+                    //Toast.makeText(getActivity().getApplicationContext(), "item selected", Toast.LENGTH_SHORT).show();
+                    mSearchFragmentInterface.goFreindProfileFromSearch(rows.get(position).getFacebook_id());
                 }
             });
             //list.setOnScrollListener(this);
@@ -242,5 +263,59 @@ public class SearchFragment extends Fragment /*implements AbsListView.OnScrollLi
         adapter.notifyDataSetChanged();*/
 
     //}
+
+
+    private class RetrieveContactsFromLocalDataBase extends AsyncTask<Void, Void, Void> {
+        private Cursor c;
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+            // How you want the results sorted in the resulting Cursor
+            String sortOrder =
+                    FeedReaderContract.FeedEntry.COLUMN_NAME_NAME + " ASC";
+
+            c = db.query(
+                    FeedReaderContract.FeedEntry.TABLE_NAME,  // The table to query
+                    projection,                               // The columns to return
+                    null,                                // The columns for the WHERE clause
+                    null,                            // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    sortOrder                                 // The sort order
+            );
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            fillTheContactListArray(c);
+        }
+    }
+
+    private  void fillTheContactListArray(Cursor c){
+        // Clear the array
+        contacts.clear();
+        rows.clear();
+
+        if(c != null){
+            if(c.moveToFirst()){
+                do{
+                    String id = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry._ID));
+                    String name = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_NAME));
+                    String facebook_id = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID));
+                    String timestamp = c.getString(c.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP));
+                    Contact tmp = new Contact(id, name, facebook_id, timestamp);
+                    contacts.add(tmp);
+                    rows.add(tmp);
+                }while(c.moveToNext());
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+
+    }
 
 }

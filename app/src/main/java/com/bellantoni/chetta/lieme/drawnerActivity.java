@@ -17,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.WindowManager;
 import android.widget.Toast;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
+import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperNotification;
 import com.bellantoni.chetta.lieme.dialog.DialogQuestionAnswered;
 import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
 import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
@@ -27,6 +28,7 @@ import com.bellantoni.chetta.lieme.listener.OnClickListenerHomeTo;
 import com.bellantoni.chetta.lieme.listener.OnClickListenerProfile;
 import com.bellantoni.chetta.lieme.network.NetworkController;
 import com.bellantoni.chetta.lieme.network.UpdateMessages;
+import com.bellantoni.chetta.lieme.network.UpdateNotifications;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -120,6 +122,17 @@ public class drawnerActivity extends ActionBarActivity
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FeedReaderDbHelperMessages mDbHelperMessages = new FeedReaderDbHelperMessages(getApplicationContext());
+        FeedReaderDbHelperNotification mDbHelperNotifications = new FeedReaderDbHelperNotification(getApplicationContext());
+
+        UpdateMessages updateMessages = new UpdateMessages(mDbHelperMessages);
+        updateMessages.update(Profile.getCurrentProfile().getId());
+        UpdateNotifications updateNotifications = new UpdateNotifications(mDbHelperNotifications, mDbHelperMessages);
+        updateNotifications.update(Profile.getCurrentProfile().getId());
+    }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {

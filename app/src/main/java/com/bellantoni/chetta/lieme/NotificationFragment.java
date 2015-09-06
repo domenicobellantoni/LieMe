@@ -174,10 +174,14 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
     }
 
+
     private void update(){
 
-        new RetrieveMessagesFromLocalDataBase().execute(null, null, null);
+
         new RetrieveNotificationsFromLocalDataBase().execute(null,null,null);
+        new RetrieveMessagesFromLocalDataBase().execute(null, null, null);
+
+
     }
 
     @Override
@@ -228,8 +232,17 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
     private void fetchMovies() {
         swipeLayout.setRefreshing(true);
-        //QUI DA FARE LA QUERY
+
+        UpdateMessages updateMessages = new UpdateMessages(mDbHelperMessages);
+        updateMessages.update(Profile.getCurrentProfile().getId());
+        UpdateNotifications updateNotifications = new UpdateNotifications(mDbHelperNotifications, mDbHelperMessages);
+        updateNotifications.update(Profile.getCurrentProfile().getId());
+
+        update();
+
         this.adapter.notifyDataSetChanged();
+
+        swipeLayout.setRefreshing(false);
     }
 
     @Override
