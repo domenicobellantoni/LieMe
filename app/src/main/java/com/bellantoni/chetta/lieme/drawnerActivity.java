@@ -608,20 +608,6 @@ public class drawnerActivity extends ActionBarActivity
 
     @Override
     public void goSearchFragment() {
-        /*if (NetworkController.isOnline(getApplicationContext()) == true) {
-
-                this.searchFragment = new SearchFragment();
-                this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
-
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .add(R.id.container, searchFragment, "SearchFragment").addToBackStack("SearchFragment")
-                        .commit();
-        } else {
-            NetworkDialog networkDialog = new NetworkDialog();
-            networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
-
-        }*/
 
         if (NetworkController.isOnline(getApplicationContext()) == true) {
 
@@ -640,7 +626,12 @@ public class drawnerActivity extends ActionBarActivity
 
     @Override
     public void goFreindProfileFromSearch(String facebookId){
-        goFriendProfileFromHome(facebookId);
+        if(facebookId.equalsIgnoreCase("anonymous")){
+            System.out.println("edit , non vado in nessun profilo perchè sono anonimo");
+        }else{
+            goFriendProfileFromHome(facebookId);
+        }
+
     }
 
 
