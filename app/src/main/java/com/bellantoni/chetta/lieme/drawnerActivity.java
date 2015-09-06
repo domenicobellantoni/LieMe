@@ -409,7 +409,7 @@ public class drawnerActivity extends ActionBarActivity
     private void contactListFragment(){
         this.actionBar.show();
 
-        if(this.contactListFragment==null) {
+        //if(this.contactListFragment==null) {
             this.contactListFragment = new ContactListFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
@@ -417,19 +417,19 @@ public class drawnerActivity extends ActionBarActivity
                     .add(R.id.container, this.contactListFragment,"ContactListFragment").addToBackStack("ContactListFragment")
                     .commit();
 
-        }else{
+        /*}else{
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, this.contactListFragment, "ContactListFragment").addToBackStack("ContactListFragment")
                     .commit();
 
-        }
+        }*/
     }
 
     private void goNotifications(){
 
-        if(this.notificationFragment==null){
+        //if(this.notificationFragment==null){
             this.notificationFragment = new NotificationFragment();
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -437,13 +437,13 @@ public class drawnerActivity extends ActionBarActivity
                     .replace(R.id.container, this.notificationFragment,"NotificationFragment").addToBackStack("NotificationFragment")
                     .commit();
 
-        }else{
+        /*}else{
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, this.notificationFragment, "NotificationFragment").addToBackStack("NotificationFragment")
                     .commit();
-        }
+        }*/
 
     }
 

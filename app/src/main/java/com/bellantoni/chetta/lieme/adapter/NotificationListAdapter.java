@@ -85,7 +85,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
             //nome da recuperare da con id notifica, quindi id utente quindi dome
             Question questionObj = NotificationFragment.findQuestionById(String.valueOf(this.rows.get(position).getAnsweredQuestionId()));
             Contact user = ContactListFragment.findContactById(questionObj.getReceiver_id());
-            holder.textNotification.setText(/*user.getName() +*/ " answered your question");
+            holder.textNotification.setText("Answered your question");
 
             Picasso.with(context).load("https://graph.facebook.com/" + questionObj.getReceiver_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(holder.imageNotification);
         }
