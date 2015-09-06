@@ -98,8 +98,10 @@ public class GcmIntentService extends IntentService {
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.drawable.logo_notifica_domanda_mini)
                             .setContentTitle("LieMe")
+                            .setAutoCancel(true)
                             .setStyle(new NotificationCompat.BigTextStyle().bigText("New question"))
                             .setContentText("New question");
+
 
             Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
             v.vibrate(400);
@@ -118,6 +120,7 @@ public class GcmIntentService extends IntentService {
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.drawable.logo_mini_dialog)
                             .setContentTitle("LieMe")
+                            .setAutoCancel(true)
                             .setStyle(new NotificationCompat.BigTextStyle().bigText("New answer"))
                             .setContentText(userAnswer.getName() + " answered");
 

@@ -520,13 +520,12 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
         for(Object n: allMessages){
             Question q = (Question)n;
-            Log.i(TAG, "YYY" + q.getId());
             if(q.getId().equals(id)){
                 Log.i(TAG, String.valueOf(q.getMessage()));
                 return q;
             }
         }
-        return new Question("nessuno", "nessuno","nessuno","nessuno","nessuno",null,"nessuno");
+        return new Question("not found", "not found","not found","not found","not found",null,"not found");
     }
 
     public static void addNotification(NotificationImpl n, Context c){
@@ -591,6 +590,17 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
             long newRowId = dbWriter.insert(FeedReaderContractNotification.FeedEntry.TABLE_NAME,null,values);
 
             return null;
+        }
+    }
+
+    public static void setAnswer(String id, String answer){
+
+        for(Object n: allMessages){
+            Question q = (Question)n;
+            if(q.getId().equals(id)){
+                q.setAnswer(answer);
+                Log.i(TAG, String.valueOf(q.getMessage()));
+            }
         }
     }
 }

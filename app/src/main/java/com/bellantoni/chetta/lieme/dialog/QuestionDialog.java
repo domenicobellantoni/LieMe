@@ -32,7 +32,9 @@ public class QuestionDialog extends DialogFragment /*implements View.OnClickList
         void yesQuestionPressed(int idQuestion,String senderId);
         void noQuestionPressed(int idQuestion,String senderId);
     }
-
+    public interface updateNotificationInterface{
+        public void updateNotifications();
+    }
     private int idQuestion;
 
     private QuestionInterface mQuestionInterface;
@@ -42,6 +44,7 @@ public class QuestionDialog extends DialogFragment /*implements View.OnClickList
     private TextView question;
     private Question questionObj;
     private Contact senderContact;
+
     /**
      * Tag used on log messages.
      */

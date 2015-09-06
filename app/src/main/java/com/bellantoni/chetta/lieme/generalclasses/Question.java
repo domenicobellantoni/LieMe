@@ -78,4 +78,8 @@ public class Question implements Notification {
     public String getAnswer() {
         return answer;
     }
+
+    public void setAnswer(String answer){
+        this.answer = answer;
+    }
 }

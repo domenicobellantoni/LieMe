@@ -450,6 +450,7 @@ public class drawnerActivity extends ActionBarActivity
     @Override
     public void readQuestion(String questionId){
 
+
         Question q = NotificationFragment.findQuestionById(questionId);
         if("undefined".equalsIgnoreCase(q.getAnswer())){
             this.questionDialog = new QuestionDialog();
@@ -477,7 +478,7 @@ public class drawnerActivity extends ActionBarActivity
     public void yesQuestionPressed(int idQuestion, String senderId){
         new SendAnswerToServer().execute(Profile.getCurrentProfile().getId(), String.valueOf(idQuestion), "yes", senderId);
         FeedReaderDbHelperMessages mDbHelperMessages = new FeedReaderDbHelperMessages(getApplicationContext());
-
+        NotificationFragment.setAnswer(String.valueOf(idQuestion),"yes");
         UpdateMessages updateMessages = new UpdateMessages(mDbHelperMessages);
         updateMessages.updateRowWithAnswer(String.valueOf(idQuestion), "yes");
     }
@@ -486,7 +487,7 @@ public class drawnerActivity extends ActionBarActivity
     public void noQuestionPressed(int idQuestion, String senderId){
         new SendAnswerToServer().execute(Profile.getCurrentProfile().getId(), String.valueOf(idQuestion), "no", senderId);
         FeedReaderDbHelperMessages mDbHelperMessages = new FeedReaderDbHelperMessages(getApplicationContext());
-
+        NotificationFragment.setAnswer(String.valueOf(idQuestion),"no");
         UpdateMessages updateMessages = new UpdateMessages(mDbHelperMessages);
         updateMessages.updateRowWithAnswer(String.valueOf(idQuestion), "no");
     }
