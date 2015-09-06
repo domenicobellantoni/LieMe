@@ -3,31 +3,24 @@ package com.bellantoni.chetta.lieme;
 import android.app.Activity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 import com.bellantoni.chetta.lieme.adapter.SearchListAdapter;
 import com.bellantoni.chetta.lieme.db.FeedReaderContract;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelper;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
-import com.facebook.FacebookSdk;
 import java.util.ArrayList;
 import java.util.List;
-import android.widget.AdapterView.OnItemClickListener;
 
 
 /**
@@ -54,55 +47,6 @@ public class SearchFragment extends Fragment /*implements AbsListView.OnScrollLi
             FeedReaderContract.FeedEntry.COLUMN_NAME_NAME,
             FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID,
             FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP
-    };
-
-
-    String idContact[] ={
-            "123",
-            "123",
-            "123",
-            "123",
-            "123",
-            "123",
-            "123",
-            "123"
-
-    };
-
-    String nameSurname[] = {
-            "Luca Biaggi",
-            "Giovanni Raimondi",
-            "Filippo Pulpo",
-            "Carlotta Gianni",
-            "Salvatore Rimmolo",
-            "Gianni Costanzo",
-            "Carlo Bummo",
-            "Serena Aivieri"
-
-    };
-
-    String facebookId[] ={
-            "123",
-            "123",
-            "123",
-            "123",
-            "123",
-            "123",
-            "123",
-            "123"
-
-    };
-
-    String timeStamp[] ={
-            "123",
-            "1234",
-            "1235",
-            "12345",
-            "12367",
-            "12354",
-            "12387",
-            "123687"
-
     };
 
     public interface SearchFragmentInterface{
@@ -136,6 +80,7 @@ public class SearchFragment extends Fragment /*implements AbsListView.OnScrollLi
         mDbHelper = new FeedReaderDbHelper(getActivity().getApplicationContext());
         contacts = new ArrayList<>();
         this.rows = new ArrayList<Contact>();
+
         setRetainInstance(true);
     }
 
@@ -148,39 +93,24 @@ public class SearchFragment extends Fragment /*implements AbsListView.OnScrollLi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedBundle) {
-        new RetrieveContactsFromLocalDataBase().execute(null, null, null);
+
         View firstAccessView;
         if(savedBundle==null) {
             firstAccessView = inflater.inflate(R.layout.search_fragment_layout, null);
 
-            //Contact friendContact = ContactListFragment.findContactById(String.valueOf(this.friendId));
+            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Your Friends");
 
-            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Search Friend");
-            //AL POSTO DI QUESTO FOR DEVO PRENDERMI TUTTI I CONTATTI
-            /*
-            for(int i=0; i<8; i++){
-                Contact c = new Contact(idContact[i], nameSurname[i], facebookId[i], timeStamp[i]);
-                this.rows.add(c);
-
-            }
-*/
-            adapter = new SearchListAdapter(getActivity(), this.rows);
             list = (ListView) firstAccessView.findViewById(R.id.listSearch);
-            list.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-
+            downloadData();
 
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
-                    //TOGLIERE IL TOAST E AGGIUNGERE LA RGA COMMENTATA DOPO
-                    //Toast.makeText(getActivity().getApplicationContext(), "item selected", Toast.LENGTH_SHORT).show();
-                    mSearchFragmentInterface.goFreindProfileFromSearch(rows.get(position).getFacebook_id());
+                    mSearchFragmentInterface.goFreindProfileFromSearch(adapter.getItem(position).getFacebook_id());
                 }
             });
-            //list.setOnScrollListener(this);
 
 
 
@@ -197,22 +127,27 @@ public class SearchFragment extends Fragment /*implements AbsListView.OnScrollLi
                     int length = editableText.getText().length();
                     temp.clear();
                     if(editableText.getText().toString().matches("")){
-                        list.setAdapter(new SearchListAdapter(getActivity(), rows));
-                        adapter.notifyDataSetChanged();
-                        System.out.println("size" + rows.size());
-                    }
-                    for(int i = 0; i<rows.size(); i++){
-                        if(length < rows.get(i).getName().length()){
-                            if((rows.get(i).getName()).contains(editableText.getText().toString())){
-                                temp.add(rows.get(i));
-
+                        adapter = new SearchListAdapter(getActivity(), contacts);
+                        list.setAdapter(adapter);
+                    }else {
+                        for (int i = 0; i < rows.size(); i++) {
+                            if (length < rows.get(i).getName().length()) {
+                                if ((rows.get(i).getName().toLowerCase()).contains(editableText.getText().toString().toLowerCase())) {
+                                    temp.add(rows.get(i));
+                                }
                             }
                         }
+                        if(temp.size()>0){
+                            adapter = new SearchListAdapter(getActivity(), temp);
+                            list.setAdapter(adapter);
+                        }else{
+                            temp.clear();
+                            temp.add(new Contact("anonymous", "No results", "anonymous", "anonymous"));
+                            adapter = new SearchListAdapter(getActivity(),temp);
+                            list.setAdapter(adapter);
+                        }
                     }
-                    if(temp.size()>0){
-                        list.setAdapter(new SearchListAdapter(getActivity(), temp));
-                        adapter.notifyDataSetChanged();
-                    }
+
                 }
 
                 @Override
@@ -227,78 +162,11 @@ public class SearchFragment extends Fragment /*implements AbsListView.OnScrollLi
         return firstAccessView;
     }
 
-
-   /* @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-        boolean loadMore =
-                firstVisibleItem + visibleItemCount >= totalItemCount;
-        int count = 0;
-        if (loadMore) {
-
-            /*for(int i=0; i<1; i++) {
-                this.rows.add(new Contact("12", "pippo", "facebookId", "timestamp"));
-            }
-            count++;
-            list.setOnItemClickListener(new OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-
-
-                    Toast.makeText(getActivity().getApplicationContext(), "item selected", Toast.LENGTH_SHORT).show();
-
-
-                }
-            });*/
-       /* }
-        this.adapter.setCount(this.adapter.getCount()+count);
-
-        adapter.notifyDataSetChanged();*/
-
-    //}
-
-
-    private class RetrieveContactsFromLocalDataBase extends AsyncTask<Void, Void, Void> {
-        private Cursor c;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-            // How you want the results sorted in the resulting Cursor
-            String sortOrder =
-                    FeedReaderContract.FeedEntry.COLUMN_NAME_NAME + " ASC";
-
-            c = db.query(
-                    FeedReaderContract.FeedEntry.TABLE_NAME,  // The table to query
-                    projection,                               // The columns to return
-                    null,                                // The columns for the WHERE clause
-                    null,                            // The values for the WHERE clause
-                    null,                                     // don't group the rows
-                    null,                                     // don't filter by row groups
-                    sortOrder                                 // The sort order
-            );
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            fillTheContactListArray(c);
-        }
-    }
-
     private  void fillTheContactListArray(Cursor c){
         // Clear the array
         contacts.clear();
         rows.clear();
+        int counter = 0;
 
         if(c != null){
             if(c.moveToFirst()){
@@ -313,8 +181,33 @@ public class SearchFragment extends Fragment /*implements AbsListView.OnScrollLi
                 }while(c.moveToNext());
             }
         }
+        adapter = new SearchListAdapter(getActivity(), this.rows);
+        adapter.setCount(adapter.getCount()+counter);
+        list.setAdapter(adapter);
+    }
 
-        adapter.notifyDataSetChanged();
+
+    private void downloadData(){
+
+
+        Cursor c;
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        // How you want the results sorted in the resulting Cursor
+        String sortOrder =
+                FeedReaderContract.FeedEntry.COLUMN_NAME_NAME + " ASC";
+
+        c = db.query(
+                FeedReaderContract.FeedEntry.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                null,                                // The columns for the WHERE clause
+                null,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+
+        fillTheContactListArray(c);
 
     }
 

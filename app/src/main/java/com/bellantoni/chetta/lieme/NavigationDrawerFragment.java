@@ -1,6 +1,5 @@
 package com.bellantoni.chetta.lieme;
 
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
@@ -22,8 +21,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.adapter.DrawerAdapter;
 import com.bellantoni.chetta.lieme.generalclasses.DrawerElement;
@@ -31,7 +28,6 @@ import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,9 +130,6 @@ public class NavigationDrawerFragment extends Fragment {
         this.profileImageDrawer = (ImageView) firstAccessView.findViewById(R.id.imageViewProfileDrawer);
         RoundImage roundedImage = new RoundImage(BitmapFactory.decodeResource(getResources(), R.mipmap.iconuseranonymous));
 
-
-        //this.profileImageDrawer.setImageDrawable(roundedImage);
-
         Picasso.with((Activity) getActivity()).load("https://graph.facebook.com/" + Profile.getCurrentProfile().getId() + "/picture?height=105&width=105")
                 .placeholder(roundedImage)
                    .transform(new CircleTransform()).fit().centerCrop().into(this.profileImageDrawer);
@@ -160,39 +153,6 @@ public class NavigationDrawerFragment extends Fragment {
 
         return firstAccessView;
 
-        /*mDrawerListView = (ListView) inflater.inflate( R.layout.fragment_navigation_drawer, container, false);
-        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
-            }
-        });*/
-
-
-
-        /*final TypedArray typedArray = getResources().obtainTypedArray(R.array.sections_icons);
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_1,
-
-
-                android.R.id.text1,
-                getResources().getStringArray(R.array.sections)
-        ) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-                TextView tv = (TextView) v.findViewById(android.R.id.text1);
-                tv.setTextColor(Color.BLACK);
-                int resourceId = typedArray.getResourceId(position, 0);
-                Drawable drawable = getResources().getDrawable(resourceId);
-                ((TextView) v).setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-                //((TextView) v).setTextColor(Color.BLACK);
-                return v;
-            }
-        });
-        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;*/
 
     }
 

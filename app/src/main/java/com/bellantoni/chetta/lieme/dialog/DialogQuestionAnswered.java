@@ -2,15 +2,12 @@ package com.bellantoni.chetta.lieme.dialog;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bellantoni.chetta.lieme.ContactListFragment;
 import com.bellantoni.chetta.lieme.NotificationFragment;
 import com.bellantoni.chetta.lieme.R;
@@ -18,8 +15,6 @@ import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.bellantoni.chetta.lieme.generalclasses.Question;
 import com.squareup.picasso.Picasso;
-
-import java.util.Random;
 
 /**
  * Created by Domenico on 22/07/2015.
@@ -47,21 +42,15 @@ public class DialogQuestionAnswered extends DialogFragment {
             }
         });
         Question questionObj = NotificationFragment.findQuestionById(String.valueOf(getArguments().getInt("questionId")));
-        //System.out.println("XXX" + String.valueOf(getArguments().getInt("questionId")));
-        //immagine la ricavo dall'id della domanda, l'id della domanda lo ricavo come getArguments().getInt("questionId");
+        Contact c = ContactListFragment.findContactById(questionObj.getReceiver_id());
+
         Picasso.with(getActivity().getApplicationContext()).load("https://graph.facebook.com/" + questionObj.getReceiver_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(imageViewProdileFriend);
-
-        //il riultato della domanda lo ricavo dall'id perchè faccio la query al db, per ora lo simulo con il numero casuale 0,1
-
         if(questionObj.getAnswer().equals("no")){
             this.resultAnswer.setImageResource(R.drawable.big_heart_red);
-
         }else{
             this.resultAnswer.setImageResource(R.drawable.big_heart_green);
         }
-
-        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+        getDialog().setTitle(c.getName());
         this.question.setText(questionObj.getMessage());
 
 

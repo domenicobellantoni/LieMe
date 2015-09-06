@@ -24,6 +24,7 @@ public class GcmIntentService extends IntentService {
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
     FeedReaderDbHelperMessages mDbHelper;
+
     /**
      * Tag used on log messages.
      */

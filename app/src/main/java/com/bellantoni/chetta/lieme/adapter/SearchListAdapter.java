@@ -8,12 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 /**
@@ -41,17 +39,17 @@ public class SearchListAdapter extends ArrayAdapter<Contact>{
         if (convertView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
             view = inflater.inflate(R.layout.list_contacts, null);
-            view.setPadding(0,10,0,10);
+            view.setPadding(0, 10, 0, 10);
 
             holder = new ViewHolder();
-            holder.imageContact = (ImageView)view.findViewById(R.id.imageContact);
+            holder.imageContact = (ImageView) view.findViewById(R.id.imageContact);
             holder.nameSurnameContact = (TextView) view.findViewById(R.id.nameSurnameContact);
             holder.idContact = (TextView) view.findViewById(R.id.idContact);
 
             view.setTag(holder);
-        }else{
+        } else {
 
-            view=convertView;
+            view = convertView;
             holder = (ViewHolder) convertView.getTag();
 
         }
@@ -60,8 +58,11 @@ public class SearchListAdapter extends ArrayAdapter<Contact>{
         holder.nameSurnameContact.setTextColor(Color.BLACK);
         holder.nameSurnameContact.setText(this.rows.get(position).getName());
         holder.idContact.setText(this.rows.get(position).getFacebook_id());
-        Picasso.with(context).load("https://graph.facebook.com/" + this.rows.get(position).getFacebook_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(holder.imageContact);
-
+        if (!this.rows.get(position).getId().equalsIgnoreCase("anonymous")){
+            Picasso.with(context).load("https://graph.facebook.com/" + this.rows.get(position).getFacebook_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(holder.imageContact);
+        } else {
+            holder.imageContact.setImageResource(R.mipmap.iconuseranonymous);
+        }
         return view;
     }
 
@@ -69,7 +70,6 @@ public class SearchListAdapter extends ArrayAdapter<Contact>{
     @Override
     public Contact getItem(int position){
         return this.rows.get(position);
-
     }
 
     @Override

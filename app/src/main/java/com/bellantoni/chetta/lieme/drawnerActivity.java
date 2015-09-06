@@ -251,7 +251,7 @@ public class drawnerActivity extends ActionBarActivity
 
 
 
-        if(this.profileFragment==null) {
+        //if(this.profileFragment==null) {
             Profile profile = Profile.getCurrentProfile();
             this.name = profile.getFirstName();
             this.surname = profile.getLastName();
@@ -272,7 +272,7 @@ public class drawnerActivity extends ActionBarActivity
             fragmentManager.beginTransaction()
                     .add(R.id.container, profileFragment, "ProfileFragment").addToBackStack("ProfileFragment")
                     .commit();
-        }else{
+        /*}else{
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             this.profileFragment.setNameSurnameString(this.profileFragment.getNameSurnameString());
             this.profileFragment.setBitmap(this.profileFragment.getBitmap());
@@ -280,7 +280,7 @@ public class drawnerActivity extends ActionBarActivity
             fragmentManager.beginTransaction()
                     .replace(R.id.container, profileFragment, "ProfileFragment").addToBackStack("ProfileFragment")
                     .commit();
-        }
+        }*/
 
 
     }
@@ -409,7 +409,7 @@ public class drawnerActivity extends ActionBarActivity
     private void contactListFragment(){
         this.actionBar.show();
 
-        if(this.contactListFragment==null) {
+        //if(this.contactListFragment==null) {
             this.contactListFragment = new ContactListFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
@@ -417,19 +417,19 @@ public class drawnerActivity extends ActionBarActivity
                     .add(R.id.container, this.contactListFragment,"ContactListFragment").addToBackStack("ContactListFragment")
                     .commit();
 
-        }else{
+        /*}else{
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, this.contactListFragment, "ContactListFragment").addToBackStack("ContactListFragment")
                     .commit();
 
-        }
+        }*/
     }
 
     private void goNotifications(){
 
-        if(this.notificationFragment==null){
+        //if(this.notificationFragment==null){
             this.notificationFragment = new NotificationFragment();
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -437,13 +437,13 @@ public class drawnerActivity extends ActionBarActivity
                     .replace(R.id.container, this.notificationFragment,"NotificationFragment").addToBackStack("NotificationFragment")
                     .commit();
 
-        }else{
+        /*}else{
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, this.notificationFragment, "NotificationFragment").addToBackStack("NotificationFragment")
                     .commit();
-        }
+        }*/
 
     }
 
@@ -609,20 +609,6 @@ public class drawnerActivity extends ActionBarActivity
 
     @Override
     public void goSearchFragment() {
-        /*if (NetworkController.isOnline(getApplicationContext()) == true) {
-
-                this.searchFragment = new SearchFragment();
-                this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
-
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .add(R.id.container, searchFragment, "SearchFragment").addToBackStack("SearchFragment")
-                        .commit();
-        } else {
-            NetworkDialog networkDialog = new NetworkDialog();
-            networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
-
-        }*/
 
         if (NetworkController.isOnline(getApplicationContext()) == true) {
 
@@ -641,7 +627,12 @@ public class drawnerActivity extends ActionBarActivity
 
     @Override
     public void goFreindProfileFromSearch(String facebookId){
-        goFriendProfileFromHome(facebookId);
+        if(facebookId.equalsIgnoreCase("anonymous")){
+            System.out.println("edit , non vado in nessun profilo perchè sono anonimo");
+        }else{
+            goFriendProfileFromHome(facebookId);
+        }
+
     }
 
 
