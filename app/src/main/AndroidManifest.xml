@@ -13,6 +13,7 @@
         android:protectionLevel="signature" />
     <uses-permission android:name="com.example.alessandro.clientapp.permission.C2D_MESSAGE" />
     <!-- GCM end -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.VIBRATE"/>
     <application
         android:name=".ApplicationClass"
