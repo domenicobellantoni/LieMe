@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.bellantoni.chetta.lieme.db.FeedReaderContract;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelper;
 import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
-import com.bellantoni.chetta.lieme.dummy.DummyContent;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;

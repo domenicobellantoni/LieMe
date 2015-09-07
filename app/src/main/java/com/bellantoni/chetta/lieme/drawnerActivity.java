@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentManager;
@@ -22,6 +23,7 @@ import com.bellantoni.chetta.lieme.dialog.DialogQuestionAnswered;
 import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
 import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
 import com.bellantoni.chetta.lieme.dialog.QuestionDialog;
+import com.bellantoni.chetta.lieme.generalclasses.BluetoothManager;
 import com.bellantoni.chetta.lieme.generalclasses.Question;
 import com.bellantoni.chetta.lieme.listener.OnClickListenerFriendProfile;
 import com.bellantoni.chetta.lieme.listener.OnClickListenerHomeTo;
@@ -64,9 +66,12 @@ public class drawnerActivity extends ActionBarActivity
     private String lastFacebookId;
     private SearchFragment searchFragment;
     public static String myFacebookId;
+    private BluetoothManager bluetoothManager;
     private final String TAG = "DrawnerActivity";
     private final String ANSWER_MANAGER_URL = "http://computersecurityproject.altervista.org/gcm_server_php/answerToQuestion.php?";
-
+    private float averageHeartRateBeforeQuestion = 0;
+    private float averageHeartRateAfterQuestion = 0;
+    private float deltaRate = 0;
 
     private AskFragment askFragment;
     private ContactListFragment contactListFragment;
@@ -86,6 +91,7 @@ public class drawnerActivity extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
+        bluetoothManager = new BluetoothManager(getApplicationContext());
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -120,6 +126,7 @@ public class drawnerActivity extends ActionBarActivity
             goProfile();
         }
 
+        bluetoothManager.connect();
     }
 
     @Override
@@ -447,9 +454,88 @@ public class drawnerActivity extends ActionBarActivity
 
     }
 
+    public void delay(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("XXX");                 //add your code here
+                    }
+                }, 5000);
+            }
+        });
+    }
+
+    @Override
+    public void readQuestion(final String questionId){
+
+        Question q = NotificationFragment.findQuestionById(questionId);
+        if(!"undefined".equalsIgnoreCase(q.getAnswer()))
+        {
+            Toast.makeText(this.getApplicationContext(), "Question already answered", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        boolean bt = bluetoothManager.connect();
+        if(!bt){
+            Toast.makeText(this.getApplicationContext(), "Bluetooth device not paired", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Toast.makeText(this.getApplicationContext(), "Monitoring heart rate for 10s", Toast.LENGTH_SHORT).show();
+        bluetoothManager.clearRateHistory();
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.i(TAG, "Taking average after 10 sec") ;
+                        averageHeartRateBeforeQuestion = bluetoothManager.getRateAverage();
+                        bluetoothManager.clearRateHistory();
+                        Log.i(TAG, "Average rate before question: " + String.valueOf(averageHeartRateBeforeQuestion));
+
+                        Question q = NotificationFragment.findQuestionById(questionId);
+                        if("undefined".equalsIgnoreCase(q.getAnswer())){
+                           // this.questionDialog = new QuestionDialog();
+                            QuestionDialog questionDialog = new QuestionDialog();
+                            Bundle args = new Bundle();
+                            args.putInt("questionId", Integer.valueOf(questionId));
+                            questionDialog.setArguments(args);
+                            questionDialog.show(getSupportFragmentManager(), "QUESTION_DIALOG");
+                        }
+                    }
+                }, 10000);
+            }
+        });
+
+
+
+    }
+
+/*
     @Override
     public void readQuestion(String questionId){
 
+        boolean bt = bluetoothManager.connect();
+        if(!bt){
+            Toast.makeText(this.getApplicationContext(), "Bluetooth device not paired", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Toast.makeText(this.getApplicationContext(), "Monitoring heart rate for 10s", Toast.LENGTH_SHORT).show();
+
+
+        delay();
+        averageHeartRateBeforeQuestion = bluetoothManager.getRateAverage();
+
+
+        Log.i(TAG, "Average rate before question: " + String.valueOf(averageHeartRateBeforeQuestion));
 
         Question q = NotificationFragment.findQuestionById(questionId);
         if("undefined".equalsIgnoreCase(q.getAnswer())){
@@ -461,7 +547,9 @@ public class drawnerActivity extends ActionBarActivity
         }else{
             Toast.makeText(this.getApplicationContext(), "Question already answered", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
+
+
 
     @Override
     public void readAnswer(String questionId){
@@ -476,20 +564,44 @@ public class drawnerActivity extends ActionBarActivity
 
     @Override
     public void yesQuestionPressed(int idQuestion, String senderId){
-        new SendAnswerToServer().execute(Profile.getCurrentProfile().getId(), String.valueOf(idQuestion), "yes", senderId);
+        averageHeartRateAfterQuestion = bluetoothManager.getRateAverage();
+        Log.i(TAG, "Average rate after question: " + String.valueOf(averageHeartRateAfterQuestion));
+        deltaRate = averageHeartRateAfterQuestion - averageHeartRateBeforeQuestion;
+        deltaRate = 1 - (averageHeartRateBeforeQuestion - deltaRate)/averageHeartRateBeforeQuestion;
+        Log.i(TAG, "Delta rate: " + String.valueOf(deltaRate));
+
+        String answer = "yes";
+
+        if(deltaRate>0.1){
+            answer = "no";
+        }
+
+        new SendAnswerToServer().execute(Profile.getCurrentProfile().getId(), String.valueOf(idQuestion), answer, senderId);
         FeedReaderDbHelperMessages mDbHelperMessages = new FeedReaderDbHelperMessages(getApplicationContext());
-        NotificationFragment.setAnswer(String.valueOf(idQuestion),"yes");
+        NotificationFragment.setAnswer(String.valueOf(idQuestion),answer);
         UpdateMessages updateMessages = new UpdateMessages(mDbHelperMessages);
-        updateMessages.updateRowWithAnswer(String.valueOf(idQuestion), "yes");
+        updateMessages.updateRowWithAnswer(String.valueOf(idQuestion), answer);
     }
 
     @Override
     public void noQuestionPressed(int idQuestion, String senderId){
-        new SendAnswerToServer().execute(Profile.getCurrentProfile().getId(), String.valueOf(idQuestion), "no", senderId);
+        averageHeartRateAfterQuestion = bluetoothManager.getRateAverage();
+        Log.i(TAG, "Average rate after question: " + String.valueOf(averageHeartRateAfterQuestion));
+        deltaRate = averageHeartRateAfterQuestion - averageHeartRateBeforeQuestion;
+        deltaRate = 1 - (averageHeartRateBeforeQuestion - deltaRate)/averageHeartRateBeforeQuestion;
+        Log.i(TAG, "Delta rate: " + String.valueOf(deltaRate));
+
+        String answer = "no";
+
+        if(deltaRate>0.1){
+            answer = "yes";
+        }
+
+        new SendAnswerToServer().execute(Profile.getCurrentProfile().getId(), String.valueOf(idQuestion), answer, senderId);
         FeedReaderDbHelperMessages mDbHelperMessages = new FeedReaderDbHelperMessages(getApplicationContext());
-        NotificationFragment.setAnswer(String.valueOf(idQuestion),"no");
+        NotificationFragment.setAnswer(String.valueOf(idQuestion),answer);
         UpdateMessages updateMessages = new UpdateMessages(mDbHelperMessages);
-        updateMessages.updateRowWithAnswer(String.valueOf(idQuestion), "no");
+        updateMessages.updateRowWithAnswer(String.valueOf(idQuestion), answer);
     }
 
 
