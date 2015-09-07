@@ -592,6 +592,8 @@ public class drawnerActivity extends ActionBarActivity
         deltaRate = averageHeartRateAfterQuestion - averageHeartRateBeforeQuestion;
         deltaRate = 1 - (averageHeartRateBeforeQuestion - deltaRate)/averageHeartRateBeforeQuestion;
         deltaRate = Math.abs(deltaRate);
+
+
         Log.i(TAG, "Delta rate: " + String.valueOf(deltaRate));
 
         String answer = "no";
