@@ -568,6 +568,8 @@ public class drawnerActivity extends ActionBarActivity
         Log.i(TAG, "Average rate after question: " + String.valueOf(averageHeartRateAfterQuestion));
         deltaRate = averageHeartRateAfterQuestion - averageHeartRateBeforeQuestion;
         deltaRate = 1 - (averageHeartRateBeforeQuestion - deltaRate)/averageHeartRateBeforeQuestion;
+        deltaRate = Math.abs(deltaRate);
+
         Log.i(TAG, "Delta rate: " + String.valueOf(deltaRate));
 
         String answer = "yes";
@@ -589,6 +591,7 @@ public class drawnerActivity extends ActionBarActivity
         Log.i(TAG, "Average rate after question: " + String.valueOf(averageHeartRateAfterQuestion));
         deltaRate = averageHeartRateAfterQuestion - averageHeartRateBeforeQuestion;
         deltaRate = 1 - (averageHeartRateBeforeQuestion - deltaRate)/averageHeartRateBeforeQuestion;
+        deltaRate = Math.abs(deltaRate);
         Log.i(TAG, "Delta rate: " + String.valueOf(deltaRate));
 
         String answer = "no";
