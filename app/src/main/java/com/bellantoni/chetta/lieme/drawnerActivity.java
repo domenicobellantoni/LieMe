@@ -614,10 +614,10 @@ public class drawnerActivity extends ActionBarActivity
 
         Log.i(TAG, "Delta rate: " + String.valueOf(deltaRate));
 
-        String answer = "no";
+        String answer = "yes";
 
         if(deltaRate>0.1){
-            answer = "yes";
+            answer = "no";
         }
 
         new SendAnswerToServer().execute(Profile.getCurrentProfile().getId(), String.valueOf(idQuestion), answer, senderId);

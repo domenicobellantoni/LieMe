@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.TextView;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -23,9 +22,8 @@ import zephyr.android.HxMBT.*;
  */
 public class BluetoothManager {
     BluetoothAdapter adapter = null;
-    BTClient _bt;
-    ZephyrProtocol _protocol;
-    NewConnectedListener _NConnListener;
+    BTClient bt;
+    NewConnectedListener NConnListener;
     private final int HEART_RATE = 0x100;
     private final int INSTANT_SPEED = 0x101;
     private String TAG = "BluetoothManager";
@@ -43,8 +41,8 @@ public class BluetoothManager {
     }
 
     public boolean connect() {
-        if(_bt!=null){
-            if(_bt.IsConnected())
+        if(bt !=null){
+            if(bt.IsConnected())
             {
                 Log.i(TAG, "BLUETOOTH ALREADY CONNECTED");
                 return true;
@@ -54,6 +52,7 @@ public class BluetoothManager {
             else
             {
                 Log.i(TAG, "BLUETOOTH NOT CONNECTED YET");
+
             }
         }
 
@@ -77,13 +76,13 @@ public class BluetoothManager {
 
             BluetoothDevice Device = adapter.getRemoteDevice(BhMacID);
             String DeviceName = Device.getName();
-            _bt = new BTClient(adapter, BhMacID);
-            _NConnListener = new NewConnectedListener(Newhandler, Newhandler);
-            _bt.addConnectedEventListener(_NConnListener);
+            bt = new BTClient(adapter, BhMacID);
+            NConnListener = new NewConnectedListener(Newhandler, Newhandler);
+            bt.addConnectedEventListener(NConnListener);
 
-            if(_bt.IsConnected())
+            if(bt.IsConnected())
             {
-                _bt.start();
+                bt.start();
                 Log.i(TAG, "BLUETOOTH CONNECTED");
                 return true;
                 //Reset all the values to 0s
@@ -121,9 +120,9 @@ public class BluetoothManager {
         /*Reset the global variables*/
 
 					/*This disconnects listener from acting on received messages*/
-        _bt.removeConnectedEventListener(_NConnListener);
+        bt.removeConnectedEventListener(NConnListener);
 					/*Close the communication with the device & throw an exception if failure*/
-        _bt.Close();
+        bt.Close();
     }
 
     private class BTBondReceiver extends BroadcastReceiver {
