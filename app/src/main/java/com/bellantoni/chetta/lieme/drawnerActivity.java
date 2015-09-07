@@ -474,58 +474,63 @@ public class drawnerActivity extends ActionBarActivity
     @Override
     public void readQuestion(final String questionId){
 
-        Question q = NotificationFragment.findQuestionById(questionId);
-        if(!"undefined".equalsIgnoreCase(q.getAnswer()))
-        {
-            Toast.makeText(this.getApplicationContext(), "Question already answered", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        if(NetworkController.isOnline(getApplicationContext())==true) {
 
-        boolean bt = bluetoothManager.connect();
-        if(!bt){
-            //Toast.makeText(this.getApplicationContext(), "Bluetooth device not paired", Toast.LENGTH_SHORT).show();
-            BluetoothDialogError btDialog = new BluetoothDialogError();
-            btDialog.show(getSupportFragmentManager(), "BT_ERROR_DIALOG");
-            return;
-        }
+            Question q = NotificationFragment.findQuestionById(questionId);
+            if (!"undefined".equalsIgnoreCase(q.getAnswer())) {
+                Toast.makeText(this.getApplicationContext(), "Question already answered", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        Toast t = new Toast(this.getApplicationContext());
-        t.setText("Monitoring heart rate for 10s");
-        t.setDuration(Toast.LENGTH_LONG);
-        t.setGravity(Gravity.CENTER, 0, 0);
-        t.show();
-        bluetoothManager.clearRateHistory();
+            boolean bt = bluetoothManager.connect();
+            if (!bt) {
+                //Toast.makeText(this.getApplicationContext(), "Bluetooth device not paired", Toast.LENGTH_SHORT).show();
+                BluetoothDialogError btDialog = new BluetoothDialogError();
+                btDialog.show(getSupportFragmentManager(), "BT_ERROR_DIALOG");
+                return;
+            }
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.i(TAG, "Taking average after 10 sec") ;
-                        averageHeartRateBeforeQuestion = bluetoothManager.getRateAverage();
-                        bluetoothManager.clearRateHistory();
-                        Log.i(TAG, "Average rate before question: " + String.valueOf(averageHeartRateBeforeQuestion));
+            Toast t = new Toast(this.getApplicationContext());
+            t.setText("Monitoring heart rate for 10s");
+            t.setDuration(Toast.LENGTH_LONG);
+            t.setGravity(Gravity.CENTER, 0, 0);
+            t.show();
+            bluetoothManager.clearRateHistory();
 
-                        Question q = NotificationFragment.findQuestionById(questionId);
-                        if(NetworkController.isOnline(getApplicationContext())==true) {
-                            if ("undefined".equalsIgnoreCase(q.getAnswer())) {
-                                // this.questionDialog = new QuestionDialog();
-                                QuestionDialog questionDialog = new QuestionDialog();
-                                Bundle args = new Bundle();
-                                args.putInt("questionId", Integer.valueOf(questionId));
-                                questionDialog.setArguments(args);
-                                questionDialog.show(getSupportFragmentManager(), "QUESTION_DIALOG");
-                            }else{
-                                NetworkDialog networkDialog = new NetworkDialog();
-                                networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.i(TAG, "Taking average after 10 sec");
+                            averageHeartRateBeforeQuestion = bluetoothManager.getRateAverage();
+                            bluetoothManager.clearRateHistory();
+                            Log.i(TAG, "Average rate before question: " + String.valueOf(averageHeartRateBeforeQuestion));
+
+                            Question q = NotificationFragment.findQuestionById(questionId);
+                            if (NetworkController.isOnline(getApplicationContext()) == true) {
+                                if ("undefined".equalsIgnoreCase(q.getAnswer())) {
+                                    // this.questionDialog = new QuestionDialog();
+                                    QuestionDialog questionDialog = new QuestionDialog();
+                                    Bundle args = new Bundle();
+                                    args.putInt("questionId", Integer.valueOf(questionId));
+                                    questionDialog.setArguments(args);
+                                    questionDialog.show(getSupportFragmentManager(), "QUESTION_DIALOG");
+                                } else {
+                                    NetworkDialog networkDialog = new NetworkDialog();
+                                    networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
+                                }
                             }
                         }
-                    }
-                }, 10000);
-            }
-        });
+                    }, 10000);
+                }
+            });
+        }else{
+            NetworkDialog networkDialog = new NetworkDialog();
+            networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
+        }
 
 
 
