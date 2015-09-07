@@ -12,12 +12,10 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Set;
-
 import zephyr.android.HxMBT.*;
 
 /**

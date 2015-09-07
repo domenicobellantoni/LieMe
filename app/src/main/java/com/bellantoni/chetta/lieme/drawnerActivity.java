@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperNotification;
+import com.bellantoni.chetta.lieme.dialog.BluetoothDialogError;
 import com.bellantoni.chetta.lieme.dialog.DialogQuestionAnswered;
 import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
 import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
@@ -350,7 +352,7 @@ public class drawnerActivity extends ActionBarActivity
            FragmentManager fragmentManager = getSupportFragmentManager();
 
            fragmentManager.beginTransaction()
-                   .add(R.id.container, this.homefragment, "HomeFragment").addToBackStack("HomeFragment")
+                   .replace(R.id.container, this.homefragment, "HomeFragment").addToBackStack("HomeFragment")
                    .commit();
 
 
@@ -360,7 +362,7 @@ public class drawnerActivity extends ActionBarActivity
            FragmentManager fragmentManager = getSupportFragmentManager();
 
            fragmentManager.beginTransaction()
-                   .add(R.id.container, this.homefragment, "HomeFragment").addToBackStack("HomeFragment")
+                   .replace(R.id.container, this.homefragment, "HomeFragment").addToBackStack("HomeFragment")
                    .commit();
 
        }
@@ -384,7 +386,7 @@ public class drawnerActivity extends ActionBarActivity
                     this.friendProfileFragment.setArguments(bundle);
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
+                            .replace(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
                             .commit();
                 }
             } else {
@@ -421,7 +423,7 @@ public class drawnerActivity extends ActionBarActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
             fragmentManager.beginTransaction()
-                    .add(R.id.container, this.contactListFragment,"ContactListFragment").addToBackStack("ContactListFragment")
+                    .replace(R.id.container, this.contactListFragment,"ContactListFragment").addToBackStack("ContactListFragment")
                     .commit();
 
         }else{
@@ -481,11 +483,17 @@ public class drawnerActivity extends ActionBarActivity
 
         boolean bt = bluetoothManager.connect();
         if(!bt){
-            Toast.makeText(this.getApplicationContext(), "Bluetooth device not paired", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this.getApplicationContext(), "Bluetooth device not paired", Toast.LENGTH_SHORT).show();
+            BluetoothDialogError btDialog = new BluetoothDialogError();
+            btDialog.show(getSupportFragmentManager(), "BT_ERROR_DIALOG");
             return;
         }
 
-        Toast.makeText(this.getApplicationContext(), "Monitoring heart rate for 10s", Toast.LENGTH_SHORT).show();
+        Toast t = new Toast(this.getApplicationContext());
+        t.setText("Monitoring heart rate for 10s");
+        t.setDuration(Toast.LENGTH_LONG);
+        t.setGravity(Gravity.CENTER, 0, 0);
+        t.show();
         bluetoothManager.clearRateHistory();
 
         runOnUiThread(new Runnable() {
@@ -626,7 +634,7 @@ public class drawnerActivity extends ActionBarActivity
                     this.friendProfileFragment.setArguments(bundle);
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
+                            .replace(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
                             .commit();
                 }
             } else {
@@ -654,7 +662,7 @@ public class drawnerActivity extends ActionBarActivity
                 this.friendProfileFragment.setArguments(bundle);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .add(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
+                        .replace(R.id.container, friendProfileFragment, "FriendProfileFragment").addToBackStack("FriendProfileFragment")
                         .commit();
             }else{
                 this.lastOperation = 5;
@@ -733,7 +741,7 @@ public class drawnerActivity extends ActionBarActivity
                 this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .add(R.id.container, searchFragment, "SearchFragment").addToBackStack("SearchFragment")
+                        .replace(R.id.container, searchFragment, "SearchFragment").addToBackStack("SearchFragment")
                         .commit();
 
         } else {
