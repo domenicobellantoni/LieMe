@@ -509,13 +509,18 @@ public class drawnerActivity extends ActionBarActivity
                         Log.i(TAG, "Average rate before question: " + String.valueOf(averageHeartRateBeforeQuestion));
 
                         Question q = NotificationFragment.findQuestionById(questionId);
-                        if("undefined".equalsIgnoreCase(q.getAnswer())){
-                           // this.questionDialog = new QuestionDialog();
-                            QuestionDialog questionDialog = new QuestionDialog();
-                            Bundle args = new Bundle();
-                            args.putInt("questionId", Integer.valueOf(questionId));
-                            questionDialog.setArguments(args);
-                            questionDialog.show(getSupportFragmentManager(), "QUESTION_DIALOG");
+                        if(NetworkController.isOnline(getApplicationContext())==true) {
+                            if ("undefined".equalsIgnoreCase(q.getAnswer())) {
+                                // this.questionDialog = new QuestionDialog();
+                                QuestionDialog questionDialog = new QuestionDialog();
+                                Bundle args = new Bundle();
+                                args.putInt("questionId", Integer.valueOf(questionId));
+                                questionDialog.setArguments(args);
+                                questionDialog.show(getSupportFragmentManager(), "QUESTION_DIALOG");
+                            }else{
+                                NetworkDialog networkDialog = new NetworkDialog();
+                                networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
+                            }
                         }
                     }
                 }, 10000);
