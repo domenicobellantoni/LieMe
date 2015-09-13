@@ -1,4 +1,4 @@
-package com.bellantoni.chetta.lieme.generalclasses;
+package com.bellantoni.chetta.lieme.listener;
 
 import android.widget.AbsListView;
 
