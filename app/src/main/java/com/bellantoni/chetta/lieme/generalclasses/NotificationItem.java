@@ -1,8 +1,5 @@
 package com.bellantoni.chetta.lieme.generalclasses;
 
-import java.sql.Time;
-import java.sql.Timestamp;
-
 /**
  * Created by Domenico on 21/07/2015.
  */
@@ -38,10 +35,6 @@ public class NotificationItem {
     public void setTypeNotification(int typeNotification) {
         this.typeNotification = typeNotification;
     }
-
-    /*public NotificationItem getNotification(){
-        return new NotificationItem(this.idQuestion,this.typeNotification, this.stateNotification, this.timeNotification);
-    }*/
 
     public int getStateNotification() {
         return stateNotification;

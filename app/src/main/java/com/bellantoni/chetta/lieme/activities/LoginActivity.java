@@ -1,4 +1,4 @@
-package com.bellantoni.chetta.lieme;
+package com.bellantoni.chetta.lieme.activities;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
 import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
+import com.bellantoni.chetta.lieme.drawnerActivity;
+import com.bellantoni.chetta.lieme.fragments.LoginFragment;
 import com.bellantoni.chetta.lieme.network.UpdateMessages;
 import com.facebook.Profile;
 
@@ -38,27 +41,21 @@ public class LoginActivity extends ActionBarActivity implements LoginFragment.Li
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void goProfile(Profile profile){
         final Intent intent = new Intent(this, drawnerActivity.class);
-        //final Intent intent = new Intent(this, New_Drawner.class);
+
         intent.putExtra("namefromlogin", profile.getFirstName());
         intent.putExtra("surnamefromlogin", profile.getLastName());
         intent.putExtra("idfromlogin", profile.getId());
-        //intent.putExtra("IMAGE", profile.getProfilePictureUri(40,40).toString());
+
 
         FeedReaderDbHelperMessages mDbHelper = new FeedReaderDbHelperMessages(getApplicationContext());
 
@@ -80,12 +77,6 @@ public class LoginActivity extends ActionBarActivity implements LoginFragment.Li
 
     @Override
     public void okInfoInterface(){
-
         //nothing to do
-
     }
-
-
-
-
 }

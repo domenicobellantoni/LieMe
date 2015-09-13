@@ -111,7 +111,7 @@ public class NavigationDrawerFragment extends Fragment {
 
         // Select either the default item (0) or the last selected item.
         selectItem(mCurrentSelectedPosition);
-        //Outline
+
 
     }
 
@@ -296,17 +296,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    /*@Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // If the drawer is open, show the global app actions in the action bar. See also
-        // showGlobalContextActionBar, which controls the top-left area of the action bar.
-        /*if (mDrawerLayout != null && isDrawerOpen()) {
-            inflater.inflate(R.menu.global, menu);
-            showGlobalContextActionBar();
-        }*/
-        /*super.onCreateOptionsMenu(menu, inflater);
 
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -315,10 +305,7 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         if (item.getItemId() == R.id.action_search) {
-            //Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
-            //final Intent intent = new Intent(getActivity(), SearchActivity.class);
-            //startActivity(intent);
-            //finish();
+
             mCallbacks.goSearchFragment();
             return true;
         }
@@ -326,18 +313,7 @@ public class NavigationDrawerFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Per the navigation drawer design guidelines, updates the action bar to show the global app
-     * 'context', rather than just what's in the current screen.
-     */
-   /* private void showGlobalContextActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ff9200")));
-        actionBar.setTitle(R.string.app_name);
 
-    }*/
 
     private ActionBar getActionBar() {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();
@@ -353,6 +329,4 @@ public class NavigationDrawerFragment extends Fragment {
         void onNavigationDrawerItemSelected(int position);
         void goSearchFragment();
     }
-
-
 }

@@ -28,16 +28,9 @@ public class OnClickListenerHomeTo implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
-        //System.out.println("CLICCATO NOME " + this.id);
         if(context instanceof OnClickHomeInterface){
             mOnClickHomeInterface = (OnClickHomeInterface)context;
             mOnClickHomeInterface.goFriendProfileFromHome(this.id);
         }
-
-
-
-
-
     }
 }

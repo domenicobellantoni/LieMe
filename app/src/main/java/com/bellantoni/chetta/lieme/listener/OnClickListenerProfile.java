@@ -29,11 +29,6 @@ public class OnClickListenerProfile implements View.OnClickListener {
         if(context instanceof OnClickProfileInterface){
             mClickProfileInterface = (OnClickProfileInterface)context;
             mClickProfileInterface.goFriendProfileFromProfile(this.id);
-
-
         }
     }
-
-
-
 }

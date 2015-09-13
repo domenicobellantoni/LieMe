@@ -1,4 +1,4 @@
-package com.bellantoni.chetta.lieme;
+package com.bellantoni.chetta.lieme.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
 import com.bellantoni.chetta.lieme.network.NetworkController;
 import com.facebook.AccessToken;

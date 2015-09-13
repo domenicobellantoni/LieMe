@@ -1,4 +1,4 @@
-package com.bellantoni.chetta.lieme;
+package com.bellantoni.chetta.lieme.activities;
 
 import android.app.Activity;
 import android.app.SearchManager;
@@ -17,6 +17,8 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.adapter.SearchListAdapter;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.facebook.FacebookSdk;
@@ -102,7 +104,6 @@ public class SearchActivity extends ActionBarActivity implements AbsListView.OnS
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             this.query = intent.getStringExtra(SearchManager.QUERY);
-            System.out.println("ho cercatooo");
             Toast.makeText(this,query, Toast.LENGTH_LONG);
         }
 
@@ -156,7 +157,6 @@ public class SearchActivity extends ActionBarActivity implements AbsListView.OnS
                                     int position, long id) {
 
                 String facebookId = adapter.getItem(position).getFacebook_id();
-                //chiudo questa activity e vado al profilo dell'amico , creo e paso informazione a activity già esistente
                 Intent intent = new Intent();
                 intent.putExtra("facebookId", Profile.getCurrentProfile().getId());
                 setResult(Activity.RESULT_OK, intent);

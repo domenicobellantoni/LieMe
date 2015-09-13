@@ -15,6 +15,6 @@ public class TimestampComparator implements Comparator<Notification> {
         if(result<0)
             return 1;
         return 0;
-        //return o1.getNotificationTimestamp().compareTo(o2.getNotificationTimestamp());
+
     }
 }

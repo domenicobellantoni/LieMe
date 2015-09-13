@@ -45,8 +45,6 @@ public class ListInFriendFragmentAdapter extends ArrayAdapter<RowItemProfile> {
             LayoutInflater inflater = context.getLayoutInflater();
             view = inflater.inflate(R.layout.list_question_profile_friend, null);
 
-            System.out.println("INFLATE VIEW");
-
             view.setPadding(0,10,0,10);
 
             holder = new ViewHolder();
@@ -57,15 +55,12 @@ public class ListInFriendFragmentAdapter extends ArrayAdapter<RowItemProfile> {
             holder.imgResponse = (ImageView) view.findViewById(R.id.imgResponseFriend);
             holder.timeStamp = (TextView) view.findViewById(R.id.dateQuestionProfileFriend);
 
-
-            // The tag can be any Object, this just happens to be the ViewHolder
             view.setTag(holder);
 
 
 
         } else {
 
-            System.out.println("NO INFLATE VIEW");
             view=convertView;
             holder = (ViewHolder) convertView.getTag();
         }
@@ -75,8 +70,6 @@ public class ListInFriendFragmentAdapter extends ArrayAdapter<RowItemProfile> {
 
         holder.timeStamp.setText(this.rows.get(position).getTime());
 
-        //l'immagine ovviamente la scarico dall'id
-        //Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").transform(new CircleTransform()).fit().centerCrop().into(holder.imageView);
         RoundImage roundedImage = new RoundImage(BitmapFactory.decodeResource(context.getResources(), R.mipmap.iconuseranonymous));
         Picasso.with(context).load("https://graph.facebook.com/" + this.rows.get(position).getFacebookId() + "/picture?height=115&width=115")
                 .placeholder(roundedImage)

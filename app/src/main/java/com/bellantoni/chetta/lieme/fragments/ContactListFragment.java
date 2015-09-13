@@ -1,8 +1,7 @@
-package com.bellantoni.chetta.lieme;
+package com.bellantoni.chetta.lieme.fragments;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -18,9 +17,9 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 
+import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.db.FeedReaderContract;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelper;
-import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
 //import com.bellantoni.chetta.lieme.dummy.DummyContent;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.facebook.AccessToken;
@@ -50,12 +49,11 @@ import java.util.List;
 
 public class ContactListFragment extends android.support.v4.app.Fragment implements AbsListView.OnItemClickListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String TAG = "CONTACT_LIST_FRAGMENT";
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
 
@@ -92,8 +90,7 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
      */
     private static RetrieveContactsFromLocalDataBase retrieveContactsFromLocalDataBaseAsync;
 
-    // Define a projection that specifies which columns from the database
-    // you will actually use after this query.
+
     private static String[] projection = {
             FeedReaderContract.FeedEntry._ID,
             FeedReaderContract.FeedEntry.COLUMN_NAME_NAME,
@@ -101,7 +98,7 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
             FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP
     };
 
-     // TODO: Rename and change types of parameters
+
     public static ContactListFragment newInstance(String param1, String param2) {
         ContactListFragment fragment = new ContactListFragment();
         Bundle args = new Bundle();
@@ -121,24 +118,7 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       /*
-        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
-        mDbHelper = new FeedReaderDbHelper(getActivity().getApplicationContext());
-        contacts = new ArrayList<Contact>();
-        retrieveContactsFromLocalDataBaseAsync = new RetrieveContactsFromLocalDataBase();
-        //retrieveContactsFromLocalDataBase();
-        /* Add test
-        contacts.add(new Contact("ok","ok","ok","ok","ok"));
-        */
-/*
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
-        mAdapter = new ArrayAdapter<Contact>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, contacts);
-
-        */
 
         downloadFriends(getActivity());
     }
@@ -148,16 +128,7 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
         mDbHelper = new FeedReaderDbHelper(c.getApplicationContext());
         contacts = new ArrayList<Contact>();
         retrieveContactsFromLocalDataBaseAsync = new RetrieveContactsFromLocalDataBase();
-        //retrieveContactsFromLocalDataBase();
-        /* Add test
-        contacts.add(new Contact("ok","ok","ok","ok","ok"));
-        */
-        /*
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-*/
+
         mAdapter = new ArrayAdapter<Contact>(c, android.R.layout.simple_list_item_1, android.R.id.text1, contacts);
 
     }
@@ -189,11 +160,9 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item, container, false);
 
-        // Set the adapter
         mListView = (AbsListView) view.findViewById(android.R.id.list);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
-        // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
         return view;
@@ -227,9 +196,7 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            // mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+
             mListener.onFragmentInteraction(contacts.get(position).getId());
         }
     }
@@ -335,37 +302,6 @@ public class ContactListFragment extends android.support.v4.app.Fragment impleme
         newRowId = db1.insert(FeedReaderContract.FeedEntry.TABLE_NAME,
                 null,
                 values);
-
-        /*
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                FeedReaderContract.FeedEntry._ID,
-                FeedReaderContract.FeedEntry.COLUMN_NAME_NAME,
-                FeedReaderContract.FeedEntry.COLUMN_NAME_FACEBOOK_ID,
-                FeedReaderContract.FeedEntry.COLUMN_NAME_TIMESTAMP
-        };
-
-        // How you want the results sorted in the resulting Cursor
-        String sortOrder =
-                FeedReaderContract.FeedEntry.COLUMN_NAME_NAME + " ASC";
-
-        Cursor c = db.query(
-                FeedReaderContract.FeedEntry.TABLE_NAME,  // The table to query
-                projection,                               // The columns to return
-                null,                                // The columns for the WHERE clause
-                null,                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                sortOrder                                 // The sort order
-        );
-
-        fillTheContactListArray(c);
-        */
-
-
     }
 
     private static class RetrieveContactsFromLocalDataBase extends AsyncTask<Void, Void, Void>{

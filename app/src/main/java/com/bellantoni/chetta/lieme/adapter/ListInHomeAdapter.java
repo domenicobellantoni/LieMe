@@ -40,9 +40,6 @@ public class ListInHomeAdapter extends ArrayAdapter<ItemHome> {
 
     }
 
-
-
-
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder holder;
@@ -50,34 +47,23 @@ public class ListInHomeAdapter extends ArrayAdapter<ItemHome> {
         if (convertView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
             view = inflater.inflate(R.layout.list_question_home, null);
-
-
-
             view.setPadding(0,10,0,10);
 
             holder = new ViewHolder();
             holder.nameFrom = (TextView) view.findViewById(R.id.nameFrom);
-
-
-
             holder.nameTo = (TextView) view.findViewById(R.id.nameTo);
-
-
             holder.question = (TextView) view.findViewById(R.id.questionFriendHome);
             holder.idfacebookTo = (TextView) view.findViewById(R.id.facebookIdFriendHome);
             holder. imageView = (ImageView) view.findViewById(R.id.imageFbHome);
             holder.imgResponse = (ImageView) view.findViewById(R.id.imgResponseFriendHome);
             holder.timeStamp = (TextView) view.findViewById(R.id.dateQuestionProfileHome);
 
-
-            // The tag can be any Object, this just happens to be the ViewHolder
             view.setTag(holder);
 
 
 
         } else {
 
-            //System.out.println("NO INFLATE VIEW");
             view=convertView;
             holder = (ViewHolder) convertView.getTag();
         }
@@ -91,14 +77,10 @@ public class ListInHomeAdapter extends ArrayAdapter<ItemHome> {
         holder.nameTo.setText(this.rows.get(position).getNameTo());
 
         holder.timeStamp.setText(this.rows.get(position).getTime());
-
-        //l'immagine ovviamente la scarico dall'id
-        //Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").transform(new CircleTransform()).fit().centerCrop().into(holder.imageView);
         RoundImage roundedImage = new RoundImage(BitmapFactory.decodeResource(context.getResources(), R.mipmap.iconuseranonymous));
         Picasso.with(context).load("https://graph.facebook.com/" + this.rows.get(position).getIdTo() + "/picture?height=115&width=115")
                 .placeholder(roundedImage)
                 .transform(new CircleTransform()).fit().centerCrop().into(holder.imageView);
-        //holder.extratxt.setTypeface(tf);
         holder.question.setText(this.rows.get(position).getQuestion());
 
         holder.idfacebookTo.setText(this.rows.get(position).getIdTo());
@@ -131,10 +113,6 @@ public class ListInHomeAdapter extends ArrayAdapter<ItemHome> {
     public void setCount(int count) {
         this.count = count;
     }
-
-
-
-
 
     static class ViewHolder {
         TextView nameFrom;

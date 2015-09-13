@@ -1,7 +1,5 @@
 package com.bellantoni.chetta.lieme.generalclasses;
 
-
-import java.sql.Time;
 import java.sql.Timestamp;
 
 /**

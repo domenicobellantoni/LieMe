@@ -115,11 +115,7 @@ public class UpdateNotifications {
             try {
                 json = new JSONObject(s);
                 notifications = json.getJSONArray("notifications");
-                /*for(int i = 0; i< notifications.length(); i++)
-                {
-                    JSONObject message = notifications.getJSONObject(i);
-                    Log.i(TAG, "message: "+ i + " " + message.getString("message"));
-                }*/
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

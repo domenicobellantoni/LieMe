@@ -51,7 +51,6 @@ public class LogoutDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Here we create and return the AlertDialog using a Builder
         AlertDialog.Builder builder =  new AlertDialog.Builder(getActivity()).setIcon(R.mipmap.logo_mini_dialog)
                 .setTitle(R.string.dialog_logout)
                 .setPositiveButton(R.string.yes,mOnclickListener)

@@ -1,4 +1,4 @@
-package com.bellantoni.chetta.lieme;
+package com.bellantoni.chetta.lieme.fragments;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
+
+import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.adapter.SearchListAdapter;
 import com.bellantoni.chetta.lieme.db.FeedReaderContract;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelper;
@@ -26,7 +28,7 @@ import java.util.List;
 /**
  * Created by Domenico on 05/09/2015.
  */
-public class SearchFragment extends Fragment /*implements AbsListView.OnScrollListener*/{
+public class SearchFragment extends Fragment {
 
 
     private SearchListAdapter adapter;
@@ -188,12 +190,8 @@ public class SearchFragment extends Fragment /*implements AbsListView.OnScrollLi
 
 
     private void downloadData(){
-
-
         Cursor c;
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-        // How you want the results sorted in the resulting Cursor
         String sortOrder =
                 FeedReaderContract.FeedEntry.COLUMN_NAME_NAME + " ASC";
 
@@ -208,7 +206,5 @@ public class SearchFragment extends Fragment /*implements AbsListView.OnScrollLi
         );
 
         fillTheContactListArray(c);
-
     }
-
 }

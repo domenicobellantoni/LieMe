@@ -12,13 +12,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bellantoni.chetta.lieme.ContactListFragment;
-import com.bellantoni.chetta.lieme.NotificationFragment;
+import com.bellantoni.chetta.lieme.fragments.ContactListFragment;
+import com.bellantoni.chetta.lieme.fragments.NotificationFragment;
 import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.bellantoni.chetta.lieme.generalclasses.Question;
-import com.facebook.Profile;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -100,9 +99,7 @@ public class QuestionDialog extends DialogFragment /*implements View.OnClickList
 
 
         return view;
-
     }
-
 
     @Override
     public void onAttach(Activity activity){
@@ -111,8 +108,4 @@ public class QuestionDialog extends DialogFragment /*implements View.OnClickList
             mQuestionInterface = (QuestionInterface) activity;
         }
     }
-
-
-
-
 }

@@ -9,10 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.bellantoni.chetta.lieme.NotificationFragment;
+import com.bellantoni.chetta.lieme.fragments.NotificationFragment;
 import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
-import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.bellantoni.chetta.lieme.generalclasses.NotificationItem;
 import com.bellantoni.chetta.lieme.generalclasses.Question;
 import com.squareup.picasso.Picasso;
@@ -61,9 +60,6 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        //if(this.rows.size()==0)
-        //    return view;
-
         int typeNotification = this.rows.get(position).getTypeNotification();
 
         holder.textNotification.setTextColor(Color.BLACK);
@@ -75,14 +71,9 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationItem> {
             holder.imageNotification.setImageResource(R.mipmap.iconuseranonymous);
        }
         if(typeNotification==1){
-            //nome da recuperare da con id notifica, quindi id utente quindi dome
             Question questionObj = NotificationFragment.findQuestionById(String.valueOf(this.rows.get(position).getAnsweredQuestionId()));
-            //Contact user = ContactListFragment.findContactById(questionObj.getReceiver_id());
             holder.textNotification.setText("Answered your question");
-            /*if(questionObj.getMessage_read().equalsIgnoreCase("0")){
-                holder.layout.setBackgroundColor(Color.parseColor("#000000"));
-            }
-            System.out.println("STATO MESSAGGIO"+questionObj.getMessage_read());*/
+
             Picasso.with(context).load("https://graph.facebook.com/" + questionObj.getReceiver_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(holder.imageNotification);
         }
         return view;

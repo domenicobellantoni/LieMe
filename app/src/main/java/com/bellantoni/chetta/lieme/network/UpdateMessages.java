@@ -53,55 +53,6 @@ public class UpdateMessages {
 
     private void updateLocalDB(JSONArray messages){
 
-        /*SQLiteDatabase dbWriter = mDbHelper.getWritableDatabase();
-
-
-        for(int i = 0; i< messages.length(); i++)
-        {
-            JSONObject message = null;
-            try {
-                message = messages.getJSONObject(i);
-                Log.i(TAG, "message: "+ i + " " + message.getString("message"));
-
-
-                String[] projection = {
-                        FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE,
-                        FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE_READ,
-                        FeedReaderContractMessages.FeedEntry.COLUMN_NAME_RECEIVER_ID,
-                        FeedReaderContractMessages.FeedEntry.COLUMN_NAME_SENDER_ID,
-                        FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP
-                };
-
-                SQLiteDatabase dbReader = mDbHelper.getReadableDatabase();
-                Cursor c = dbReader.query(
-                        FeedReaderContractMessages.FeedEntry.TABLE_NAME,  // The table to query
-                        projection,                               // The columns to return
-                        FeedReaderContractMessages.FeedEntry._ID + "=?",   // The columns for the WHERE clause
-                        new String[]{String.valueOf(message.getString("id"))},                            // The values for the WHERE clause
-                        null,                                     // don't group the rows
-                        null,                                     // don't filter by row groups
-                        null                                 // The sort order
-                );
-
-                if(c.moveToNext()){
-                    Log.i(TAG, "MESSAGE IN THE LOCAL DB");
-                }else{
-
-                    Log.i(TAG, "MESSAGE NOT IN THE LOCAL DB");
-                    ContentValues values = new ContentValues();
-                    values.put(FeedReaderContractMessages.FeedEntry._ID, message.getString("id"));
-                    values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_SENDER_ID, message.getString("sender_id"));
-                    values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE, message.getString("message"));
-                    values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_MESSAGE_READ, message.getString("message_read"));
-                    values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_RECEIVER_ID, message.getString("receiver_id"));
-                    values.put(FeedReaderContractMessages.FeedEntry.COLUMN_NAME_TIMESTAMP, message.getString("timestamp"));
-                    long newRowId = dbWriter.insert(FeedReaderContractMessages.FeedEntry.TABLE_NAME,null,values);
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }*/
 
         UpdateLocalDBBackground updateLocalDBBackground = new UpdateLocalDBBackground();
         updateLocalDBBackground.execute(messages);
@@ -173,11 +124,7 @@ public class UpdateMessages {
             try {
                 json = new JSONObject(s);
                 messages = json.getJSONArray("messages");
-                /*for(int i = 0; i< messages.length(); i++)
-                {
-                    JSONObject message = messages.getJSONObject(i);
-                    Log.i(TAG, "message: "+ i + " " + message.getString("message"));
-                }*/
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

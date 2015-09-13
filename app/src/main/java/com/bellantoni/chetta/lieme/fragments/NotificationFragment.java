@@ -1,4 +1,4 @@
-package com.bellantoni.chetta.lieme;
+package com.bellantoni.chetta.lieme.fragments;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.adapter.NotificationListAdapter;
 import com.bellantoni.chetta.lieme.db.FeedReaderContractMessages;
 import com.bellantoni.chetta.lieme.db.FeedReaderContractNotification;
@@ -264,10 +266,6 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
             this.adapter.setCount(this.adapter.getCount()+1);
             Log.i(TAG, "COUNT" +this.adapter.getCount() + " list " + this.rows.size());
-
-
-            //rows.add(new NotificationItem(545154,0,1, new Date().getTime()));
-            //this.adapter.addAll(this.rows);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
@@ -276,7 +274,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
 
                     if(adapter.getItem(position).getTypeNotification()==0) {
-                        //prima di leggere la domanda qui devo controllare se ho un dispositivo bluetooth attaccato
+
                         mNotificationInteface.readQuestion(adapter.getItem(position).getQuestionId());
                     }
                     if(adapter.getItem(position).getTypeNotification()==1){
@@ -287,18 +285,12 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
                 }
             });
 
-
-            //System.out.println("CONTATORE "+ this.adapter.getCount());
             adapter.notifyDataSetChanged();
         }
     }
 
     public void onScrollStateChanged(AbsListView v, int s) {
-
-        //System.out.println("CONTATORE "+ this.adapter.getCount());
         adapter.notifyDataSetChanged();
-
-
     }
 
     private void updateList(ArrayList<Notification> notifications){
@@ -306,7 +298,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
 
         for(Object o: notifications){
             Notification n = (Notification)o;
-            // If notification is a Question
+
             if(n.getNotificationType() == 0)
             {
                 Question q = (Question) n;
@@ -348,7 +340,7 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
                 Log.i(TAG, "Message retrieved from DB:" + q.getMessage());
             }
 
-            // If notification is an answer
+
             if(n.getNotificationType() == 1)
             {
                 NotificationImpl nImpl = (NotificationImpl) n;
@@ -605,10 +597,6 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
         }
 
     }
-
-    /*public static ArrayList<Notification> getAllNotifications(){
-        return allNotifications;
-    }*/
 }
 
 

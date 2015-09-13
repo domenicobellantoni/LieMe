@@ -23,11 +23,9 @@ public final class FeedReaderContractMessages {
     public static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME;
 
-    // To prevent someone from accidentally instantiating the contract class,
-    // give it an empty constructor.
+
     public FeedReaderContractMessages() {}
 
-    /* Inner class that defines the table contents */
     public static abstract class FeedEntry implements BaseColumns {
         public static final String TABLE_NAME = "messages";
         public static final String COLUMN_NAME_SENDER_ID = "sender_id";

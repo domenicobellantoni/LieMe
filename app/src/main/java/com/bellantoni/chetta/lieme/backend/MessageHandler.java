@@ -1,22 +1,20 @@
-package com.bellantoni.chetta.lieme;
+package com.bellantoni.chetta.lieme.backend;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.bellantoni.chetta.lieme.fragments.ProfileFragment;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,14 +43,6 @@ public class MessageHandler {
         Log.i(TAG, "Sending message to " + receiver.getName() + " receiver id: " + receiver.getFacebook_id() + " sender id: " + senderFacebookId + " message: " + message);
 
         new SenderAsync().execute(senderFacebookId,message, receiver.getFacebook_id());
-        /*if(this.sentResult==true){
-            Toast toast = Toast.makeText(this.context, "Message Sent", Toast.LENGTH_LONG);
-            toast.show();
-
-        }else{
-            Toast toast = Toast.makeText(this.context, "ERROR: Message not Sent", Toast.LENGTH_LONG);
-            toast.show();
-        }*/
     }
 
 
@@ -87,7 +77,6 @@ public class MessageHandler {
                 parameter.add(new BasicNameValuePair("regId", "empty"));
                 parameter.add(new BasicNameValuePair("sender_id", params[0]));
                 parameter.add(new BasicNameValuePair("receiver_facebook_id", params[2]));
-                //parameter.add(new BasicNameValuePair("receiver_facebook_id", "455542404610206"));
                 parameter.add(new BasicNameValuePair("message", params[1]));
 
                 String paramString = URLEncodedUtils.format(parameter, "utf-8");
@@ -95,13 +84,10 @@ public class MessageHandler {
 
                 Log.i(TAG, paramString);
                 HttpResponse resp = client.execute(get);
-                System.out.println("SREVER RESPONSE " + resp.getStatusLine().getStatusCode());
+
                 if(resp.getStatusLine().getStatusCode()==200){
                     MessageHandler.this.sentResult = true;
                 }
-
-
-
             } catch (IOException e) {
 
                 Log.i(TAG,"Error :" + e.getMessage());

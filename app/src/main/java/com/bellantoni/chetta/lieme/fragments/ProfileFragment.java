@@ -1,4 +1,4 @@
-package com.bellantoni.chetta.lieme;
+package com.bellantoni.chetta.lieme.fragments;
 
 
 import android.app.Activity;
@@ -26,8 +26,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bellantoni.chetta.lieme.adapter.CustomListAdapter;
+import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.db.FeedReaderContractMessages;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
+import com.bellantoni.chetta.lieme.drawnerActivity;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
 import com.bellantoni.chetta.lieme.generalclasses.Notification;
@@ -268,12 +271,12 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
             FAB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //mProfileFragmentInteface.goaskQuestionFragment();
+
                     mProfileFragmentInteface.goContactListFragment();
                 }
             });
 
-            //la lista andrà creata in un async task e nel frattempo mostrato uno spin
+
             for (int i = 0; i < 8; i++) {
 
                 RowItemProfile row = new RowItemProfile(questions[i], itemname[i], idfb[i], imgid[i], resultsQuestion[i], p.format(timeStamp[i]));
@@ -340,8 +343,6 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
                     if(q.getAnswer().equals("no"))
                         res = false;
                     Contact senderContact = ContactListFragment.findContactById(q.getSender_id());
-                    //ImageView profileImage ;
-                    //Picasso.with(getActivity().getApplicationContext()).load("https://graph.facebook.com/" + q.getSender_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(profileImage);
                     RowItemProfile row = new RowItemProfile(q.getMessage(), senderContact.getName(), q.getSender_id(), R.drawable.ic_profile, res, p.format(q.getNotificationTimestamp()));
                     this.rows.add(row);
                     count++;
@@ -517,22 +518,12 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
         @Override
         protected Void doInBackground(Void... params) {
-            //da scaricare
-            /*
-            Random random = new Random();
-
-            int number = random.nextInt(3)+1;
-            for(int i=0; i<number; i++){
-                RowItemProfile row = new RowItemProfile("Pippo", "Pippo", "id fb Pippo", R.id.icon, true, p.format(new Date()));
-                ProfileFragment.this.rows.add(0,row);
-            }*/
             new RetrieveMessagesFromLocalDataBase().execute(null,null,null);
             return null;
         }
 
         protected void onPostExecute(Void result){
            ProfileFragment.this.swipeLayout.setRefreshing(false);
-
         }
     }
 
@@ -593,8 +584,7 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
 
     private void updateMessageArray(ArrayList<Notification> messages){
         Collections.sort(messages, new TimestampComparator());
-        // Question q = (Question)messages.get(0);
-        // Log.i("MESSAGGIO PRIMO: ", q.getMessage() + " RISPOSTA: " + q.getAnswer());
+
         this.messages = messages;
         this.rows.clear();
 
@@ -607,13 +597,10 @@ public class ProfileFragment extends Fragment implements AbsListView.OnScrollLis
                 if(q.getAnswer().equals("no"))
                     res = false;
                 Contact senderContact = ContactListFragment.findContactById(q.getSender_id());
-                //ImageView profileImage ;
-                //Picasso.with(getActivity().getApplicationContext()).load("https://graph.facebook.com/" + q.getSender_id() + "/picture?height=115&width=115").placeholder(R.mipmap.iconuseranonymous).transform(new CircleTransform()).fit().centerCrop().into(profileImage);
                 RowItemProfile row = new RowItemProfile(q.getMessage(), senderContact.getName(), q.getSender_id(), R.drawable.ic_profile, res, p.format(q.getNotificationTimestamp()));
                 this.rows.add(row);
             }
         }
-
         this.adapter.setCount(this.rows.size());
         this.adapter.notifyDataSetChanged();
     }

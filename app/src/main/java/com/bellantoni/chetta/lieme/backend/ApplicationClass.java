@@ -1,4 +1,4 @@
-package com.bellantoni.chetta.lieme;
+package com.bellantoni.chetta.lieme.backend;
 
 import android.app.Application;
 import android.content.pm.PackageInfo;

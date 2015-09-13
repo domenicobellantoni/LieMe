@@ -14,7 +14,6 @@ public class DrawerElement {
 
     }
 
-
     public int getIdImg() {
         return idImg;
     }

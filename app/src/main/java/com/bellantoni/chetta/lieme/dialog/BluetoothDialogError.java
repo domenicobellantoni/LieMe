@@ -14,9 +14,7 @@ import com.bellantoni.chetta.lieme.R;
  */
 public class BluetoothDialogError extends DialogFragment {
 
-    /*private ImageView btIcon;
-    private ImageView signalIcon;
-    private ImageView deviceIcon;*/
+
     private Button okButton;
 
 
@@ -24,9 +22,7 @@ public class BluetoothDialogError extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_dialog_bluetooth_error, null);
 
-        /*this.btIcon = (ImageView) view.findViewById(R.id.btIcon);
-        this.signalIcon  = (ImageView) view.findViewById(R.id.signalIcon);
-        this.deviceIcon  = (ImageView) view.findViewById(R.id.deviceIcon);*/
+
         this.okButton = (Button) view.findViewById(R.id.okButtonReadQuestion);
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override

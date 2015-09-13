@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.bellantoni.chetta.lieme.activities.LoginActivity;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperNotification;
 import com.bellantoni.chetta.lieme.dialog.BluetoothDialogError;
@@ -25,6 +27,13 @@ import com.bellantoni.chetta.lieme.dialog.DialogQuestionAnswered;
 import com.bellantoni.chetta.lieme.dialog.LogoutDialog;
 import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
 import com.bellantoni.chetta.lieme.dialog.QuestionDialog;
+import com.bellantoni.chetta.lieme.fragments.AskFragment;
+import com.bellantoni.chetta.lieme.fragments.ContactListFragment;
+import com.bellantoni.chetta.lieme.fragments.FriendProfileFragment;
+import com.bellantoni.chetta.lieme.fragments.HomeFragment;
+import com.bellantoni.chetta.lieme.fragments.NotificationFragment;
+import com.bellantoni.chetta.lieme.fragments.ProfileFragment;
+import com.bellantoni.chetta.lieme.fragments.SearchFragment;
 import com.bellantoni.chetta.lieme.generalclasses.BluetoothManager;
 import com.bellantoni.chetta.lieme.generalclasses.Question;
 import com.bellantoni.chetta.lieme.listener.OnClickListenerFriendProfile;
@@ -317,7 +326,7 @@ public class drawnerActivity extends ActionBarActivity
 
         }else{
             this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
-            //this.askFragment.setArguments(bundle);
+
             FragmentManager fragmentManager = getSupportFragmentManager();
 
             fragmentManager.beginTransaction()
@@ -334,7 +343,7 @@ public class drawnerActivity extends ActionBarActivity
             finish();
         }
         else {
-            System.out.println("DIMENSIONE " + titlesActionbar.size());
+
             this.actionBar.setTitle(titlesActionbar.get(titlesActionbar.size() - 1));
             this.titlesActionbar.remove(titlesActionbar.size() - 1);
             super.onBackPressed();
@@ -536,39 +545,6 @@ public class drawnerActivity extends ActionBarActivity
 
     }
 
-/*
-    @Override
-    public void readQuestion(String questionId){
-
-        boolean bt = bluetoothManager.connect();
-        if(!bt){
-            Toast.makeText(this.getApplicationContext(), "Bluetooth device not paired", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Toast.makeText(this.getApplicationContext(), "Monitoring heart rate for 10s", Toast.LENGTH_SHORT).show();
-
-
-        delay();
-        averageHeartRateBeforeQuestion = bluetoothManager.getRateAverage();
-
-
-        Log.i(TAG, "Average rate before question: " + String.valueOf(averageHeartRateBeforeQuestion));
-
-        Question q = NotificationFragment.findQuestionById(questionId);
-        if("undefined".equalsIgnoreCase(q.getAnswer())){
-            this.questionDialog = new QuestionDialog();
-            Bundle args = new Bundle();
-            args.putInt("questionId", Integer.valueOf(questionId));
-            questionDialog.setArguments(args);
-            questionDialog.show(getSupportFragmentManager(), "QUESTION_DIALOG");
-        }else{
-            Toast.makeText(this.getApplicationContext(), "Question already answered", Toast.LENGTH_SHORT).show();
-        }
-    }*/
-
-
-
     @Override
     public void readAnswer(String questionId){
 
@@ -763,13 +739,8 @@ public class drawnerActivity extends ActionBarActivity
     @Override
     public void goFreindProfileFromSearch(String facebookId){
         if(facebookId.equalsIgnoreCase("anonymous")){
-            System.out.println("edit , non vado in nessun profilo perchè sono anonimo");
         }else{
             goFriendProfileFromHome(facebookId);
         }
-
     }
-
-
-
 }

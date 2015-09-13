@@ -1,4 +1,4 @@
-package com.bellantoni.chetta.lieme;
+package com.bellantoni.chetta.lieme.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.generalclasses.CircleTransform;
 import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
 import com.bellantoni.chetta.lieme.listener.OnClickListenerProfile;
@@ -41,18 +43,13 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
 
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Avoid unneccessary calls to findViewById() on each row, which is expensive!
+
         ViewHolder holder;
 
-    /*
-     * If convertView is not null, we can reuse it directly, no inflation required!
-     * We only inflate a new View when the convertView is null.
-     */
+
         if (convertView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
             view = inflater.inflate(R.layout.mylist, null);
-
-            System.out.println("INFLATE VIEW");
 
             view.setPadding(0,10,0,10);
             // Create a ViewHolder and store references to the two children views
@@ -65,31 +62,27 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
             holder.timestamp = (TextView) view.findViewById(R.id.dateQuestionProfile);
 
 
-            // The tag can be any Object, this just happens to be the ViewHolder
+
             view.setTag(holder);
 
 
 
         } else {
-            // Get the ViewHolder back to get fast access to the TextView
-            // and the ImageView.
-            System.out.println("NO INFLATE VIEW");
             view=convertView;
             holder = (ViewHolder) convertView.getTag();
         }
 
-        // Bind that data efficiently!
-        //holder.txtTitle.setTypeface(tf);
+
 
         holder.txtTitle.setTextColor(Color.BLACK);
         holder.txtTitle.setText(this.rows.get(position).getNameSurname());
-        //holder.imageView.setImageResource(R.mipmap.iconuseranonymous);
+
         Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").transform(new CircleTransform()).fit().centerCrop().into(holder.imageView);
         RoundImage roundedImage = new RoundImage(BitmapFactory.decodeResource(context.getResources(), R.mipmap.iconuseranonymous));
         Picasso.with(context).load("https://graph.facebook.com/" + this.rows.get(position).getFacebookId() + "/picture?height=115&width=115")
                 .placeholder(roundedImage)
                 .transform(new CircleTransform()).fit().centerCrop().into(holder.imageView);
-        //holder.extratxt.setTypeface(tf);
+
 
         holder.extratxt.setText(this.rows.get(position).getQuestion());
 
@@ -102,11 +95,7 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
 
         if(this.rows.get(position).getResultQuestion()==true){
             holder.imgResponse.setImageResource(R.drawable.heart_green);
-
-            //holder.txtTitle.setCompoundDrawables(null,null,context.getResources().getDrawable(R.drawable.heart_green),null);
-
         }else{
-            //holder.txtTitle.setCompoundDrawables(null,null,context.getResources().getDrawable(R.drawable.heart_red),null);
 
             holder.imgResponse.setImageResource(R.drawable.heart_red);
         }

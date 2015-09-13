@@ -1,4 +1,4 @@
-package com.bellantoni.chetta.lieme;
+package com.bellantoni.chetta.lieme.activities;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperMessages;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelperNotification;
 import com.bellantoni.chetta.lieme.dialog.NetworkDialog;
+import com.bellantoni.chetta.lieme.drawnerActivity;
 import com.bellantoni.chetta.lieme.network.NetworkController;
 import com.bellantoni.chetta.lieme.network.UpdateMessages;
 import com.bellantoni.chetta.lieme.network.UpdateNotifications;
@@ -86,7 +88,7 @@ public class SplashActivity extends ActionBarActivity implements NetworkDialog.N
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_splash, menu);
 
         return true;
@@ -94,12 +96,9 @@ public class SplashActivity extends ActionBarActivity implements NetworkDialog.N
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -136,7 +135,7 @@ public class SplashActivity extends ActionBarActivity implements NetworkDialog.N
                 intent.putExtra("idfromsplash", profile.getId());
                 intent.putExtra("photo1", "https://graph.facebook.com/" );
                 intent.putExtra("photo2","/picture?height=105&width=105");
-                System.out.println("NOMEEEEEEE "+profile.getFirstName());
+
 
                 FeedReaderDbHelperMessages mDbHelper = new FeedReaderDbHelperMessages(getApplicationContext());
 

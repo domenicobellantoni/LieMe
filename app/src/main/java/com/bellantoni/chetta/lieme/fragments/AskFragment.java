@@ -1,29 +1,25 @@
-package com.bellantoni.chetta.lieme;
+package com.bellantoni.chetta.lieme.fragments;
 
 
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bellantoni.chetta.lieme.backend.MessageHandler;
+import com.bellantoni.chetta.lieme.R;
 import com.bellantoni.chetta.lieme.db.FeedReaderContract;
 import com.bellantoni.chetta.lieme.db.FeedReaderDbHelper;
 import com.bellantoni.chetta.lieme.generalclasses.Contact;
-import com.bellantoni.chetta.lieme.generalclasses.RoundImage;
 import com.facebook.FacebookSdk;
 
 /**
