@@ -620,7 +620,6 @@ public class drawnerActivity extends ActionBarActivity
                 this.lastFacebookId = facebookId;
                 NetworkDialog networkDialog = new NetworkDialog();
                 networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
-
             }
         }
     }
@@ -714,18 +713,26 @@ public class drawnerActivity extends ActionBarActivity
     public void goSearchFragment() {
 
         if (NetworkController.isOnline(getApplicationContext()) == true) {
-
-                this.searchFragment = new SearchFragment();
-                this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, searchFragment, "SearchFragment").addToBackStack("SearchFragment")
-                        .commit();
+            SearchFragment myFragment = (SearchFragment)getSupportFragmentManager().findFragmentByTag("SearchFragment");
+            if (myFragment == null ) {
+                createSearchFragment();
+            } else if(!myFragment.isVisible()){
+                createSearchFragment();
+            }
 
         } else {
             NetworkDialog networkDialog = new NetworkDialog();
             networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
         }
+    }
+
+    private void createSearchFragment(){
+        this.searchFragment = new SearchFragment();
+        this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, searchFragment, "SearchFragment").addToBackStack("SearchFragment")
+                .commit();
     }
 
     @Override
