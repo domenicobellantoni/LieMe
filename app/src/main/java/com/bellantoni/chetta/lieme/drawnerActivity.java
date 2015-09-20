@@ -2,6 +2,7 @@ package com.bellantoni.chetta.lieme;
 
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -16,7 +17,9 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.bellantoni.chetta.lieme.activities.LoginActivity;
@@ -260,14 +263,10 @@ public class drawnerActivity extends ActionBarActivity
       //per la rotazione guadrare il manufest tag conf in questa attività
     private void goProfile(){
 
-
-
         this.actionBar = getSupportActionBar();
         actionBar.setTitle(Profile.getCurrentProfile().getFirstName()+" "+Profile.getCurrentProfile().getLastName());
-        //this.actionBar.hide();
+
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-
 
         if(this.profileFragment==null) {
             Profile profile = Profile.getCurrentProfile();
@@ -299,8 +298,6 @@ public class drawnerActivity extends ActionBarActivity
                     .replace(R.id.container, profileFragment, "ProfileFragment").addToBackStack("ProfileFragment")
                     .commit();
         }
-
-
     }
 
     private void goAskQuestion( String receiver_id){
@@ -343,11 +340,9 @@ public class drawnerActivity extends ActionBarActivity
             finish();
         }
         else {
-
             this.actionBar.setTitle(titlesActionbar.get(titlesActionbar.size() - 1));
             this.titlesActionbar.remove(titlesActionbar.size() - 1);
             super.onBackPressed();
-
         }
     }
 
@@ -364,7 +359,6 @@ public class drawnerActivity extends ActionBarActivity
                    .replace(R.id.container, this.homefragment, "HomeFragment").addToBackStack("HomeFragment")
                    .commit();
 
-
        }else{
            this.titlesActionbar.add(String.valueOf(actionBar.getTitle()));
 
@@ -373,9 +367,7 @@ public class drawnerActivity extends ActionBarActivity
            fragmentManager.beginTransaction()
                    .replace(R.id.container, this.homefragment, "HomeFragment").addToBackStack("HomeFragment")
                    .commit();
-
        }
-
     }
 
 
@@ -740,7 +732,16 @@ public class drawnerActivity extends ActionBarActivity
     public void goFreindProfileFromSearch(String facebookId){
         if(facebookId.equalsIgnoreCase("anonymous")){
         }else{
+            hideKeyboard();
             goFriendProfileFromHome(facebookId);
+        }
+    }
+
+    private void hideKeyboard(){
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 }
