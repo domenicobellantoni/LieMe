@@ -231,7 +231,7 @@ public class HomeFragment extends Fragment implements AbsListView.OnScrollListen
 
             int count = 0;
 
-            for(int i=this.rows.size()-1; i<this.messages.size(); i++) {
+            for(int i=this.rows.size(); i<this.messages.size()-1; i++) {
                 Question q = (Question)messages.get(i);
                 if(!q.getAnswer().equals("undefined"))
                 {

@@ -36,8 +36,6 @@ public class CustomListAdapter extends ArrayAdapter<RowItemProfile> {
         super(context, R.layout.mylist, firstRows);
         this.context = context;
         this.rows = firstRows;
-
-
     }
 
 

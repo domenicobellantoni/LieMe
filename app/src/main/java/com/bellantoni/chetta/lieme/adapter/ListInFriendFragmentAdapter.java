@@ -33,8 +33,6 @@ public class ListInFriendFragmentAdapter extends ArrayAdapter<RowItemProfile> {
         super(context, R.layout.mylist, firstRows);
         this.context = context;
         this.rows = firstRows;
-
-
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {

@@ -36,8 +36,7 @@ public class ListInHomeAdapter extends ArrayAdapter<ItemHome> {
         super(context, R.layout.list_question_home, firstRows);
         this.context = context;
         this.rows = firstRows;
-
-
+        //this.count = firstRows.size();
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -68,33 +67,31 @@ public class ListInHomeAdapter extends ArrayAdapter<ItemHome> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.nameTo.setTextColor(Color.BLACK);
 
+            holder.nameTo.setTextColor(Color.BLACK);
+            holder.nameFrom.setText(this.rows.get(position).getNameFrom());
+            holder.nameTo.setText(this.rows.get(position).getNameTo());
 
-        holder.nameFrom.setText(this.rows.get(position).getNameFrom());
+            holder.timeStamp.setText(this.rows.get(position).getTime());
+            RoundImage roundedImage = new RoundImage(BitmapFactory.decodeResource(context.getResources(), R.mipmap.iconuseranonymous));
+            Picasso.with(context).load("https://graph.facebook.com/" + this.rows.get(position).getIdTo() + "/picture?height=115&width=115")
+                    .placeholder(roundedImage)
+                    .transform(new CircleTransform()).fit().centerCrop().into(holder.imageView);
+            holder.question.setText(this.rows.get(position).getQuestion());
 
+            holder.idfacebookTo.setText(this.rows.get(position).getIdTo());
 
-        holder.nameTo.setText(this.rows.get(position).getNameTo());
+            holder.nameTo.setOnClickListener(new OnClickListenerHomeTo(holder.idfacebookTo.getText().toString(), this.context));
+            holder.imageView.setOnClickListener(new OnClickListenerHomeTo(holder.idfacebookTo.getText().toString(), this.context));
 
-        holder.timeStamp.setText(this.rows.get(position).getTime());
-        RoundImage roundedImage = new RoundImage(BitmapFactory.decodeResource(context.getResources(), R.mipmap.iconuseranonymous));
-        Picasso.with(context).load("https://graph.facebook.com/" + this.rows.get(position).getIdTo() + "/picture?height=115&width=115")
-                .placeholder(roundedImage)
-                .transform(new CircleTransform()).fit().centerCrop().into(holder.imageView);
-        holder.question.setText(this.rows.get(position).getQuestion());
+            if (this.rows.get(position).isResultQuestion() == true) {
+                holder.imgResponse.setImageResource(R.drawable.heart_green);
 
-        holder.idfacebookTo.setText(this.rows.get(position).getIdTo());
+            } else {
 
-        holder.nameTo.setOnClickListener(new OnClickListenerHomeTo(holder.idfacebookTo.getText().toString(), this.context));
-        holder.imageView.setOnClickListener(new OnClickListenerHomeTo(holder.idfacebookTo.getText().toString(),this.context));
+                holder.imgResponse.setImageResource(R.drawable.heart_red);
+            }
 
-        if(this.rows.get(position).isResultQuestion()==true){
-            holder.imgResponse.setImageResource(R.drawable.heart_green);
-
-        }else{
-
-            holder.imgResponse.setImageResource(R.drawable.heart_red);
-        }
         return view;
     }
 
