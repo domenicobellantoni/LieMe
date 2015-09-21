@@ -26,7 +26,7 @@ public class ListInFriendFragmentAdapter extends ArrayAdapter<RowItemProfile> {
 
     private final Activity context;
     private List<RowItemProfile> rows;
-    private int count = 1;
+    private int count = 3;
 
     public ListInFriendFragmentAdapter(Activity context, List<RowItemProfile> firstRows ) {
 

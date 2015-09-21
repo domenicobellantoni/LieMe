@@ -29,14 +29,13 @@ public class ListInHomeAdapter extends ArrayAdapter<ItemHome> {
 
     private final Activity context;
     private List<ItemHome> rows;
-    private int count = 1;
+    private int count = 3;
 
     public ListInHomeAdapter(Activity context, List<ItemHome> firstRows ) {
 
         super(context, R.layout.list_question_home, firstRows);
         this.context = context;
         this.rows = firstRows;
-        //this.count = firstRows.size();
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
