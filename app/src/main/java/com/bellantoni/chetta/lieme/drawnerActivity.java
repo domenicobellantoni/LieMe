@@ -483,7 +483,7 @@ public class drawnerActivity extends ActionBarActivity
                 return;
             }
 
-            /*boolean bt = bluetoothManager.connect();
+            boolean bt = bluetoothManager.connect();
             if (!bt) {
                 //Toast.makeText(this.getApplicationContext(), "Bluetooth device not paired", Toast.LENGTH_SHORT).show();
                 BluetoothDialogError btDialog = new BluetoothDialogError();
@@ -496,9 +496,9 @@ public class drawnerActivity extends ActionBarActivity
             t.setDuration(Toast.LENGTH_LONG);
             t.setGravity(Gravity.CENTER, 0, 0);
             t.show();
-            bluetoothManager.clearRateHistory();*/
+            bluetoothManager.clearRateHistory();
 
-            /*runOnUiThread(new Runnable() {
+            runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     final Handler handler = new Handler();
@@ -508,7 +508,7 @@ public class drawnerActivity extends ActionBarActivity
                             Log.i(TAG, "Taking average after 10 sec");
                             averageHeartRateBeforeQuestion = bluetoothManager.getRateAverage();
                             bluetoothManager.clearRateHistory();
-                            Log.i(TAG, "Average rate before question: " + String.valueOf(averageHeartRateBeforeQuestion));*/
+                            Log.i(TAG, "Average rate before question: " + String.valueOf(averageHeartRateBeforeQuestion));
 
                             Question q2 = NotificationFragment.findQuestionById(questionId);
                             if (NetworkController.isOnline(getApplicationContext()) == true) {
@@ -524,10 +524,10 @@ public class drawnerActivity extends ActionBarActivity
                                     networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
                                 }
                            }
-                        /*}
+                        }
                     }, 10000);
                 }
-            });*/
+            });
         }else{
             NetworkDialog networkDialog = new NetworkDialog();
             networkDialog.show(getSupportFragmentManager(), "NETWORK_DIALOG");
