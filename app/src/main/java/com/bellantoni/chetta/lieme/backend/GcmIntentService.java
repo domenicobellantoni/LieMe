@@ -48,6 +48,10 @@ public class GcmIntentService extends IntentService {
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
 
         String messageType = gcm.getMessageType(intent);
+        for (String key: extras.keySet())
+        {
+            Log.d ("myApplication", key + " is a key in the bundle, and this is the value " + extras.get(key));
+        }
 
         if (!extras.isEmpty()) {
 
@@ -103,16 +107,16 @@ public class GcmIntentService extends IntentService {
         }
         if(msg.getString("notificationType").equals("answer"))
         {
-            Contact userAnswer = ContactListFragment.findContactById(msg.getString("friendId"));
-            Timestamp notificationTimestamp = Timestamp.valueOf(msg.getString("timestamp"));
-            Log.i(TAG, "Answer notification received from: "+ userAnswer.getName() + " timestamp: " + notificationTimestamp.toString());
+            //Contact userAnswer = ContactListFragment.findContactById(msg.getString("friendId"));
+            //Timestamp notificationTimestamp = Timestamp.valueOf(msg.getString("timestamp"));
+            //Log.i(TAG, "Answer notification received from: "+ userAnswer.getName() + " timestamp: " + notificationTimestamp.toString());
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.drawable.logo_mini_dialog)
                             .setContentTitle("LieMe")
                             .setAutoCancel(true)
                             .setStyle(new NotificationCompat.BigTextStyle().bigText("New answer"))
-                            .setContentText(userAnswer.getName() + " answered");
+                            .setContentText("You have a new answer to your question");
 
             Vibrator v = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
 
