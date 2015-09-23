@@ -1,6 +1,7 @@
 package com.bellantoni.chetta.lieme.fragments;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -183,7 +184,8 @@ public class NotificationFragment extends Fragment implements AbsListView.OnScro
         new RetrieveNotificationsFromLocalDataBase().execute(null,null,null);
         new RetrieveMessagesFromLocalDataBase().execute(null, null, null);
 
-
+        NotificationManager notificationManager = (NotificationManager)getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(1);
     }
 
     @Override
